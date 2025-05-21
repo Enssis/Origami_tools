@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling >= 1.26", "numpy >= 1.26", "pysvg >=0.2", "Ipython >= 8.0", "cairosvg >= 2.5"]
+build-backend = "hatchling.build"
+
+[project]
+name = "origami_tools"
+version = "0.0.1"
+authors = [
+    { name="Enssis", email="enssis@protonmail.com" },
+]
+description = "A package with different tools for origami creation."
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = ""
