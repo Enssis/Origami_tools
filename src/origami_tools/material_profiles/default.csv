@@ -1,0 +1,5 @@
+name,color,ep,full,dash_length,dash_full_ratio,power,speed,passe
+def_adhesif_remove,#000000,0.1,True,0,0,50,14,1
+def_pli_cut,#ff0000,0.001,False,5,0.95,80,4,4
+def_cut,#ff0000,0.001,True,0,0,80,4,4
+def_text,#0000ff,0.1,True,0,0,40,10,1

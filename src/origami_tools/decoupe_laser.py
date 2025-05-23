@@ -1,116 +1,17 @@
-from typing import List, overload
+from typing import List, Sequence, overload
 import svg
 from IPython.display import SVG, display
 import cairosvg
 import os
 import prettytable as pt 
+
+from origami_tools import get_material_path
 from .geometry import *
-# =========== Paramètres du patron ===========
-
-def mm_str(value):
-	""" 
-		Transform a value in mm to a string with "mm" at the end
-	"""
-	return "{:.2f}mm".format(value) 
-
-def px_to_mm(px):
-	""" 
-		Transform a value in px to mm
-	"""
-	return px / 96 * 25.4
-
-def mm_to_px(mm):
-	"""
-		Transform a value in mm to px
-	"""
-	return mm / 25.4 * 96
-
-def svg_shape_from_shape(shape : Shape, color="black", opacity : Number =1, width : Number =1, fill="none", origin=Point(0, 0)):
-	"""
-		Transform a shape in a SVG shape
-	"""
-	
-	# transform a circle in a circle for SVG
-	if isinstance(shape, Circle):
-		center = shape[0] + origin
-		return svg.Circle(cx=svg.Length(center[0], "mm"), cy=svg.Length(center[1], "mm"), r=svg.Length(shape.radius, "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width, fill=fill)
-	
-	# transform a rectangle in a rectangle for SVG
-	elif isinstance(shape, Rectangle):
-			top_left = shape[0] + origin
-			return svg.Rect(x=svg.Length(top_left[0], "mm"), y=svg.Length(top_left[1], "mm"), width=svg.Length(shape.width, "mm"), height=svg.Length(shape.height, "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width, fill=fill)
-	
-	# transform a line in a line for SVG
-	elif isinstance(shape, Line):
-		return svg_line_from_line(shape, color=color, opacity=opacity, width=width)
-	
-	# transform a polygon in a polygon for SVG
-	elif isinstance(shape, Polygon):
-		pts = []
-		for point in shape:
-			p = point + origin
-			pts.append([mm_to_px(p[0]), mm_to_px(p[1])])
-		return svg.Polygon(points=pts, stroke=color, stroke_opacity=opacity, fill=fill, stroke_width=width)
-	
-	# transform a path in a path for SVG
-	else :
-
-		path = []
-		path.append(svg.M(mm_to_px(shape[0][0]), mm_to_px(shape[0][1])))
-		for point in shape[1:]:	
-			p = point + origin	
-			path.append(svg.L(mm_to_px(p[0]), mm_to_px(p[1])))
-		return svg.Path(d=path, stroke=color, stroke_opacity=opacity, stroke_width=width, fill=fill)
-
-
-# transforme une ligne décrite par son point de départ et son point d'arriver en ligne pour la librairie SVG
-def svg_line_from_line(line : Line, color="black", opacity : Number =1, width : Number =1, origin=Point(0, 0)):
-	start = line[0] + origin
-	end = line[1] + origin
-	if line.is_dashed():
-		dash_full = line.dash_ratio * line.dash_length
-		dash_empty = line.dash_length - dash_full
-		return svg.Line(x1=svg.Length(start[0], "mm"), y1=svg.Length(start[1], "mm"), x2=svg.Length(end[0], "mm"), y2=svg.Length(end[1], "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width, stroke_dasharray=[dash_full, dash_empty])
-	return svg.Line(x1=svg.Length(start[0], "mm"), y1=svg.Length(start[1], "mm"), x2=svg.Length(end[0], "mm"), y2=svg.Length(end[1], "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width)
-
-
-# transforme une chaine de caractère en texte pour SVG
-def svg_text_from_text(text, x, y, font_size=10, color="black", opacity=1, text_anchor : None | str="start"):
-	t_anchor = None
-	if text_anchor is not None:
-		if text_anchor == "start":
-			t_anchor = "start"
-		elif text_anchor == "middle":
-			t_anchor = "middle"
-		elif text_anchor == "end":
-			t_anchor = "end"
-		else:
-			print(f"Erreur : {text_anchor} n'est pas un ancre de texte valide.")
-			return None
-	return svg.Text(x=svg.Length(x, "mm"), y=svg.Length(y, "mm"), text=text, font_size=svg.Length(font_size, "mm"), fill=color, fill_opacity=opacity, text_anchor=t_anchor)
-
-def save_svg(svg, path):
-	with open(path, "w") as f:
-		f.write(svg.as_str())
-	print(f"Fichier SVG sauvegardé dans {path}")
-
-def rgb_to_hex(rgb):
-	# Convertit une couleur
-	r, g, b = rgb[:-1].split('(')[1].split(",")
-	r = int(r.strip())
-	g = int(g.strip())
-	b = int(b.strip())
-	return "#{:02x}{:02x}{:02x}".format(r, g, b)
-
-def hex_to_rgb(hex):
-	# Convertit une couleur
-	r = int(hex[1:3], 16)
-	g = int(hex[3:5], 16)
-	b = int(hex[5:7], 16)
-	return f"rgb({r},{g},{b})"
+from .utils._svg_utils import *
 # =========== Classe Patron ===========
 
-LASER_SAVE_PATH = os.path.dirname(__file__) + "/profils_laser/"
+
+LASER_SAVE_PATH = get_material_path()
 
 class LaserParam:
 	def __init__(self, color, name="", ep : Number =0.2, full=True, dash_length : Number = 6, dash_full_ratio : float = 0.5, power : Number =80, speed : Number =4, passe : int=1):
@@ -209,7 +110,7 @@ class LaserParam:
 				if line.startswith(name):
 					return LaserParam.load_from_csv(line)
 		print(f"Le paramètre {name} n'existe pas dans le fichier de sauvegarde {path}.")
-		return None
+		return LaserParam.default_cut()
 
 	@staticmethod
 	def load_from_csv(param_str):
@@ -402,6 +303,9 @@ class LaserCut:
 		if dir_path is None:
 			dir_path = LASER_SAVE_PATH
 		path = dir_path + profile + ".csv"
+		if not os.path.exists(path):
+			print(f"Le profil {profile} n'existe pas.")
+			return None
 		with open(path, "r") as f:
 			lines = f.readlines()[1:]
 			params = []
@@ -467,7 +371,7 @@ class LaserCut:
 		path = dir_path + profile + ".csv"
 		with open(path) as fp:
 			mytable = pt.from_csv(fp)
-		print(mytable)
+		return mytable
 
 	def show_param(self):
 		# Affiche le tableau des paramètres
@@ -868,6 +772,8 @@ class Patron:
 			name = self.name
 		if self.canvas is None:
 			self.create()
+		if path[-1] != "/":
+			path += "/"
 		save_dir = path + name + ".pdf"
 
 		# conversion directe depuis le canvas sans fichier temporaire
@@ -1102,10 +1008,11 @@ class Patron:
 				patrons[0].add_shapes(adh_rem_p[0], param=adhesif_param, background=True, outline=False)
 				patrons[1].add_shapes(adh_rem_p[1], param=adhesif_param, background=True, outline=False)
 		patrons[1].mirror(Plane(Point(self.width + 2.5, 0), E2X))
-		patrons[0] += patrons[1]
-		patrons[0].w_h(self.width * 2 + self.origin[0] * 2, self.height + 2 * self.origin[1])
 
-		return patrons[0]
+		patron = patrons[0] + patrons[1]
+		patron.w_h(self.width * 2 + self.origin[0] * 2, self.height + 2 * self.origin[1])
+		patron.name = self.name + "_lasercut"
+		return patron
 
 	def create_lasercut_martyr(self, asym=False, e=0, L=2):
 		

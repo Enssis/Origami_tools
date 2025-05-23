@@ -3,8 +3,7 @@ from stl import mesh
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from dataclasses import dataclass
-from typing import Self, Type, Sequence
-from ._types import Number, Group
+from .utils._types import Number, Group
 
 
 
@@ -311,10 +310,6 @@ E2Y = Vec(0, 1)
 
 class Point(Vec):
     """ A class representing a Point in 2D or 3D space. """
-    x : Number
-    y : Number
-    z : Number | None = None
-    dimension : int = 2
 
     @classmethod
     def from_homogeneous(cls, v : Group):
@@ -327,13 +322,6 @@ class Point(Vec):
             return cls(v[0] / v[2], v[1] / v[2])
         else:
             return cls(v[0] / v[3], v[1] / v[3], v[2] / v[3])
-
-    def __post_init__(self):
-        if self.z is not None:
-            self.dimension = 3
-            super().__init__(self.x, self.y, self.z)
-        else:
-            super().__init__(self.x, self.y)
 
     def as_homogeneous(self):
         """Convert the vector to a homogeneous coordinate."""
@@ -379,8 +367,8 @@ class Plane():
 @dataclass
 class Repere():
     """ A class representing a coordinate system in 2D or 3D space. """
-    origin : Point = O20
-    axis : list[Vec] = [E2X, E2Y]
+    origin : Point 
+    axis : list[Vec] 
     dimension : int = 2
 
     def __post_init__(self):
@@ -466,7 +454,7 @@ class Repere():
         for i in range(self.dimension):
             self.axis[i] = np.dot(rotation_matrix, self.axis[i])
 
-    def rotation_mat(self, repere : 'Repere' | None = None): # type: ignore
+    def rotation_mat(self, repere : 'None | Repere' = None):
         if repere is None:
             repere = Repere.base(dimension=self.dimension)
 
@@ -486,7 +474,7 @@ class Repere():
     
     def transformation_mat(self, repere = None):
         if repere is None:
-            repere = Repere(dimension=self.dimension)
+            repere = Repere.base(self.dimension)
 
         if not isinstance(repere, Repere):
             raise TypeError("Expected a Repere object")
@@ -513,6 +501,7 @@ class Shape():
     def __post_init__(self):
         if len(self.points) < 1:
             raise ValueError("At least a point is required to define a shape")
+        self.dimension = self.points[0].dimension
         for i in range(len(self.points)):
             if self.points[i].dimension != self.dimension:
                 raise ValueError("All points must have the same dimension")
@@ -768,7 +757,8 @@ class Line(Shape):
 
 
     def get_line_dashed(self, dash_length : Number | None = None, dash_ratio : Number | None = None):
-        """Get a dashed line representation of the line."""
+        """Get a dashed line representation of the line.
+            start at the middle of the dash"""
         if dash_length is None:
             dash_length = self.dash_length
         if dash_ratio is None:
@@ -778,12 +768,22 @@ class Line(Shape):
         if dash_ratio <= 0 or dash_ratio >= 1:
             raise ValueError("Dash ratio must be between 0 and 1")
         
-        line_length = self.length()
-        n_dashes = int(line_length / dash_length)
+        line_length = self.points[0].distance(self.points[1])
+        n_dashes = int(line_length / dash_length) + 1
+        if line_length % dash_length > 0:
+            n_dashes += 1
         dashes = []
+        dir_line = Vec.from_2points(self.points[0], self.points[1]).normalize()
         for i in range(n_dashes):
-            start = self.points[0] + (self.points[1] - self.points[0]) * (i / n_dashes)
-            end = start + (self.points[1] - self.points[0]) * (dash_length * dash_ratio / line_length)
+            start = self.points[0] + dir_line * (i - 0.5 * dash_ratio) * dash_length
+            if i == 0:
+                start = self.points[0]
+                end = start + dir_line * dash_length * dash_ratio * (0.5)
+            elif i == n_dashes - 1:
+                end = self.points[1]
+            else:
+                end = start + dir_line * dash_length * dash_ratio
+
             dashes.append(Line([start, end]))
         return dashes
 
@@ -921,14 +921,17 @@ class Surface(Shape):
 @dataclass
 class Circle(Surface):
     """ A class representing a circle defined by its center and radius. """
-    radius : float | int
-    normal : Vec = E3Z
+    radius : Number
+    normal : Vec | None = None 
 
     def __post_init__(self):
         if len(self) != 1:
             raise ValueError("Circle must have one point")
         if self.radius <= 0:
             raise ValueError("Radius must be positive")
+        if self[0].dimension != 2 and self.normal is None:
+            raise ValueError("Normal vector must be provided for 3D circles")
+
 
     @classmethod
     def from_center_and_point(cls, center : Point, point_on_circle : Point):
@@ -970,7 +973,7 @@ class Rectangle(Surface):
     def __post_init__(self):
         if len(self) != 2:
             raise ValueError("Rectangle must have two points")
-        if self.width <= 0 or self.height <= 0:
+        if self.width < 0 or self.height < 0:
             raise ValueError("Width and height must be positive")
         
         if self[0][0] > self[1][0]:
