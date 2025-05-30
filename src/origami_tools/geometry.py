@@ -1,3 +1,4 @@
+from typing import Sequence
 import numpy as np
 from stl import mesh
 import matplotlib.pyplot as plt
@@ -5,6 +6,13 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from dataclasses import dataclass
 from .utils._types import Number, Group
 
+# application du theoreme d'Al-Kashi
+def alkashi(ac, bc, c):
+	return np.sqrt(ac**2 + bc**2 - 2 * ac * bc * np.cos(c))
+
+# application du theoreme d'alkashi pour trouver l'angle
+def alkashi_angle(ac, bc, ab):
+	return np.arccos((ac**2 + bc**2 - ab**2) / (2 * ac * bc))
 
 
 def skewm(v):
@@ -22,13 +30,6 @@ def normalize(vector):
     if norm == 0:
         raise ValueError("Cannot normalize a zero vector")
     return vector / norm
-
-
-def project_vector(v, u):
-    """Project vector v onto vector u."""
-    u_norm = normalize(u)
-    return np.dot(v, u_norm) * u
-
 
 def axe_angle_to_mat_rotation(v : 'Vec', angle):
     """Create a rotation matrix for a given angle around a vector."""
@@ -182,7 +183,7 @@ class Vec(list):
     def in_3D(self):
         """Convert the vector to 3D coordinates."""
         if self.dimension == 2:
-            return type(self)(self[0].copy(), self[1].copy(), 0)
+            return type(self)(self[0], self[1], 0)
         else:
             return self
 
@@ -192,7 +193,7 @@ class Vec(list):
 
     def copy(self):
         """Create a copy of the vector."""
-        return type(self).from_list(self)
+        return type(self)(self[0], self[1], self[2]) if len(self) == 3 else type(self)(self[0], self[1])
     
     def distance(self, other):
         """Calculate the distance between two vectors."""
@@ -262,13 +263,8 @@ class Vec(list):
 
         return type(self).from_list(np.dot(rotation_matrix, self - point) + point)
     
-    def mirror(self, mir : 'Plane' | Group | 'Line'):
+    def mirror(self, mir : 'Plane | Line'):
         """Mirror the point across a given axis."""
-        if isinstance(mir, Group):
-            if self.dimension == 2:
-                mir = Line(mir[0], mir[1])
-            else:
-                mir = Plane.from_points(mir[0], mir[1], mir[2])
         
         if isinstance(mir, Line) and self.dimension != 2 or isinstance(mir, Plane) and self.dimension != 3:
             raise ValueError(f"Mirror must be in {self.dimension}D")
@@ -276,14 +272,14 @@ class Vec(list):
         if self.dimension == 2:
             if not isinstance(mir, Line):
                 raise ValueError("Mirror must be a Line in 2D")
-            vect_plane_point = Vec.from_list(project_vector(self - mir.points[0], mir.normal_vect()))
+            vect_plane_point = (self - mir.points[0]).project(mir.normal_vect())
             x = self[0] - 2 * vect_plane_point[0]
             y = self[1] - 2 * vect_plane_point[1]
             return type(self).from_list([x, y])
         else:
             if not isinstance(mir, Plane):
                 raise ValueError("Mirror must be a Plane in 3D")
-            vect_plane_point = type(self).from_list(project_vector(self - mir.point, mir.normal))
+            vect_plane_point = (self - mir.point).project(mir.normal)
             x = self[0] - 2 * vect_plane_point[0]
             y = self[1] - 2 * vect_plane_point[1]
             z = self[2] - 2 * vect_plane_point[2]
@@ -299,6 +295,22 @@ class Vec(list):
         if self.dimension == 3:
             self[2] = v[2] + self[2]
 
+    def show(self, ax = None, show = False):
+        """Show the point."""
+        if self.dimension == 2:
+            if ax is None:
+                fig, ax = plt.subplots()
+            ax.plot(self[0], self[1], 'o')
+        else:
+            if ax is None:
+                fig = plt.figure()
+                ax = fig.add_subplot(111, projection='3d')
+            ax.scatter(self[0], self[1], self[2])
+        if show:
+            plt.show()
+        else:
+            return ax
+
 
 E3X = Vec(1, 0, 0)
 E3Y = Vec(0, 1, 0)
@@ -306,7 +318,6 @@ E3Z = Vec(0, 0, 1)
 
 E2X = Vec(1, 0)
 E2Y = Vec(0, 1)
-
 
 class Point(Vec):
     """ A class representing a Point in 2D or 3D space. """
@@ -322,6 +333,12 @@ class Point(Vec):
             return cls(v[0] / v[2], v[1] / v[2])
         else:
             return cls(v[0] / v[3], v[1] / v[3], v[2] / v[3])
+
+    def __str__(self):
+        if self.dimension == 2:
+            return f"Point({self[0]:.{3}f}, {self[1]:.{3}f})"
+        else:
+            return f"Point({self[0]:.{3}f}, {self[1]:.{3}f}, {self[2]:.{3}f})"
 
     def as_homogeneous(self):
         """Convert the vector to a homogeneous coordinate."""
@@ -341,10 +358,6 @@ class Plane():
     normal : Vec
 
     def __post_init__(self):
-        if self.point.dimension != 3:
-            self.point = self.point.in_3D()
-        if self.normal.dimension != 3:
-            self.normal = self.normal.in_3D()
         self.normal = self.normal.normalize()
 
     @classmethod
@@ -454,23 +467,18 @@ class Repere():
         for i in range(self.dimension):
             self.axis[i] = np.dot(rotation_matrix, self.axis[i])
 
-    def rotation_mat(self, repere : 'None | Repere' = None):
-        if repere is None:
-            repere = Repere.base(dimension=self.dimension)
+    def rotation_mat(self, other : 'None | Repere' = None):
+        if other is None:
+            other = Repere.base(dimension=self.dimension)
 
-        if not isinstance(repere, Repere):
+        if not isinstance(other, Repere):
             raise TypeError("Expected a Repere object")
-        if self.dimension != repere.dimension:
+        if self.dimension != other.dimension:
             raise ValueError("Repere dimensions must match")
-        if self.dimension == 2:
-            rotation_matrix = np.array([self.axis[0].project(repere.axis[0]),
-                            self.axis[1].project(repere.axis[1])])
-        else:
-            rotation_matrix = np.array([self.axis[0].project(repere.axis[0]),
-                            self.axis[1].project(repere.axis[1]),
-                            self.axis[2].project(repere.axis[2])])
 
-        return rotation_matrix
+        vec_mat = np.vstack([self.axis[0], self.axis[1], self.axis[2]]) if self.dimension == 3 else np.hstack([self.axis[0], self.axis[1]])
+        vec_mat2 = np.vstack([other.axis[0], other.axis[1], other.axis[2]]) if other.dimension == 3 else np.hstack([other.axis[0], other.axis[1]])
+        return vec_mat @ np.linalg.inv(vec_mat2)
     
     def transformation_mat(self, repere = None):
         if repere is None:
@@ -505,8 +513,14 @@ class Shape():
         for i in range(len(self.points)):
             if self.points[i].dimension != self.dimension:
                 raise ValueError("All points must have the same dimension")
-        
-        self.dimension = self.points[0].dimension
+            self.points[i] = self.points[i].copy()
+    
+    def as_json(self):
+        """Convert the shape to a JSON serializable format."""
+        return {
+            "type": type(self).__name__,
+            "points": [point for point in self.points]
+        }
 
     def __getitem__(self, index):
         if isinstance(index, int):
@@ -514,13 +528,38 @@ class Shape():
         else:
             raise TypeError("Index must be an integer or a slice")
 
+    def __str__(self):
+        if self.dimension == 2:
+            return f"Shape with {len(self.points)} points in 2D: {self.points}\n"
+        else:
+            return f"Shape with {len(self.points)} points in 3D: {self.points}\n"
+
     def __len__(self):
         return len(self.points)
 
-    def mirror(self, plane : Group | Plane | 'Line'):
+    def __add__(self, other):
+        """Add another shape to this shape."""
+        if isinstance(other, Shape):
+            if self.dimension != other.dimension:
+                raise ValueError("Shapes must have the same dimension")
+            return Shape(self.points + other.points)
+        elif isinstance(other, Vec):
+            n_shape = self.copy()
+            n_shape.translate(other)
+            return n_shape
+        
+        raise TypeError("Expected a Shape or vec object")
+
+    def get_mirror(self, plane : 'Plane | Line'):
+        n_shape = self.copy()
+        n_shape.mirror(plane)
+        return n_shape
+
+    def mirror(self, plane : 'Plane | Line'):
         pts = []
         for i in range(len(self)):
             pts.append(self.points[i].mirror(plane))
+        self.points = pts
     
     def rotate(self, angle : Number, point : Point | Group | None = None, axis : Point | Group | None = None, deg = False):
         for i in range(len(self)):
@@ -543,6 +582,18 @@ class Shape():
         points = [point.copy() for point in self.points]
         return Shape(points)
     
+    def center(self):
+        """Calculate the center of the shape."""
+        if self.dimension == 2:
+            x = sum(point[0] for point in self.points) / len(self.points)
+            y = sum(point[1] for point in self.points) / len(self.points)
+            return Point(x, y)
+        else:
+            x = sum(point[0] for point in self.points) / len(self.points)
+            y = sum(point[1] for point in self.points) / len(self.points)
+            z = sum(point[2] for point in self.points) / len(self.points)
+            return Point(x, y, z)
+
     def repr_3D(self):
         """give the list of point to represent the shape in 3D"""
         if self.dimension != 3:
@@ -552,6 +603,35 @@ class Shape():
         y = np.array(self.points[:][1])
         z = np.array(self.points[:][2])
         return (x, y, z)
+    
+    def show(self, ax = None, show = False):
+        """Show the surface."""
+        nb_pts = len(self)
+        if self.dimension == 2:
+            if ax is None:
+                fig, ax = plt.subplots()
+            plt.plot([self[i % nb_pts][0] for i in range(nb_pts + 1)], [self[i % nb_pts][1] for i in range(nb_pts + 1)])
+        else:
+            if ax is None:
+                fig = plt.figure()
+                ax = fig.add_subplot(111, projection='3d')
+            ax.plot([self[i % nb_pts][0] for i in range(nb_pts + 1)], [self[i % nb_pts][1] for i in range(nb_pts + 1)], [self[i % nb_pts][2] for i in range(nb_pts + 1)])
+        if show:
+            plt.show()
+        else :
+            return ax
+        
+    def transform(self, mat : Group):
+        """Transform the shape using a transformation matrix."""
+        if not isinstance(mat, (list, np.ndarray)):
+            raise TypeError("Expected a list or numpy array")
+        if len(mat) != self.dimension + 1:
+            raise ValueError(f"Transformation matrix must have {self.dimension + 1} rows")
+        if len(mat[0]) != self.dimension + 1:
+            raise ValueError(f"Transformation matrix must have {self.dimension + 1} columns")
+        
+        for i in range(len(self.points)):
+            self.points[i] = self.points[i].transform(mat)
 
 
 @dataclass
@@ -561,13 +641,56 @@ class Line(Shape):
     dash_length : float = 6
     dash_ratio : float = 0.5
         
+    def __init__(self, point1 : Point, point2 : Point, dashed : bool = False, dash_length : float = 6, dash_ratio : float = 0.5):
+        super().__init__([point1, point2])
+        if self.dimension != point1.dimension or self.dimension != point2.dimension:
+            raise ValueError("Points must have the same dimension")
+
+    def __str__(self):
+        if self.dimension == 2:
+            return f"Line from {self.points[0]} to {self.points[1]} in 2D\n"
+        else:
+            return f"Line from {self.points[0]} to {self.points[1]} in 3D\n"
+
+    def __repr__(self):
+        if self.dimension == 2:
+            return f"Line({self.points[0]}, {self.points[1]}) \n"
+        else:
+            return f"Line({self.points[0]}, {self.points[1]}) \n"
+
+    @classmethod
+    def from_dir(cls, point : Point, direction : Vec):
+        """Create a line from a point and a direction vector."""
+        if not isinstance(direction, Vec):
+            raise TypeError("Expected a Vec object")
+        if point.dimension != direction.dimension:
+            raise ValueError("Point and direction must have the same dimension")
+        
+        if point.dimension == 2:
+            return cls(point, point + direction)
+        else:
+            return cls(point, point + direction)
+
     @classmethod
     def from_angle(cls, point : Point, angle : Number, length : Number):
         """Create a line from a point and an angle."""
         
         x = point[0] + length * np.cos(angle)
         y = point[1] + length * np.sin(angle)
-        return cls([point, Point(x, y)])
+        return cls(point, Point(x, y))
+
+    @classmethod
+    def from_point_normal(cls, point : Point, normal : Vec, length : Number = 5):
+        """Create a line from a point and a normal vector."""
+        if not isinstance(normal, Vec):
+            raise TypeError("Expected a Vec object")
+        if point.dimension != normal.dimension:
+            raise ValueError("Point and normal must have the same dimension")
+        
+        if point.dimension == 2:
+            return cls(point, Point(point[0] + length * normal[1], point[1] + length * normal[0]))
+        else:
+            raise ValueError("Normal vector must be in 2D space")
 
 
     def as_homogeneous(self):
@@ -682,8 +805,8 @@ class Line(Shape):
             v1 = l1.normal_vect().normalize() 
             v2 = l2.normal_vect().normalize()
             
-            o_dpl = [ v1 * -(L/2 + o_l[0][2]), v1 * -(L/2), 
-                    v2 * (L/2 + o_l[1][2]), v2 * (L/2) ]
+            o_dpl = [ v1 * -( o_l[0][3] /2 + o_l[0][2]), v1 * -(o_l[0][3]/2), 
+                    v2 * (o_l[0][3]/2 + o_l[1][2]), v2 * (o_l[0][3]/2) ]
             for k in range(2):
                 ps = []
                 for l in range(2):
@@ -784,7 +907,7 @@ class Line(Shape):
             else:
                 end = start + dir_line * dash_length * dash_ratio
 
-            dashes.append(Line([start, end]))
+            dashes.append(Line(start, end))
         return dashes
 
     def is_dashed(self):
@@ -806,15 +929,14 @@ class Line(Shape):
     
     def copy(self):
         """Create a copy of the line."""
-        return Line([self.points[0].copy(), self.points[1].copy()], self.dashed, self.dash_length, self.dash_ratio)
+        return Line(self.points[0].copy(), self.points[1].copy(), self.dashed, self.dash_length, self.dash_ratio)
 
 
 @dataclass
 class Surface(Shape):
 
     def __post_init__(self):
-        if self.points[0] != self.points[-1]:
-            self.points.append(self.points[0].copy())
+        super().__post_init__()
     
     def copy(self):
         """Create a copy of the surface."""
@@ -855,7 +977,7 @@ class Surface(Shape):
         surf = self.in_3D()
 
         for i in range(len(self) - 1):
-            line = Line([surf.points[i], surf.points[i + 1]])
+            line = Line(surf.points[i], surf.points[i + 1])
             line_dir = line.direction_vect()
             depl = (plane_norm @ line_dir.in_3D()).normalize() * d[i]
             line.translate(depl)
@@ -898,7 +1020,7 @@ class Surface(Shape):
         """Get the edges of the surface."""
         edges = []
         for i in range(len(self) - 1):
-            edges.append(Line([self[i], self[(i + 1) % len(self)]]))
+            edges.append(Line(self[i], self[(i + 1) % len(self)]))
         return edges
     
     def normal_vect(self):
@@ -907,16 +1029,15 @@ class Surface(Shape):
         a = Vec.from_2points(self[0], self[1])
         b = Vec.from_2points(self[0], self[2])
         return (a @ b).normalize()
+
+    def get_lines(self):
+        """Get the lines of the surface."""
+        lines = []
+        for i in range(len(self) - 1):
+            lines.append(Line(self[i], self[(i + 1) % len(self)]))
+        return lines
     
-    def show(self):
-        """Show the surface."""
-        if self.dimension == 2:
-            plt.plot([self[i][0] for i in range(len(self))], [self[i][1] for i in range(len(self))])
-        else:
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
-            ax.plot([self[i][0] for i in range(len(self))], [self[i][1] for i in range(len(self))], [self[i][2] for i in range(len(self))])
-        plt.show()
+
 
 @dataclass
 class Circle(Surface):
@@ -924,14 +1045,19 @@ class Circle(Surface):
     radius : Number
     normal : Vec | None = None 
 
-    def __post_init__(self):
-        if len(self) != 1:
-            raise ValueError("Circle must have one point")
-        if self.radius <= 0:
-            raise ValueError("Radius must be positive")
-        if self[0].dimension != 2 and self.normal is None:
+    def __init__(self, center : Point, radius : Number, normal : Vec | None = None):
+        if not isinstance(center, Point):
+            raise TypeError("Center must be a Point object")
+        if center.dimension != 2 and (normal is None or not isinstance(normal, Vec)):
             raise ValueError("Normal vector must be provided for 3D circles")
+        
+        if center.dimension == 2:
+            super().__init__([center])
+        
+        self.radius = radius
+        self.normal = normal
 
+        super().__post_init__()
 
     @classmethod
     def from_center_and_point(cls, center : Point, point_on_circle : Point):
@@ -971,6 +1097,8 @@ class Rectangle(Surface):
     height : Number = 0
 
     def __post_init__(self):
+        if not isinstance(self[0], Point) :
+            raise TypeError("Rectangle points must be Point objects")
         if len(self) != 2:
             raise ValueError("Rectangle must have two points")
         if self.width < 0 or self.height < 0:
@@ -984,6 +1112,8 @@ class Rectangle(Surface):
         self.width = abs(self[0][0] - self[1][0])
         self.height = abs(self[0][1] - self[1][1])
 
+        super().__post_init__()
+
     @classmethod
     def from_points(cls, point1 : Point, point2 : Point):
         """Create a rectangle from two points."""
@@ -996,7 +1126,7 @@ class Rectangle(Surface):
         return cls([point1, point2], width, height)
     
     @classmethod
-    def from_corner_and_size(cls, corner : Point, width : Number, height : Number):
+    def from_cs(cls, corner : Point, width : Number, height : Number):
         """Create a rectangle from its top left corner and its width and height."""
         if not isinstance(corner, Point):
             raise ValueError("corner must be a Point object")
@@ -1016,7 +1146,7 @@ class Rectangle(Surface):
     
     def copy(self):
         """Create a copy of the rectangle."""
-        return Rectangle(self[0].copy(), self.width, self.height)
+        return Rectangle([self[0].copy(), self[1].copy()], self.width, self.height)
     
     def mirror(self, plane):
         super().mirror(plane)
@@ -1036,10 +1166,10 @@ class Polygon(Surface):
         if len(self) < 3:
             raise ValueError("Polygon must have at least 3 points")
         # Close the polygon by adding the first point at the end
-        if self.points[0] != self.points[-1]:
-            self.points.append(self.points[0].copy())
         
         self.n_points = len(self)
+
+        super().__post_init__()
 
     def __repr__(self):
         return f"Polygon({super().__repr__()})"
@@ -1088,7 +1218,7 @@ class RegularPolygon(Polygon):
 @dataclass    
 class Volume():
     """ A class representing a volume defined by a list of surfaces. """
-    surfaces : list[Surface] 
+    surfaces : Sequence[Surface] 
     n_surfaces : int = 0
 
     def __post_init__(self):
@@ -1157,7 +1287,7 @@ class Volume():
                 surfaces.append(surface.copy())
         return Volume(surfaces)
     
-    def show(self):
+    def show(self, save = False, path = None):
         ax = plt.figure().add_subplot(111, projection='3d')
         
         volume_mesh = self.mesh_3D()
@@ -1166,8 +1296,14 @@ class Volume():
         poly.set_edgecolor('0')
         # Auto scale to the mesh size
         scale = volume_mesh.points.flatten() # type: ignore
-        ax.auto_scale_xyz(scale, scale, scale) # type: ignore
-
+        scalex = []
+        scaley = []
+        scalez = []
+        for i in range(int(len(scale) / 3)):
+            scalex.append(scale[i * 3])
+            scaley.append(scale[i * 3 + 1])
+            scalez.append(scale[i * 3 + 2])
+        ax.auto_scale_xyz(scalex, scaley, scalez) # type: ignore
         ax.add_collection3d(poly) # type: ignore
         ax.set_aspect('equal')
 
@@ -1175,12 +1311,18 @@ class Volume():
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z') # type: ignore
+        if save:
+            if path is None:
+                path = 'volume.png'
+            plt.savefig(path)
+            plt.close()
+            # print("Volume saved to volume.png")
+        else:
+            plt.show() 
 
-        plt.show() 
-
-    def translate(self, v : Point):
+    def translate(self, v : Vec):
         """Translate the volume by a given vector."""
-        if not isinstance(v, Point):
+        if not isinstance(v, (Point, Vec)):
             raise ValueError("Translation vector must be a Point object")
         
         for i in range(len(self)):

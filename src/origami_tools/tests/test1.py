@@ -20,6 +20,8 @@ def test_patron():
     patron.add_shapes([poly])
     assert len(patron.shapes) == 1
     assert type(patron.shapes[0]) == DrawnShapes
+    patron.save_PDF(__file__.replace("test1.py", ""))
+    patron.save_SVG(__file__.replace("test1.py", ""))
 
 
 test_add()
