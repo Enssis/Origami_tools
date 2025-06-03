@@ -378,11 +378,15 @@ class LaserCut:
 			if isinstance(shape, Line):
 				if not param.full:
 					lines = shape.get_line_dashed(param.dash_length, param.dash_full_ratio)
-					fab_shapes += [svg_line_from_line(line, param.color, opacity=1, width=param.ep, origin=origin) for line in lines]
+					fab_shapes += [line.as_svg(param.color, opacity=1, width=param.ep, origin=origin) for line in lines]
 				else:
-					fab_shapes.append(svg_line_from_line(shape, param.color, opacity=1, width=param.ep, origin=origin))
+					fab_shapes.append(shape.as_svg(param.color, opacity=1, width=param.ep, origin=origin))
 			else:
-				fab_shapes.append(svg_shape_from_shape(shape, color=param.color, opacity=1, width=ep, fill=fill, origin=origin))
+				if not param.full and isinstance(shape, Surface):
+					lines = shape.get_dashed(param.dash_length, param.dash_full_ratio)
+					fab_shapes += [line.as_svg(param.color, opacity=1, width=param.ep, origin=origin) for line in lines]
+				else:
+					fab_shapes.append(shape.as_svg(color=param.color, opacity=1, width=ep, fill=fill, origin=origin))
 		return fab_shapes
 
 	# retourne un texte pour la gravure
@@ -428,13 +432,14 @@ class LaserCut:
 # =========== Classe Patron ===========
 
 class DrawnShapes():
-	def __init__(self, shapes : Sequence[Shape], param = None, background=False, outline=True):
+	def __init__(self, shapes : Sequence[Shape], param = None, background=False, outline=True, outside=False):
 		if param is None:
 			raise ValueError("Le paramètre de dessin est obligatoire")
 		self.shapes = shapes
 		self.param = param
 		self.background = background
 		self.outline = outline
+		self.outside = outside  # True if the shape is on the outside of the shape, False if it is on the interior
 
 	def __str__(self):
 		return f"DrawnShape {self.id()}: {self.shapes}, param={self.param}, background={self.background}, outline={self.outline}"
@@ -443,8 +448,8 @@ class DrawnShapes():
 		return self.__str__()
 
 	@staticmethod
-	def create_id(param_name, background, outline):
-		return f"{param_name}_{int(background)}_{int(outline)}"
+	def create_id(param_name, background, outline, outside):
+		return f"{param_name}_{int(background)}_{int(outline)}_{int(outside)}"
 
 	def as_json(self):
 		"""
@@ -455,14 +460,15 @@ class DrawnShapes():
 			"shapes": [shape.as_json() for shape in self.shapes],
 			"param": self.param,
 			"background": self.background,
-			"outline": self.outline
+			"outline": self.outline,
+			"outside": self.outside
 		}
 
 	def id(self):
 		"""
 			renvoie l'id du patron
 		"""
-		return DrawnShapes.create_id(self.param, self.background, self.outline)
+		return DrawnShapes.create_id(self.param, self.background, self.outline, self.outside)
 
 	def mirror(self, plane : Plane | Line):
 		for shape in self.shapes:
@@ -494,7 +500,7 @@ class DrawnShapes():
 		new_shapes = []
 		for shape in self.shapes:
 			new_shapes.append(shape.copy())
-		return DrawnShapes(new_shapes, param=self.param, background=self.background, outline=self.outline)
+		return DrawnShapes(new_shapes, param=self.param, background=self.background, outline=self.outline, outside=self.outside)
 	
 	def to_svg(self, color="black", opacity=1, width=1, fill=None, origin=Point(0, 0)):
 		"""
@@ -510,42 +516,47 @@ class DrawnShapes():
 			width = 0
 
 		for shape in self.shapes:
-			# transform a circle in a circle for SVG
-			if isinstance(shape, Circle):
-				center = shape[0] + origin
-				svg_shapes.append(svg.Circle(cx=svg.Length(center[0], "mm"), cy=svg.Length(center[1], "mm"), r=svg.Length(shape.radius, "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width, fill=fill))
-			
-			# transform a rectangle in a rectangle for SVG
-			elif isinstance(shape, Rectangle):
-				top_left = shape[0] + origin
-				svg_shapes.append(svg.Rect(x=svg.Length(top_left[0], "mm"), y=svg.Length(top_left[1], "mm"), width=svg.Length(shape.width, "mm"), height=svg.Length(shape.height, "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width, fill=fill))
-			
-			# transform a line in a line for SVG
-			elif isinstance(shape, Line):
-				svg_shapes.append(svg_line_from_line(shape, color=color, opacity=opacity, width=width, origin=origin))
-			
-			# transform a polygon in a polygon for SVG
-			elif isinstance(shape, Polygon):
-				pts = []
-				for point in shape:
-					p = point + origin
-					pts.append([mm_to_px(p[0]), mm_to_px(p[1])])
-				svg_shapes.append(svg.Polygon(points=pts, stroke=color, stroke_opacity=opacity, fill=fill, stroke_width=width))
-			
-			# transform a path in a path for SVG
-			else :
-				path = []
-				path.append(svg.M(mm_to_px(shape[0][0]), mm_to_px(shape[0][1])))
-				for point in shape[1:]:	
-					p = point + origin	
-					path.append(svg.L(mm_to_px(p[0]), mm_to_px(p[1])))
-				svg_shapes.append(svg.Path(d=path, stroke=color, stroke_opacity=opacity, stroke_width=width, fill=fill))
+			svg_shapes.append(shape.as_svg(color=color, opacity=opacity, width=width, fill=fill, origin=origin))
 
 		return svg_shapes
-			
+	
+	def to_polygon(self):
+		if len(self.shapes) == 1:
+			if isinstance(self.shapes[0], Polygon):
+				return self.shapes[0]
+			if isinstance(self.shapes[0], Line):
+				raise ValueError("Cannot convert a line to a polygon")
+			if isinstance(self.shapes[0], Circle):
+				return RegularPolygon.from_center_and_radius(self.shapes[0][0], self.shapes[0].radius, 20)
+			if isinstance(self.shapes[0], Rectangle):
+				return Polygon(self.shapes[0].get_corners())
+		elif len(self.shapes) > 1:
+			if not isinstance(self.shapes[0], Line):
+				raise ValueError("Cannot convert multiple shapes to a polygon")
+			pts = [self.shapes[0][0], self.shapes[0][1]]
+			lines = self.shapes[1:]
+			done = []
+			for _ in range(1, len(self.shapes)):
+				for j in range(len(lines)):
+					if j in done:
+						continue
+					shape = lines[j]
+					if not isinstance(shape, Line):
+						print(f"Erreur : {shape} n'est pas une ligne.")
+						continue
+					if shape[0] == pts[-1]:
+						pts.append(shape[1])
+					elif shape[1] == pts[-1]:
+						pts.append(shape[0])
+					else:
+						continue
+					done.append(j)
+		return Polygon(pts) # type: ignore
 
+
+			
 class Folds(DrawnShapes):
-	def __init__(self, lines : Sequence[Line], param = None, fold_type="n", fold_value : Number =0):
+	def __init__(self, lines : Sequence[Line], param = None, fold_type="n", fold_value : Number =0, outside = False):
 		"""
 			create a fold \n
 			lines : list of lines to fold \n
@@ -558,7 +569,7 @@ class Folds(DrawnShapes):
 			fold_value : max value of the fold \n
 		"""
 		
-		super().__init__(shapes=lines, param=param)
+		super().__init__(shapes=lines, param=param, outside=outside)
 		self.fold_type = fold_type
 		self.fold_value = fold_value
 
@@ -618,7 +629,7 @@ class Folds(DrawnShapes):
 		lines = []
 		for line in self.shapes:
 			if isinstance(line, Line):
-				lines.append(svg_line_from_line(line, color=color, opacity=opacity, width=width, origin=origin))
+				lines.append(line.as_svg(color=color, opacity=opacity, width=width, origin=origin))
 			else:
 				print(f"Erreur : {line} n'est pas une ligne.")
 		return lines
@@ -736,7 +747,7 @@ class Patron:
 			elems.append(laser_cut.fab_text(text_coord[0], text_coord[1], text_coord[2], param=text[1], font_size=text[2], text_anchor=text[3]))
 		return elems
 
-	def add_folds(self, lines, fold_type="n", fold_value : Number = 0, param : str | None =None):
+	def add_folds(self, lines, fold_type="n", fold_value : Number = 0, param : str | None =None, outside=False):
 		"""
 			ajoute des lignes au patron \n
 			lines : liste de lignes à ajouter \n
@@ -767,7 +778,7 @@ class Patron:
 			index = self.shapes_id.index(f_id)
 			self.shapes[index].shapes += nlines
 		else:
-			self.shapes.append(Folds(nlines, param=param, fold_type=fold_type, fold_value=fold_value))
+			self.shapes.append(Folds(nlines, param=param, fold_type=fold_type, fold_value=fold_value, outside=outside))
 			self.shapes_id.append(f_id)
 
 
@@ -778,11 +789,11 @@ class Patron:
 			self.texts.append([text, param, font_size,text_anchor])
 	
 
-	def add_shapes(self, shapes : Shape | List[Shape], param : str | None = None, background=False, outline=True):
+	def add_shapes(self, shapes : Shape | List[Shape], param : str | None = None, background=False, outline=True, outside=False):
 		"""
 			add shapes to the patron \n
 			shapes : list of shapes to add \n
-				shape : Line(), Circle(), Rectangle(), Polygon(), Shape() \n
+				shape : Line(), Circle(), Rectangle(), Polygon(), Shape() , HoledPolygon() \n
 			param : name of the parameter to use \n
 			background : if True, the shape is filled \n
 			outline : if True, the shape is outlined \n
@@ -799,12 +810,12 @@ class Patron:
 			shapes = t_shapes
 		if param is None:
 			param = "def_cut"
-		s_id = DrawnShapes.create_id(param, background, outline)
+		s_id = DrawnShapes.create_id(param, background, outline, outside)
 		if s_id in self.shapes_id:
 			index = self.shapes_id.index(s_id)
 			self.shapes[index].shapes += shapes
 		else:
-			self.shapes.append(DrawnShapes(shapes.copy(), param=param, background=background, outline=outline))
+			self.shapes.append(DrawnShapes(shapes.copy(), param=param, background=background, outline=outline, outside=outside))
 			self.shapes_id.append(s_id)
 	
 	def add_drawn_shapes(self, drawn_shapes : DrawnShapes):
@@ -944,35 +955,209 @@ class Patron:
 		)
 
 	def create_patron_decal(self, montain, e):
-		name = self.name + "_decal_"
-		name += "mountain" if montain else "valley"
-		new_patron = Patron(name, laser_cut=self.laser_cut, size=self.size, origin=self.origin) 
+		name = self.name + "_decal_" + ("mountain" if montain else "valley")
+		new_patron = Patron(name, laser_cut=self.laser_cut, size=self.size, origin=self.origin)
 
+		original_lines = []
+		offset_instructions = []
+		fixed_lines = []
+
+
+		# Étape 1 — Séparer les lignes décalables et les autres
 		for shape in self.shapes:
 			if isinstance(shape, Folds):
-				if (montain ^ (shape.fold_type == "v")) or shape.fold_type == "n":
-					new_patron.add_folds(shape.shapes, param=shape.param)
-				else:
-					d = e * np.tan(shape.fold_value/2)
-					lines = []
+				if not ((montain ^ (shape.fold_type == "v")) or shape.fold_type == "n"):
+					d = e * np.tan(shape.fold_value / 2)
 					for line in shape.shapes:
 						if isinstance(line, Line):
-							normal = line.normal_vect().normalize() * d
-							new_l1 = line.copy()
-							new_l2 = line.copy()
-							new_l1.translate(normal)
-							new_l2.translate(0-normal)
-							lines.append(new_l1)
-							lines.append(new_l2)
-					new_patron.add_folds(lines, param=shape.param)
+							original_lines.append(line)
+							offset_instructions.append((line, d, shape))
+				else:
+					# On ajoute directement les plis non concernés
+					new_patron.add_folds(shape.shapes, param=shape.param)
+					fixed_lines.extend(shape.shapes)  # pour intersections plus complètes si utile
 			else:
-				new_patron.add_drawn_shapes(shape.copy())
+				all_lines = []
+				for s in shape.shapes:
+					if isinstance(s, Line):
+						all_lines.append(s.copy())
+					elif isinstance(s, Surface):
+						all_lines += s.get_lines()
+				fixed_lines.extend(all_lines)
+				new_patron.add_shapes(
+						all_lines,
+						param=shape.param,
+						background=shape.background,
+						outline=shape.outline,
+						outside=shape.outside
+					)
+
+		# Étape 2 — Construire la table d'intersections sur lignes originales
+		intersections_map = {i: [[], []] for i in range(len(offset_instructions))}
+		for i, (line_i, _, _) in enumerate(offset_instructions):
+			for j in range(i + 1, len(offset_instructions)):
+				line_j = offset_instructions[j][0]
+				inter = line_i.intersection(line_j, limit=True)
+				if inter is None:
+					continue
+				if inter == line_i[0]:
+					intersections_map[i][0].append(j)
+				elif inter == line_i[1]:
+					intersections_map[i][1].append(j)
+				if inter == line_j[0]:
+					intersections_map[j][0].append(i)
+				elif inter == line_j[1]:
+					intersections_map[j][1].append(i)
+			for j, line in enumerate(fixed_lines):
+				inter = line_i.intersection(line, limit=True)
+				if inter is not None:
+					if inter == line_i[0]:
+						intersections_map[i][0].append(- j - 1)
+					elif inter == line_i[1]:
+						intersections_map[i][1].append(- j - 1)
+			for j in range(2):
+				inter_lines = []
+				for index in intersections_map[i][j]:
+					if index >= 0:
+						line = offset_instructions[index][0]
+					else:
+						line = fixed_lines[-index - 1]
+					
+					angle = line_i.angles_with(line, line_i[j])[0]
+					if len(inter_lines) == 0:
+						inter_lines = [(index, angle), (index, angle)]
+					else:
+						if angle < inter_lines[0][1]:
+							inter_lines[0] = (index, angle)
+						elif angle > inter_lines[1][1]:
+							inter_lines[1] = (index, angle)
+				intersections_map[i][j] = [inter_lines[j][0], inter_lines[j - 1][0]]
+		# Étape 3 — Créer et tronquer les lignes décalées
+		for i, (line, d, shape) in enumerate(offset_instructions):
+			normal = line.normal_vect().normalize() * d
+			for sign in [+1, -1]:
+				offset_line = line.copy()
+				offset_line.translate(sign * normal)
+				# Liste des autres lignes décalées
+				for j in range(2):
+					if len(intersections_map[i][j]) != 2:
+						continue
+					index  = intersections_map[i][j][int(sign / 2 + 0.5)]
+					# print(index)
+					# print(line, sign, j)
+					if index < 0:
+						# Intersection avec une ligne fixe
+						other_line = fixed_lines[-index - 1]
+						d2 = 0
+					else:
+						# Intersection avec une autre ligne décalée
+						other_line = offset_instructions[index][0]
+						d2 = offset_instructions[index][1]
+					if other_line[0] == line[0] or other_line[1] == line[1]:
+						d2 = -d2
+
+					# On décale la ligne fixe ou décalée
+					other_offset = other_line.copy()
+					other_offset.translate(sign * other_line.normal_vect().normalize() * d2)
+
+					inter = offset_line.intersection(other_offset, limit=False)
+					if inter is not None:
+						offset_line[j] = inter
+					else:
+						print(f"Erreur : pas d'intersection entre {offset_line} et {other_offset} pour la ligne {i}, index {index}, sign {sign}, j {j}")
+
+				# print(f"cut_points for line {i}: {len(cut_points)}, cut_points={cut_points}")
+
+				new_patron.add_shapes(
+						[offset_line],
+						param=shape.param,
+						background=shape.background,
+						outline=shape.outline,
+						outside=shape.outside
+					)
+
+
 		new_patron.texts = self.texts.copy()
 		new_patron.w_h(self.width, self.height)
-
 		return new_patron
 
-	def create_patron_offset(self, e : Number =0, L : Number =2, param="def_pli_cut", closed = True):
+
+
+
+	def create_patron_offset(self, mountain = False, e : Number = 0, L : Number = 2, full = False, param=""):
+		shapes = []
+		n_patron = Patron(self.name + "_offset", laser_cut=self.laser_cut, size=self.size, origin=self.origin)
+		n_patron.w_h(self.width, self.height)
+		outside_poly = None
+		for drawnshape in self.shapes:
+			d = 0 if L == 0 else 0.25
+			if drawnshape.outside:
+				# if the shape is outside, we offset it by 0.5
+				outside_poly = drawnshape.to_polygon()
+				drawnshape.shapes = [outside_poly.copy()]
+				dep = 0 if L == 0 else -0.25
+				outside_poly = outside_poly.copy().offset(dep).in_2D(BASE_REPERE3D)
+				if not full and L > 0:
+					n_patron.add_drawn_shapes(DrawnShapes([outside_poly], param=drawnshape.param, background=drawnshape.background, outline=drawnshape.outline, outside=True))
+			if isinstance(drawnshape, Folds):
+				if drawnshape.fold_type != "n":
+					if mountain ^ (drawnshape.fold_type == "v"):
+						d = e * np.tan(drawnshape.fold_value/2) + L
+					else:
+						d = L
+			for shape in drawnshape.shapes:	
+				shapes.append([shape, drawnshape.param, drawnshape.background, drawnshape.outline, drawnshape.outside, [d] * (len(shape) - 1)])
+
+		nb_shapes = len(shapes)
+		i = 0
+		while i < nb_shapes:
+			nb_test = nb_shapes
+			shape = shapes[i][0]
+			if isinstance(shape, Line):
+				for j in range(nb_test):
+					if isinstance(shapes[j][0], Line):
+						continue
+					poly = shapes[j][0]
+					if not isinstance(shapes[j][0], Polygon):
+						poly = shapes[j][0].to_polygon()
+					dec = shapes[j][5] + shapes[i][5]
+					pols, decals = poly.cut(shape, dec)
+
+					if len(pols) == 1:
+						# if the polygon is not cut, we continue
+						continue
+					shapes[j][0] = pols[0]
+					shapes[j][5] = decals[0]
+					for k in range(1, len(pols)):
+						shapes.append([pols[k], shapes[j][1], shapes[j][2], shapes[j][3], shapes[j][4], decals[k]])
+						nb_shapes += 1
+			i += 1
+		holes = []
+		for shape in shapes:
+			if isinstance(shape[0], Line) or len(shape[0]) < 4:
+				continue
+			# print(shape[0])
+			poly_shape = shape[0].offset(shape[5])
+			poly_shape.in_2D(BASE_REPERE3D)
+			if full:
+				poly_shape.change_direction()
+				holes.append(poly_shape)
+			else:
+				if param == "":
+					param = "def_pli_cut"
+				n_patron.add_shapes(poly_shape, param=param, background=shape[2], outline=shape[3], outside=shape[4])		
+		
+		if full:
+			if outside_poly is None :
+				raise ValueError("no outside defined")
+			holed_poly = HoledPolygon.from_polygons(outside_poly, holes)
+			if param == "":
+				param = "def_adhesif_remove"
+			n_patron.add_shapes([holed_poly], param=param, background=True, outline=shapes[0][3], outside=shapes[0][4])
+
+		return n_patron
+
+	def create_patron_offset3(self, e : Number =0, L : Number =2, param="def_pli_cut", closed = True):
 		
 		lines_list = []
 
@@ -1068,8 +1253,8 @@ class Patron:
 					intersect_lines = middle_lines[j][0]
 					line0 = Line(inter, line[0])
 					line1 = Line(inter, line[1])
-					pts_list.append(line0.offset_intersect_lines(intersect_lines + [[line1, lines_list[i][1], d]], inter, d, L))
-					pts_list.append(line1.offset_intersect_lines(intersect_lines + [[line0, lines_list[i][1], d]], inter, d, L))
+					pts_list.append(line0.offset_intersect_lines(intersect_lines + [[line1, lines_list[i][1], d, lines_list[i][3]]], inter, d, lines_list[i][3]))
+					pts_list.append(line1.offset_intersect_lines(intersect_lines + [[line0, lines_list[i][1], d, lines_list[i][3]]], inter, d, lines_list[i][3]))
 				pts_list.append(pts[1])
 				for j in range(0, len(pts_list), 2):
 
@@ -1193,7 +1378,7 @@ class Patron:
 				else:
 					svg_elements += shape.to_svg(color=pli_col[i], opacity=1.0 - shape.fold_value / np.pi, width=width, origin=self.origin)
 			elif isinstance(shape, DrawnShapes):
-				svg_elements += shape.to_svg(color=contour_col, opacity=1, width=width, fill="none", origin=self.origin)
+				svg_elements += shape.to_svg(color=contour_col, opacity=1, width=width, fill="black" if shape.background else "none", origin=self.origin)
 			else:
 				print(f"Erreur : {shape} n'est pas une forme.")
 				continue

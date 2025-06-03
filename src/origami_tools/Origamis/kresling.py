@@ -325,12 +325,10 @@ class TDK:
         depl = Vec(self.a, 0)
         for i in range(1, self.n):
             b_line = b_lines[i-1].copy()
-            b_line.translate(depl)
-            b_lines.append(b_line)
+            b_lines.append(Line(b_line[0] + depl, b_line[1] + depl))
 
             l_line = l_lines[i-1].copy()
-            l_line.translate(depl)
-            l_lines.append(l_line)
+            l_lines.append(Line(l_line[0] + depl, l_line[1] + depl))
 
         last_bline = b_lines[-1].copy()
         last_bline.translate(depl)
@@ -338,7 +336,7 @@ class TDK:
 
         self.patron.add_folds(b_lines[1:-1], "m", angle_m)
         self.patron.add_folds(l_lines, "v", angle_v)
-        self.patron.add_folds([b_lines[0], b_lines[-1]], "n", 0)
+        self.patron.add_shapes([b_lines[0], b_lines[-1]], outside=True)
 
         if self.etages > 1:
             print("TODO: add folds for etages > 1")
@@ -349,19 +347,23 @@ class TDK:
             dec = 0
 
         if attache is None:
-            self.patron.add_folds([Line(Point(0, 0), Point(long, 0))], "n")
-            self.patron.add_folds([Line(Point(dec, self.r_p), Point(dec + long, self.r_p))], "n")
+            self.patron.add_shapes([Line(Point(0, 0), Point(long, 0))], outside=True)
+            self.patron.add_shapes([Line(Point(dec, self.r_p), Point(dec + long, self.r_p))], outside=True)
         else:
             dual_attache = attache.copy()
             dual_attache.rotate(np.pi)
             dual_attache.translate(Vec(dec, self.r_p * self.etages + attache.height))
             dual_attache += attache.copy()
+            rho = self.angle_pli_rho(h)
+            up_folds = []
+            down_folds = []
             for i in range(self.n):
                 self.patron += dual_attache.copy()
                 dual_attache.translate(Vec(self.a, 0))
-            rho = self.angle_pli_rho(h)
-            self.patron.add_folds([Line(Point(0, 0), Point(long, 0))], "m", rho)
-            self.patron.add_folds([Line(Point(dec, self.r_p), Point(dec + long, self.r_p))], "v", rho)
+                up_folds.append(Line(Point(i * self.a, 0), Point((i + 1) * self.a, 0)))
+                down_folds.append(Line(Point(dec + i * self.a, self.r_p * self.etages), Point(dec + (i + 1) * self.a, self.r_p * self.etages)))
+            self.patron.add_folds(up_folds, "m", rho)
+            self.patron.add_folds(down_folds, "v", rho)
             
                 
         

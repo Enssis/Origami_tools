@@ -45,3 +45,6 @@ def csv_to_latex(csv_file : str, latex_file : str):
 \\label{label}
 \\end{{table}}
 '''.format(caption=name, label="fig:" + name))
+        
+
+
