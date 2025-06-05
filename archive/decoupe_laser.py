@@ -10,7 +10,7 @@ import json
 
 from origami_tools import get_material_path
 from .geometry import *
-from .utils._svg_utils import *
+from .Utils._svg_utils import *
 # =========== Classe Patron ===========
 
 
@@ -533,14 +533,14 @@ class DrawnShapes():
 		elif len(self.shapes) > 1:
 			if not isinstance(self.shapes[0], Line):
 				raise ValueError("Cannot convert multiple shapes to a polygon")
-			pts = [self.shapes[0][0], self.shapes[0][1]]
+			pts = [self.shapes[0][0].copy(), self.shapes[0][1].copy()]
 			lines = self.shapes[1:]
 			done = []
 			for _ in range(1, len(self.shapes)):
 				for j in range(len(lines)):
 					if j in done:
 						continue
-					shape = lines[j]
+					shape = lines[j].copy()
 					if not isinstance(shape, Line):
 						print(f"Erreur : {shape} n'est pas une ligne.")
 						continue
@@ -1034,7 +1034,7 @@ class Patron:
 				intersections_map[i][j] = [inter_lines[j][0], inter_lines[j - 1][0]]
 		# Étape 3 — Créer et tronquer les lignes décalées
 		for i, (line, d, shape) in enumerate(offset_instructions):
-			normal = line.normal_vect().normalize() * d
+			normal = line.normal_vect().normalize() * d / 2
 			for sign in [+1, -1]:
 				offset_line = line.copy()
 				offset_line.translate(sign * normal)
@@ -1052,7 +1052,7 @@ class Patron:
 					else:
 						# Intersection avec une autre ligne décalée
 						other_line = offset_instructions[index][0]
-						d2 = offset_instructions[index][1]
+						d2 = offset_instructions[index][1] / 2
 					if other_line[0] == line[0] or other_line[1] == line[1]:
 						d2 = -d2
 
@@ -1084,78 +1084,142 @@ class Patron:
 
 
 
-	def create_patron_offset(self, mountain = False, e : Number = 0, L : Number = 2, full = False, param=""):
+	def create_patron_offset(self, mountain=False, e: Number = 0, L: Number = 2, full=False, param=""):
+		"""
+		Generate an offset pattern (patron) for adhesive or cutting.
+		
+		Args:
+			mountain (bool): If True, treat folds as mountain folds, otherwise valley.
+			e (Number): Thickness or extrusion amount (for fold-based offsets).
+			L (Number): Offset length for all shapes.
+			full (bool): If True, generate a full offset shape with cut-out holes.
+			param (str): Parameter name for resulting shapes.
+		
+		Returns:
+			Patron: The new offset pattern.
+		"""
 		shapes = []
 		n_patron = Patron(self.name + "_offset", laser_cut=self.laser_cut, size=self.size, origin=self.origin)
 		n_patron.w_h(self.width, self.height)
+
 		outside_poly = None
+
 		for drawnshape in self.shapes:
+			# Default offset value
 			d = 0 if L == 0 else 0.25
+
+			# Handle outer contour (cut line)
 			if drawnshape.outside:
-				# if the shape is outside, we offset it by 0.5
 				outside_poly = drawnshape.to_polygon()
 				drawnshape.shapes = [outside_poly.copy()]
 				dep = 0 if L == 0 else -0.25
 				outside_poly = outside_poly.copy().offset(dep).in_2D(BASE_REPERE3D)
+
 				if not full and L > 0:
-					n_patron.add_drawn_shapes(DrawnShapes([outside_poly], param=drawnshape.param, background=drawnshape.background, outline=drawnshape.outline, outside=True))
+					n_patron.add_drawn_shapes(DrawnShapes(
+						[outside_poly],
+						param=drawnshape.param,
+						background=drawnshape.background,
+						outline=drawnshape.outline,
+						outside=True
+					))
+
+			# Handle fold lines (with optional thickness-based offset)
 			if isinstance(drawnshape, Folds):
-				if drawnshape.fold_type != "n":
+				if drawnshape.fold_type != "n":  # Skip neutral folds
 					if mountain ^ (drawnshape.fold_type == "v"):
-						d = e * np.tan(drawnshape.fold_value/2) + L
+						d = (e * np.tan(drawnshape.fold_value / 2) + L) / 2
 					else:
-						d = L
-			for shape in drawnshape.shapes:	
-				shapes.append([shape, drawnshape.param, drawnshape.background, drawnshape.outline, drawnshape.outside, [d] * (len(shape) - 1)])
+						d = L / 2
 
-		nb_shapes = len(shapes)
+			# Process individual shapes
+			for shape in drawnshape.shapes:
+				if isinstance(shape, Circle):
+					n_patron.add_shapes([shape.copy()],
+										param=drawnshape.param,
+										background=drawnshape.background,
+										outline=drawnshape.outline,
+										outside=drawnshape.outside)
+				else:
+					shapes.append([
+						shape.copy(),                # Shape
+						drawnshape.param,            # Parameter
+						drawnshape.background,       # Background flag
+						drawnshape.outline,          # Outline flag
+						drawnshape.outside,          # Outside flag
+						[d] * (len(shape) - 1)       # Offset distances per edge
+					])
+
+		# Step 2: Cutting polygons by lines
 		i = 0
-		while i < nb_shapes:
-			nb_test = nb_shapes
-			shape = shapes[i][0]
-			if isinstance(shape, Line):
-				for j in range(nb_test):
-					if isinstance(shapes[j][0], Line):
-						continue
-					poly = shapes[j][0]
-					if not isinstance(shapes[j][0], Polygon):
-						poly = shapes[j][0].to_polygon()
-					dec = shapes[j][5] + shapes[i][5]
-					pols, decals = poly.cut(shape, dec)
+		while i < len(shapes):
+			current_shape = shapes[i][0]
+			if not isinstance(current_shape, Line):
+				i += 1
+				continue
 
-					if len(pols) == 1:
-						# if the polygon is not cut, we continue
-						continue
-					shapes[j][0] = pols[0]
-					shapes[j][5] = decals[0]
-					for k in range(1, len(pols)):
-						shapes.append([pols[k], shapes[j][1], shapes[j][2], shapes[j][3], shapes[j][4], decals[k]])
-						nb_shapes += 1
+			for j in range(len(shapes)):
+				if isinstance(shapes[j][0], Line):
+					continue
+
+				poly = shapes[j][0]
+				if not isinstance(poly, Polygon):
+					poly = poly.to_polygon()
+
+				# Combine offsets from both shapes
+				offset_values = shapes[j][5] + shapes[i][5]
+
+				# Perform the cut
+				sub_polygons, sub_offsets = poly.cut(current_shape, offset_values)
+
+				if len(sub_polygons) == 1:
+					continue
+
+				# Replace first part in place, append the others
+				shapes[j][0] = sub_polygons[0]
+				shapes[j][5] = sub_offsets[0]
+				for k in range(1, len(sub_polygons)):
+					shapes.append([
+						sub_polygons[k], shapes[j][1], shapes[j][2], shapes[j][3], shapes[j][4], sub_offsets[k]
+					])
+
 			i += 1
+
+		# Step 3: Apply offset and render shapes
 		holes = []
+
 		for shape in shapes:
 			if isinstance(shape[0], Line) or len(shape[0]) < 4:
-				continue
-			# print(shape[0])
-			poly_shape = shape[0].offset(shape[5])
-			poly_shape.in_2D(BASE_REPERE3D)
+				continue  # Skip invalid or trivial polygons
+
+			offset_shape = shape[0].offset(shape[5])
+			print(shape[5])
+			offset_shape.in_2D(BASE_REPERE3D)
+
 			if full:
-				poly_shape.change_direction()
-				holes.append(poly_shape)
+				offset_shape.change_direction()  # Ensure valid hole orientation
+				holes.append(offset_shape)
 			else:
-				if param == "":
-					param = "def_pli_cut"
-				n_patron.add_shapes(poly_shape, param=param, background=shape[2], outline=shape[3], outside=shape[4])		
-		
+				n_patron.add_shapes(offset_shape,
+									param=param if param else "def_pli_cut",
+									background=shape[2],
+									outline=shape[3],
+									outside=shape[4])
+
+		# Step 4: Create final holed polygon if requested
 		if full:
-			if outside_poly is None :
-				raise ValueError("no outside defined")
-			holed_poly = HoledPolygon.from_polygons(outside_poly, holes)
-			if param == "":
-				param = "def_adhesif_remove"
-			n_patron.add_shapes([holed_poly], param=param, background=True, outline=shapes[0][3], outside=shapes[0][4])
+			if outside_poly is None:
+				raise ValueError("No outer boundary defined for full offset.")
+
+			holed = HoledPolygon.from_polygons(outside_poly, holes)
+			n_patron.add_shapes([holed],
+								param=param if param else "def_adhesif_remove",
+								background=True,
+								outline=False,
+								outside=shapes[0][4])
 
 		return n_patron
+
 
 	def create_patron_offset3(self, e : Number =0, L : Number =2, param="def_pli_cut", closed = True):
 		

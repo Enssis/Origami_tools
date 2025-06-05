@@ -4,8 +4,8 @@ from stl import mesh
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from dataclasses import dataclass
-from .utils._types import Number, Group
-from .utils._svg_utils import *
+from .Utils._types import Number, Group
+from .Utils._svg_utils import *
 
 def merge_close_points(points, tol=1e-6):
     result = []
@@ -1342,58 +1342,82 @@ class Polygon(Surface):
         """Create a copy of the polygon."""
         return Polygon([point.copy() for point in self])
 
-    def cut(self, line : Line, decals :list[Number] | None = None):
-        """Cut the polygon with a line defined by two points.
-        Returns a list of polygons created by the intersection of the line with the polygon.
-        decals = [d1, d2, ..., dn] where d1 is the offset of the first line, d2 is the offset of the second line, ... and dn is the offset of the added line.
+    def cut(self, line: Line, decals: list[Number] | None = None):
         """
-        
-        if decals is not None:
-            if len(decals) != len(self):
-                raise ValueError("decals must have the same length as the number of edges of the polygon + 1")
+        Cut the polygon by a given line.
 
+        Args:
+            line (Line): The cutting line.
+            decals (list[Number] | None): Optional offset values for each polygon edge.
+                Expected length: number of polygon edges (len(self)) + 1 for the new edge.
+
+        Returns:
+            tuple: 
+                - List of Polygon objects created by the cut.
+                - List of decal lists corresponding to each polygon.
+        """
+        n_edges = len(self)
+
+        # Check decal length consistency
+        if decals is not None:
+            if len(decals) != n_edges:
+                raise ValueError("decals must have the same length as the number of polygon edges + 1")
+
+        # Build list of points with inserted intersections
         j = 1
         pts = [self[0].copy()]
-        intersections = []
-        for i in range(len(self) - 1):
-            line2 = Line(self[i], self[i + 1])
-            inter = line.intersection(line2)
+        intersections : list[int] = []
+
+        for i in range(n_edges - 1):
+            seg = Line(self[i], self[i + 1])
+            inter = line.intersection(seg)
             if inter is not None:
-                # print(inter, line, line2)
                 if inter == self[i + 1]:
                     intersections.append(j)
                 elif inter != self[i]:
                     pts.append(inter)
                     intersections.append(j)
                     if decals is not None:
+                        # Insert matching decal value at the new edge
                         decals.insert(j, decals[i])
                     j += 1
             pts.append(self[i + 1].copy())
             j += 1
 
+        # If no intersection or odd number → invalid cut
         if len(intersections) % 2 != 0 or len(intersections) == 0:
-            # print("Warning: odd number of intersections, returning original polygon")
             return [self.copy()], [decals]
-        
-        start : int = intersections[0]
+
+        # Build resulting sub-polygons
+        start = intersections[0]
         polygons = []
         new_pts = [pts[start].copy()]
         n_decals = [[decals[start]] if decals is not None else []]
         n_poly = 0
+
         for i in range(j - 1):
             index = (i + start) % (j - 1) + 1
             new_pts.append(pts[index].copy())
+
             if decals is not None:
                 n_decals[n_poly].append(decals[index % (j - 1)])
+
             if index in intersections:
+                # Close current polygon
                 new_pts.append(new_pts[0].copy())
                 polygons.append(Polygon(new_pts).in_2D())
                 new_pts = [pts[index].copy()]
+
                 if decals is not None:
+                    # The last inserted decal is the one for the added segment
                     n_decals[n_poly][-1] = decals[-1]
                 n_poly += 1
-                n_decals.append([decals[index % (j - 1)]] if decals is not None else [])
-        return polygons, n_decals 
+                n_decals.append(
+                    [decals[index % (j - 1)]] if decals is not None else []
+                )
+
+        return polygons, n_decals
+
     
     def as_svg(self, color="black", opacity : Number =1, width : Number =1, fill="none", origin=Point(0, 0)):
         """Convert the polygon to an SVG path."""
@@ -1454,7 +1478,7 @@ class HoledPolygon(Surface):
     def as_svg(self, color="black", opacity : Number =1, width : Number =1, fill="none", origin=Point(0, 0)):
         """Convert the holed polygon to an SVG path."""
         path_svg = []
-        self.update()
+        # self.update()
         polygons = [self.outside] + self.holes
         for polygon in polygons:
             if polygon[0] != polygon[-1] :

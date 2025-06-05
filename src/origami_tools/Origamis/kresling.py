@@ -1,10 +1,16 @@
+from dataclasses import dataclass
 import numpy as np
-import sys
+import os
+import json
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-import open3d as o3d
 
-from .. import *
+
+from ..Geometry import *
+from ..Utils._types import Number
+from .. import get_origami_dir
+from ..Patron import Patron
+from ..LaserCut import LaserCut
 
 
 def rotation_vect_and_point(vec, pt, angle):

@@ -81,10 +81,10 @@ def set_origami_dir(path):
 
 
 
-from .decoupe_laser import *
-from .geometry import *
-
-# __all__ = [
-#     "geometry", 
-#     "decoupe_laser", 
-# ]
+# from .decoupe_laser import *
+from . import Geometry, LaserCut, Patron
+__all__ = [
+    "Geometry", 
+    "LaserCut",
+    "Patron", 
+]
