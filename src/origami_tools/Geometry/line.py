@@ -324,15 +324,16 @@ class Line(Shape):
         gap_size = dash_length * (1 - dash_ratio)
         pattern_size = dash_size + gap_size
 
-        n_patterns = int((total_length + gap_size) // pattern_size)
+        n_patterns = int((total_length + gap_size + dash_size / 2) // pattern_size)
 
         dashes = []
         cursor = p0
 
-        for _ in range(n_patterns):
+        for i in range(n_patterns):
             dash_start = cursor
             dash_end = dash_start + dir_vec * dash_size
-
+            if i == 0:
+                dash_end -= dir_vec * dash_size / 2  # Ensure first dash starts with a visible segment
             if dash_start.distance(p0) > total_length:
                 break
             if dash_end.distance(p0) > total_length:
@@ -385,3 +386,15 @@ class Line(Shape):
             dash_empty = self.dash_length - dash_full
             return svg.Line(x1=svg.Length(start[0], "mm"), y1=svg.Length(start[1], "mm"), x2=svg.Length(end[0], "mm"), y2=svg.Length(end[1], "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width, stroke_dasharray=[dash_full, dash_empty])
         return svg.Line(x1=svg.Length(start[0], "mm"), y1=svg.Length(start[1], "mm"), x2=svg.Length(end[0], "mm"), y2=svg.Length(end[1], "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width)
+    
+    def coefficients(self):
+        """Return the equation of the line in the form Ax + By + C = 0."""
+        if self.dimension != 2:
+            raise NotImplementedError("Equation not implemented for dimensions other than 2")
+        
+        A = self.points[1][1] - self.points[0][1]
+        B = self.points[0][0] - self.points[1][0]
+        C = A * self.points[0][0] + B * self.points[0][1]
+        
+        return A, B, -C
+        

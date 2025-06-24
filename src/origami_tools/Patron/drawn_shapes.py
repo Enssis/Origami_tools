@@ -23,6 +23,7 @@ class DrawnShapes():
 	background: bool = False  # Si True, le patron est dessiné en arrière-plan
 	outline: bool = True  # Si True, le patron est dessiné avec un contour
 	outside: bool = False  # Si True, la forme est dessinée à l'extérieur de la forme, sinon à l'intérieur
+	duplicate: bool = False  # Si True, la forme sera dupliquée lors du dessin
 	z_offset: Number = 0  # Décalage en z pour le dessin, utilisé pour l'ordre des patrons 
 
 	def __str__(self):
@@ -32,8 +33,8 @@ class DrawnShapes():
 		return self.__str__()
 
 	@staticmethod
-	def create_id(param_name, background, outline, outside, z_offset : Number = 0): 
-		return f"{param_name}_{int(background)}_{int(outline)}_{int(outside)}_{int(z_offset * 100) / 100}"
+	def create_id(param_name, background, outline, outside, duplicate, z_offset : Number = 0): 
+		return f"{param_name}_{int(background)}_{int(outline)}_{int(outside)}_{int(duplicate)}_{int(z_offset * 100) / 100}"
 
 	def as_json(self):
 		"""
@@ -46,6 +47,7 @@ class DrawnShapes():
 			"background": self.background,
 			"outline": self.outline,
 			"outside": self.outside,
+			"duplicate": self.duplicate,
 			"z_offset": self.z_offset
 		}
 
@@ -53,7 +55,7 @@ class DrawnShapes():
 		"""
 			renvoie l'id du patron
 		"""
-		return DrawnShapes.create_id(self.param, self.background, self.outline, self.outside, self.z_offset)
+		return DrawnShapes.create_id(self.param, self.background, self.outline, self.outside, self.duplicate ,self.z_offset)
 
 	def mirror(self, plane : Plane | Line):
 		for shape in self.shapes:
@@ -85,7 +87,7 @@ class DrawnShapes():
 		new_shapes = []
 		for shape in self.shapes:
 			new_shapes.append(shape.copy())
-		return DrawnShapes(new_shapes, param=self.param, background=self.background, outline=self.outline, outside=self.outside, z_offset=self.z_offset)
+		return DrawnShapes(new_shapes, param=self.param, background=self.background, outline=self.outline, outside=self.outside, duplicate=self.duplicate, z_offset=self.z_offset)
 	
 	def to_svg(self, color="black", opacity=1, width=1, fill=None, origin=Point(0, 0)):
 		"""
@@ -179,11 +181,11 @@ class Folds(DrawnShapes):
 		return self.__str__()
 	
 	@staticmethod
-	def create_id(param_name, fold_type, fold_value, z_offset : Number = 0): # type: ignore
-		return f"{param_name}_{fold_type}_{int(fold_value * 100) / 100}_{int(z_offset * 100) / 100}"
+	def create_id(param_name, fold_type, fold_value, duplicate, z_offset : Number = 0): # type: ignore
+		return f"{param_name}_{fold_type}_{int(fold_value * 100) / 100}_{int(duplicate)}_{int(z_offset * 100) / 100}"
 
 	def id(self):
-		return Folds.create_id(self.param, self.fold_type, self.fold_value, self.z_offset)
+		return Folds.create_id(self.param, self.fold_type, self.fold_value, self.duplicate, self.z_offset)
 
 	def copy(self):
 		"""
@@ -192,7 +194,7 @@ class Folds(DrawnShapes):
 		new_shapes = []
 		for shape in self.shapes:
 			new_shapes.append(shape.copy())
-		return Folds(new_shapes, param=self.param, fold_type=self.fold_type, fold_value=self.fold_value, outside=self.outside, z_offset=self.z_offset)
+		return Folds(new_shapes, param=self.param, fold_type=self.fold_type, fold_value=self.fold_value, outside=self.outside, duplicate=self.duplicate, z_offset=self.z_offset)
 	
 	def thicken_to_rect(self, l):
 		"""

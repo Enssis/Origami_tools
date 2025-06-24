@@ -4,11 +4,13 @@ from svglib.svglib import svg2rlg
 import svg
 from IPython.display import SVG, display
 import numpy as np
+import io
+from reportlab.graphics import renderPDF
 
 
 from ..Utils._types import Number
 from ..LaserCut import LaserCut
-from ..Geometry import Point, Line, Vec, Plane, E2X, Shape, Surface, BASE_REPERE3D, HoledPolygon, Circle, Polygon
+from ..Geometry import Point, Line, Vec, Plane, E2X, Shape, Surface, BASE_REPERE3D, HoledPolygon, Circle, Polygon, Arc
 from .drawn_shapes import DrawnShapes, Folds
 
 class Patron:
@@ -82,6 +84,7 @@ class Patron:
 	def reset(self): 
 		self.shapes = []
 		self.texts = []
+		self.shapes_id = []
 
 		self.canvas = None
 
@@ -118,7 +121,7 @@ class Patron:
 			elems.append(laser_cut.fab_text(text_coord[0], text_coord[1], text_coord[2], param=text[1], font_size=text[2], text_anchor=text[3]))
 		return elems
 
-	def add_folds(self, lines, fold_type="n", fold_value : Number = 0, param : str | None =None, outside=False, z_offset : Number = 0):
+	def add_folds(self, lines, fold_type="n", fold_value : Number = 0, param : str | None =None, outside=False, duplicate = False, z_offset : Number = 0):
 		"""
 			ajoute des lignes au patron \n
 			lines : liste de lignes à ajouter \n
@@ -144,12 +147,12 @@ class Patron:
 					nlines.append(Line(line[0], line[1]))
 			else :
 				nlines.append(line.copy())
-		f_id = Folds.create_id(param, fold_type, fold_value, z_offset)
+		f_id = Folds.create_id(param, fold_type, fold_value, duplicate, z_offset)
 		if f_id in self.shapes_id:
 			index = self.shapes_id.index(f_id)
 			self.shapes[index].shapes += nlines
 		else:
-			self.shapes.append(Folds(nlines, param=param, outside=outside, z_offset=z_offset, fold_type=fold_type, fold_value=fold_value))
+			self.shapes.append(Folds(nlines, param=param, outside=outside, z_offset=z_offset, fold_type=fold_type, duplicate=duplicate, fold_value=fold_value))
 			self.shapes_id.append(f_id)
 
 
@@ -160,7 +163,7 @@ class Patron:
 			self.texts.append([text, param, font_size,text_anchor])
 	
 
-	def add_shapes(self, shapes : Shape | List[Shape], param : str | None = None, background=False, outline=True, outside=False, z_offset : Number = 0):
+	def add_shapes(self, shapes : Shape | List[Shape], param : str | None = None, background=False, outline=True, outside=False, duplicate = False, z_offset : Number = 0):
 		"""
 			add shapes to the patron \n
 			shapes : list of shapes to add \n
@@ -181,12 +184,12 @@ class Patron:
 			shapes = t_shapes
 		if param is None:
 			param = "def_cut"
-		s_id = DrawnShapes.create_id(param, background, outline, outside, z_offset)
+		s_id = DrawnShapes.create_id(param, background, outline, outside, duplicate, z_offset)
 		if s_id in self.shapes_id:
 			index = self.shapes_id.index(s_id)
 			self.shapes[index].shapes += shapes
 		else:
-			self.shapes.append(DrawnShapes(shapes.copy(), param=param, background=background, outline=outline, outside=outside, z_offset=z_offset))
+			self.shapes.append(DrawnShapes(shapes.copy(), param=param, background=background, outline=outline, outside=outside, duplicate=duplicate, z_offset=z_offset))
 			self.shapes_id.append(s_id)
 	
 	def add_drawn_shapes(self, drawn_shapes : DrawnShapes):
@@ -325,7 +328,26 @@ class Patron:
 			elements=svg_elements, 
 		)
 
-	def create_patron_decal(self, montain, e, z_offset : Number = 1):
+	def get_duplicate(self, param="", param_suffix=""):
+		"""
+			renvoie un patron dupliqué
+		"""
+		patron = self.copy()
+		patron.name += "_duplicate"
+		patron.reset()
+		patron.shapes = []
+		for shape in self.shapes:
+			if isinstance(shape, DrawnShapes):
+				if shape.duplicate:
+					dr_shape = shape.copy()
+					if param != "":
+						dr_shape.param = param
+					elif param_suffix != "":
+						dr_shape.param += param_suffix
+					patron.add_drawn_shapes(dr_shape)
+		return patron
+
+	def create_patron_decal(self, montain, e, z_offset : Number = 1, param = ""):
 		name = self.name + "_decal_" + ("mountain" if montain else "valley")
 		new_patron = Patron(name, laser_cut=self.laser_cut, size=self.size, origin=self.origin)
 
@@ -337,15 +359,15 @@ class Patron:
 		# Étape 1 — Séparer les lignes décalables et les autres
 		for shape in self.shapes:
 			if isinstance(shape, Folds):
-				if not ((montain ^ (shape.fold_type == "v")) or shape.fold_type == "n"):
-					d = e * np.tan(shape.fold_value / 2)
+				if not ((montain ^ (shape.fold_type == "v")) or shape.fold_type == "n" or shape.fold_value == 0 or e == 0):
+					d = 2 * e / np.tan(shape.fold_value / 2)
 					for line in shape.shapes:
 						if isinstance(line, Line):
 							original_lines.append(line)
 							offset_instructions.append((line, d, shape))
 				else:
 					# On ajoute directement les plis non concernés
-					new_patron.add_folds(shape.shapes, param=shape.param, z_offset=z_offset)
+					new_patron.add_folds(shape.shapes, param=shape.param if param == "" else param, duplicate=shape.duplicate, z_offset=z_offset)
 					fixed_lines.extend(shape.shapes)  # pour intersections plus complètes si utile
 			else:
 				all_lines = []
@@ -360,6 +382,7 @@ class Patron:
 								background=shape.background,
 								outline=shape.outline,
 								outside=shape.outside,
+								duplicate=shape.duplicate,
 								z_offset=z_offset
 							)
 						else :
@@ -367,10 +390,11 @@ class Patron:
 				fixed_lines.extend(all_lines)
 				new_patron.add_shapes(
 						all_lines,
-						param=shape.param,
+						param=shape.param if param == "" else param,
 						background=shape.background,
 						outline=shape.outline,
 						outside=shape.outside,
+						duplicate=shape.duplicate,
 						z_offset=z_offset
 					)
 
@@ -452,10 +476,11 @@ class Patron:
 
 				new_patron.add_shapes(
 						[offset_line],
-						param=shape.param,
+						param=shape.param if param == "" else param,
 						background=shape.background,
 						outline=shape.outline,
 						outside=shape.outside,
+						duplicate=shape.duplicate,
 						z_offset=z_offset
 					)
 
@@ -467,7 +492,7 @@ class Patron:
 
 
 
-	def create_patron_offset(self, mountain=False, e: Number = 0, L: Number = 2, full=False, param="", z_offset : Number = 0) -> "Patron":
+	def create_patron_offset(self, e: Number = 0, k : Number = 0.5, full=False, param="", z_offset : Number = 0) -> "Patron":
 		"""
 		Generate an offset pattern (patron) for adhesive or cutting.
 		
@@ -485,41 +510,33 @@ class Patron:
 		n_patron = Patron(self.name + "_offset", laser_cut=self.laser_cut, size=self.size, origin=self.origin)
 		n_patron.w_h(self.width, self.height)
 
-		outside_poly = None
+		
+
+		outside_shape = None				
+
+		# Default offset value
+		
+		if full :
+			param = "def_adhesif_remove" if param == "" else param
+		else:
+			param = "def_pli_cut" if param == "" else param
 
 		for drawnshape in self.shapes:
-			# Default offset value
-			d = 0 if L == 0 else -0.25
-			if full :
-				param = "def_adhesif_remove" if param == "" else param
-			else:
-				param = "def_pli_cut" if param == "" else param
-
+			d = 0 if k == 0 else -0.25
 			# Handle outer contour (cut line)
 			if drawnshape.outside:
-				outside_poly = drawnshape.to_polygon()
-				drawnshape.shapes = [outside_poly.copy()]
-				dep = 0 if L == 0 else 0.25
-				outside_poly = outside_poly.copy().offset(dep).in_2D(BASE_REPERE3D)
-
-				if not full and L > 0:
-					n_patron.add_drawn_shapes(DrawnShapes(
-						[outside_poly],
-						param=param,
-						background=drawnshape.background,
-						outline=drawnshape.outline,
-						outside=True,
-						z_offset=z_offset
-					))
+				if outside_shape is None:
+					outside_shape = drawnshape.copy()
+				else:
+					outside_shape.shapes += drawnshape.shapes
+				continue
+				
 
 			# Handle fold lines (with optional thickness-based offset)
 			if isinstance(drawnshape, Folds):
 				if drawnshape.fold_type != "n":  # Skip neutral folds
-					if mountain ^ (drawnshape.fold_type == "v"):
-						d = -(e * np.tan(drawnshape.fold_value / 2) + L) / 2
-					else:
-						d = -L / 2
-
+					d = -e / np.tan(drawnshape.fold_value / 2) - k / 2
+			
 			# Process individual shapes
 			for shape in drawnshape.shapes:
 				if isinstance(shape, Circle):
@@ -538,6 +555,33 @@ class Patron:
 						drawnshape.outside,          # Outside flag
 						[d] * (len(shape) - 1)       # Offset distances per edge
 					])
+
+		outside_poly = None
+		if outside_shape is not None:
+			d = 0 if k == 0 else -0.25
+			outside_poly = outside_shape.to_polygon()
+			outside_shape.shapes = [outside_poly.copy()]
+			dep = 0 if k == 0 else 0.25
+			outside_poly = outside_poly.copy().offset(dep).in_2D(BASE_REPERE3D)
+
+			if not full and k > 0:
+				n_patron.add_drawn_shapes(DrawnShapes(
+					[outside_poly],
+					param=param,
+					background=outside_shape.background,
+					outline=outside_shape.outline,
+					outside=True,
+					z_offset=z_offset
+				))
+			shapes.append([
+						outside_poly.copy(),                # Shape
+						outside_shape.param,            # Parameter
+						outside_shape.background,       # Background flag
+						outside_shape.outline,          # Outline flag
+						outside_shape.outside,          # Outside flag
+						[d] * (len(outside_poly) - 1)       # Offset distances per edge
+					])
+
 
 		# Step 2: Cutting polygons by lines
 		i = 0
@@ -579,7 +623,6 @@ class Patron:
 
 		# Step 3: Apply offset and render shapes
 		holes = []
-
 		for shape in shapes:
 			if isinstance(shape[0], Line) or len(shape[0]) < 4:
 				continue  # Skip invalid or trivial polygons
@@ -734,51 +777,36 @@ class Patron:
 
 		return patron
 
-	def create_lasercut_patron(self, asym=False, e : Number =0, L : Number=2, adhesif_param ="def_adhesif_remove"):
+	def create_lasercut_patron(self, asym=False, e : Number = 0, k : Number=0.5, adhesif_param ="def_adhesif_remove", mirror=True, montain=True, cut_param=""):
 		"""
 			return two patrons on one \n
 			asym : if True, the two patrons are asymetric \n
 			e : thickness of the fold \n
 			l : thickness of the removed adhesive \n
 			adhesif_param : name of the parameter to use for the adhesive \n
+			mirror : if True, the patron is mirrored \n
+			montain : if True, the patron is a mountain fold \n
 		"""
-		patrons = [self.copy(), self.copy()]
+		patron = self.copy()
+		if not asym:
+			e = 0
+		patron_offset_m = patron.create_patron_offset(e, k, True, adhesif_param)
+		patron_offset_mcut = patron.create_patron_decal(montain, e, param=cut_param)
 
-		# if asym is False or the thickness of the plate is null, we create the two patrons with the same fold
-		if not asym or e == 0:
-			if L != 0:
-				patrons[0].thicken_lines(L / 2, param=adhesif_param)
-				patrons[1].thicken_lines(L / 2, param=adhesif_param)
+		if mirror:
+			w_mirror = patron.width + 2.5
+			mirror_line = Line(Point(w_mirror, 0), Point(w_mirror, 5))
+			patron.mirror(mirror_line)
+			patron.w_h(w_mirror * 2, patron.height)
+			patron_offset_v = patron.create_patron_offset(e, k, True, adhesif_param)
+			patron_offset_vcut = patron.create_patron_decal(not montain, e, param=cut_param)
+			full_patron = patron_offset_m + patron_offset_mcut + patron_offset_v + patron_offset_vcut
 		else:
-			# else we create the two patrons with lines to remove the material surplus
-			patrons[0] = self.create_patron_decal(True, e)
-			patrons[1] = self.create_patron_decal(False, e)
-			if L != 0:
-				adh_rem_p = [[],[]]
-				for shape in self.shapes:
-					if isinstance(shape, Folds):
-						if shape.fold_type == "n":
-							adh_rem_p[0] += shape.shapes
-							adh_rem_p[1] += shape.shapes
-						else :
-							d = e * np.tan(shape.fold_value/2)
-							lines_small = shape.thicken_to_rect(L/2)
-							lines_big = shape.thicken_to_rect(L/2 + d)
-							i = 0 if shape.fold_type == "m" else 1
-							adh_rem_p[i] += lines_small
-							adh_rem_p[i ^ 1] += lines_big
-					elif isinstance(shape, DrawnShapes):
-						adh_rem_p[0] += shape.shapes
-						adh_rem_p[1] += shape.shapes
+			full_patron = patron_offset_m + patron_offset_mcut
 
-				patrons[0].add_shapes(adh_rem_p[0], param=adhesif_param, background=True, outline=False)
-				patrons[1].add_shapes(adh_rem_p[1], param=adhesif_param, background=True, outline=False)
-		patrons[1].mirror(Line(Point(self.width + 2.5, 0), Point(self.width + 2.5, 5)))
 
-		patron = patrons[0] + patrons[1]
-		patron.w_h(self.width * 2 + 5, self.height)
-		patron.name = self.name + "_lasercut"
-		return patron
+		full_patron.name = self.name + "_lasercut"
+		return full_patron
 
 	def create_lasercut_martyr(self, asym=False, e=0, L=2):
 		
@@ -819,6 +847,59 @@ class Patron:
 		patron += patron2
 		patron.w_h(self.width  * 2 + 5 + self.origin[0], self.height + self.origin[1])
 
+		return patron
+
+	def cut_half(self, side : int = 1):
+		"""
+			cut the patron in half \n
+			side : 0 for left, 1 for right \n
+		"""
+		if side not in [0, 1]:
+			raise ValueError("side must be 0 or 1")
+		patron = self.copy()
+		middle_x = self.width / 2
+		cut_line = Line(Point(middle_x, 0), Point(middle_x, self.height))
+		mult = -1 if side == 0 else 1
+		for shape in patron.shapes:
+			shapes = []
+			for s in shape.shapes:
+				if isinstance(s, Line):
+					if mult * s[0][0] < mult * middle_x:
+						s[0][0] = middle_x
+					if mult * s[1][0] < mult * middle_x:
+						s[1][0] = middle_x
+					if s[0][0] == s[1][0]:
+						continue
+				elif isinstance(s, Circle):
+					inter_pts = s.line_intersection(cut_line)
+					if inter_pts is None or len(inter_pts) == 1:
+						if mult * s[0][0] < mult * middle_x:
+							continue
+					
+					else: 
+						if inter_pts[0][1] > inter_pts[1][1]:
+							up_point = inter_pts[0] 
+							down_point = inter_pts[1]
+						else:
+							up_point = inter_pts[1] 
+							down_point = inter_pts[0]
+						if side == 1:
+							s = Arc([s[0], down_point, up_point], s.radius)
+						else:
+							s = Arc([s[0], up_point, down_point], s.radius)
+
+
+				else :
+					s = s.to_polygon()
+					if isinstance(s, Polygon):
+						polygons = s.cut(cut_line)
+						if len(polygons) == 1:
+							if mult * polygons[0][0][0] < mult * middle_x:
+								continue
+						else :
+							s = s.cut(cut_line)[side]
+				shapes.append(s)
+			shape.shapes = shapes
 		return patron
 
 	def create_pattern(self):

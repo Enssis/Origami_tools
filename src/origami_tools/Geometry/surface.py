@@ -114,8 +114,8 @@ class Surface(Shape):
     def triangulate(self):
         """Triangulate the surface."""
         triangles = []
-        for i in range(1, len(self) - 2):
-            triangles.append(Surface([self[0], self[i], self[i + 1]]))
+        for i in range(1, len(self) - 1):
+            triangles.append(Surface([self[0], self[i], self[(i + 1) % len(self)] ]))
         return triangles
 
     def edges(self):
@@ -204,10 +204,145 @@ class Circle(Surface):
         """Create a copy of the circle."""
         return Circle(self[0].copy(), self.radius)
 
-    def as_svg(self, color="black", opacity : Number =1, width : Number =1, fill="none", origin=Point(0, 0)):
+    def as_svg(self, color="black", opacity : Number =1, width : Number =1, fill="none", origin=Point(0, 0)) -> svg.Element:
         """Convert the circle to an SVG path."""
         center = self[0] + origin
         return svg.Circle(cx=svg.Length(center[0], "mm"), cy=svg.Length(center[1], "mm"), r=svg.Length(self.radius, "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width, fill=fill)
+
+    def line_intersection(self, line: Line):
+        """Find the intersection points of the circle with a line."""
+        if not isinstance(line, Line):
+            raise TypeError("line must be a Line object")
+        
+        # Convert to 2D if necessary
+        if self.dimension == 3:
+            self.in_2D()
+        
+        a,b,c = line.coefficients()
+        x0, y0 = self[0]
+        r = self.radius
+
+        if b != 0:
+            m = - a / b
+            c2 = - c / b
+            # Line is not vertical
+            A = 1 + m ** 2
+            B = 2 * (m * c2 + m * y0 - x0)
+            C = c2 ** 2 + y0 ** 2 - r ** 2 + x0 ** 2 - 2 * y0 * c2
+            
+            discriminant = B**2 - 4*A*C
+            if discriminant < 0:
+                return None
+            
+            sqrt_discriminant = np.sqrt(discriminant)
+            x1 = (-B + sqrt_discriminant) / (2 * A)
+            y1 = m * x1 + c2
+            if discriminant == 0:
+                return [Point(x1, y1)]
+            
+            x2 = (-B - sqrt_discriminant) / (2 * A)
+            y2 = m * x2 + c2
+            
+            return [Point(x1, y1), Point(x2, y2)]
+        else:
+            # Line is vertical
+            x = -c / a
+            if abs(x - x0) > r:
+                return None
+            y_offset = np.sqrt(r ** 2 - (x - x0) ** 2)
+            y1 = y0 + y_offset
+            y2 = y0 - y_offset
+            return [Point(x, y1), Point(x, y2)] if y1 != y2 else [Point(x, y1)]
+            
+
+@dataclass
+class Arc(Circle):
+    """ A class representing an arc defined by its center, radius, start angle, and end angle. """
+    sweep : bool = True  # True for counter-clockwise, False for clockwise
+
+    def __post_init__(self):
+        if not isinstance(self[0], Point):
+            raise TypeError("Arc center must be a Point object")
+        
+        if len(self) != 3:
+            raise ValueError("Arc must have three points: center, start point, and end point")
+
+        dist1 = self[0].distance(self[1])
+        if np.abs(self[0].distance(self[2]) - dist1) > 1e-6:
+            raise ValueError("Start and end points must be equidistant from the center")
+        if dist1 != self.radius:
+            self.radius = dist1
+            
+
+        super().__post_init__()
+
+    def get_angles(self):
+        """Get the start and end angles of the arc."""
+        if self.dimension != 2:
+            raise ValueError("Arc must be in 2D space")
+        
+        start_angle = np.arctan2(self[1][1] - self[0][1], self[1][0] - self[0][0])
+        end_angle = np.arctan2(self[2][1] - self[0][1], self[2][0] - self[0][0])
+
+        if start_angle < 0:
+            start_angle += 2 * np.pi
+        if end_angle < 0:
+            end_angle += 2 * np.pi
+        if start_angle > 2 * np.pi:
+            start_angle %= 2 * np.pi
+        if end_angle > 2 * np.pi:
+            end_angle %= 2 * np.pi
+
+        return start_angle, end_angle
+
+    @classmethod
+    def from_angles(cls, center : Point, start_angle : Number, end_angle : Number, radius : Number, sweep : bool = True):
+        """Create an arc from its center, start angle, end angle, and radius."""
+        if not isinstance(center, Point):
+            raise ValueError("center must be a Point object")
+        if center.dimension != 2:
+            raise ValueError("center must be in 2D space")
+        if radius <= 0:
+            raise ValueError("radius must be positive")
+        if not isinstance(sweep, bool):
+            raise ValueError("sweep must be a boolean value")
+
+        start_point = Point(
+            center[0] + radius * np.cos(start_angle),
+            center[1] + radius * np.sin(start_angle)
+        )
+        end_point = Point(
+            center[0] + radius * np.cos(end_angle),
+            center[1] + radius * np.sin(end_angle)
+        )
+        
+        return cls([center, start_point, end_point], radius, None, sweep)
+
+    def __repr__(self):
+        return f"Arc(center: {self[0]}, radius: {self.radius}, start_point: {self[1]}, end_point: {self[2]})"
+    
+    def copy(self):
+        """Create a copy of the arc."""
+        return Arc([self[0].copy(), self[1].copy(), self[2].copy()], self.radius, self.normal, self.sweep)
+    
+
+
+    def as_svg(self, color="black", opacity : Number =1, width : Number =1, fill="none", origin=Point(0, 0)):
+        """Convert the arc to an SVG path."""
+
+        path_start = svg.M(mm_to_px(self[1][0] + origin[0]), mm_to_px(self[1][1] + origin[1]))
+
+        start_angle, end_angle = self.get_angles()
+        large_arc_flag = np.abs(end_angle - start_angle) > np.pi
+
+        arc = svg.Arc(rx=self.radius, ry=self.radius, angle=np.rad2deg(np.abs(start_angle - end_angle)), large_arc=True if large_arc_flag else False, sweep=self.sweep, x=mm_to_px(self[2][0] + origin[0]), y=mm_to_px(self[2][1] + origin[1]))
+        return svg.Path(d=[path_start, arc], stroke=color, stroke_opacity=opacity, stroke_width=width, fill=fill)
+    
+    def mirror(self, plane: Plane | Line):
+        super().mirror(plane)
+        self.sweep = not self.sweep  # Reverse the sweep direction on mirroring
+    
+
 
 @dataclass
 class Rectangle(Surface):
@@ -245,7 +380,7 @@ class Rectangle(Surface):
         return cls([point1, point2], width, height)
     
     @classmethod
-    def from_cs(cls, corner : Point, width : Number, height : Number):
+    def from_corner_size(cls, corner : Point, width : Number, height : Number):
         """Create a rectangle from its top left corner and its width and height."""
         if not isinstance(corner, Point):
             raise ValueError("corner must be a Point object")
@@ -289,6 +424,11 @@ class Rectangle(Surface):
         """Convert the rectangle to an SVG path."""
         top_left = self[0] + origin
         return svg.Rect(x=svg.Length(top_left[0], "mm"), y=svg.Length(top_left[1], "mm"), width=svg.Length(self.width, "mm"), height=svg.Length(self.height, "mm"), stroke=color, stroke_opacity=opacity, stroke_width=width, fill=fill)
+    
+    def to_polygon(self):
+        """Convert the rectangle to a polygon."""
+        corners = self.get_corners()
+        return Polygon(corners, n_points=4)
 
 @dataclass
 class Polygon(Surface):

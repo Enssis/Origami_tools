@@ -31,7 +31,7 @@ from .repere import Repere
 from .plane import Plane
 from .line import Line
 from .shape import Shape
-from .surface import Surface, Polygon, Circle, HoledPolygon, RegularPolygon, Rectangle
+from .surface import Surface, Polygon, Circle, HoledPolygon, RegularPolygon, Rectangle, Arc
 from .volume import Volume   
 
 BASE_REPERE2D = Repere.base(2)
@@ -51,6 +51,7 @@ __all__ = [
     "Surface",
     "Polygon",
     "Circle",
+    "Arc",
     "HoledPolygon",
     "RegularPolygon",
     "Rectangle",

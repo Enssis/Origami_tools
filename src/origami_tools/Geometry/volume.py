@@ -1,6 +1,8 @@
 from .surface import *
 from typing import Sequence
 from stl import mesh
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+
 
 @dataclass    
 class Volume():
@@ -74,13 +76,15 @@ class Volume():
                 surfaces.append(surface.copy())
         return Volume(surfaces)
     
-    def show(self, save = False, path = None):
+    def show(self, save = False, path = None, alpha = 0.5, edgecolor = '0', facecolor = 'cyan'):
         ax = plt.figure().add_subplot(111, projection='3d')
         
         volume_mesh = self.mesh_3D()
 
-        poly = Poly3DCollection(volume_mesh.vectors, alpha=0.5) # type: ignore
-        poly.set_edgecolor('0')
+        poly = Poly3DCollection(volume_mesh.vectors, alpha=alpha) # type: ignore
+        poly.set_edgecolor(edgecolor)
+        poly.set_facecolor(facecolor) # type: ignore
+        
         # Auto scale to the mesh size
         scale = volume_mesh.points.flatten() # type: ignore
         scalex = []

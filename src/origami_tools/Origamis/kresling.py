@@ -300,21 +300,33 @@ class TDK:
             self.create_patron(h)
         self.patron.create_pattern() # type: ignore
 
-
-    def create_patron(self, h : Number =0, attache : Patron | None = None, laser_cut : LaserCut | None =None) -> Patron:
+    
+    def create_patron(self, h : Number =0, attache : Patron | None = None, laser_cut : LaserCut | None = None, closing : int = 2, side : int = 0, closing_type : int = 1) -> Patron:
         """
         Create the patron of the Kresling tower
         :param h: height of the tower, if 0, use h1
         :param attache: Patron to attach to the tower, if None, no attachment. Must be the first one on the top left of the patron and be open on the down side
         :param laser_cut: LaserCut object to use for the patron, if None, use the default laser cut
+        :param closing: number of the closing method
+        :param side: 0 => no sides diff, 1 => side1, 2 => side2
+        :param closing_type: 1 => closing at half pane; 2 => closigne at half 2 panes 
         :return: Patron object
         """
         if h == 0:
             h = self.h1
-        self.patron = Patron(self.name, laser_cut=laser_cut, origin=Point(5, 5))
+        w = 5 + self.a/2 if (closing == 2 and side == 1) else 5 + self.a if (closing == 2 and side == 2) else 5
+        self.patron = Patron(self.name, laser_cut=laser_cut, origin=Point(w, 5))
         if isinstance(attache, Patron):
             attache.origin = self.patron.origin.copy() 
             self.patron.origin[1] += attache.height
+
+        if self.etages > 1:
+            raise ValueError("TODO: add folds for etages > 1")
+
+        if self.etages % 2 != 0:
+            dec = np.sqrt(self.b ** 2 - self.r_p ** 2)
+        else :
+            dec = 0
 
         angle_v = self.angle_pli_vallee(h)
         angle_m = self.angle_pli_montagne(h)
@@ -329,28 +341,85 @@ class TDK:
         l_lines = [Line.from_angle(Point(0, 0), phi1, self.l)]
 
         depl = Vec(self.a, 0)
+
         for i in range(1, self.n):
-            b_line = b_lines[i-1].copy()
+            b_line = b_lines[-1].copy()
             b_lines.append(Line(b_line[0] + depl, b_line[1] + depl))
 
-            l_line = l_lines[i-1].copy()
+            l_line = l_lines[-1].copy()
             l_lines.append(Line(l_line[0] + depl, l_line[1] + depl))
-
+        
         last_bline = b_lines[-1].copy()
         last_bline.translate(depl)
         b_lines.append(last_bline)
 
-        self.patron.add_folds(b_lines[1:-1], "m", angle_m)
-        self.patron.add_folds(l_lines, "v", angle_v)
-        self.patron.add_shapes([b_lines[0], b_lines[-1]], outside=True)
+        self.patron.add_folds(b_lines[1:-1], "v", angle_v)
+        self.patron.add_folds(l_lines, "m", angle_m)
+        
+        if closing == 2 and side == 1:
+            p2 = b_lines[0][1].copy()
+            A = Point(0,0)
+            if attache is not None:
+                A = Point(-self.a/2, -attache.height)
+                half_attache = attache.cut_half()
+                half_attache.translate(-depl)
+                self.patron += half_attache
+            limit_lines : list[Shape] = [] 
+            if closing_type == 2:
+                p2.translate(-depl/2)
+                if attache is None:
+                    limit_lines.append(Line.from_dir(p2, depl / 2))
+                else:
+                    half_attache = attache.cut_half(0)
+                    half_attache.rotate(np.pi)
+                    half_attache.translate(Vec(dec - self.a, self.r_p + attache.height))
+                    limit_lines.append(Line.from_dir(p2, Vec(0, half_attache.height)))
+                    self.patron += half_attache
+            limit_lines.extend([Line(A, Point(- self.a/2, 0)), Line(Point(-self.a/2, 0), p2)])
+            self.patron.add_shapes(limit_lines, outside=True)
+            self.patron.add_folds([b_lines[0]], "v", angle_v)
+        else:
+            if not (closing == 2 and side == 2 and closing_type == 1):
+                self.patron.add_shapes([b_lines[0]], outside=True)
+        
+        if closing == 2 and side == 2:
+            p1 = Point(self.a * (self.n - 1), 0)
+            p2 = l_lines[-1][1].copy()
+            
+            if closing_type == 2:
+                p2.translate(depl/2)
+                p1.translate(depl)
+                self.patron.add_folds([b_lines[-1]], "v", angle_v)
 
-        if self.etages > 1:
-            print("TODO: add folds for etages > 1")
+            else :
+                l_line = l_lines[0].copy()
+                self.patron.add_shapes([Line(l_line[0] - depl, l_line[1] - depl)], outside=True)
 
-        if self.etages % 2 != 0:
-            dec = np.sqrt(self.b ** 2 - self.r_p ** 2)
+            
+            limit_lines : list[Shape] = [Line(p1 + depl / 2, p2)]
+            if attache is not None:
+                p3 = Point(self.a * (self.n - 1) + self.a / 2, -attache.height)
+                half_attache = attache.cut_half(0)
+                half_attache.translate(Vec((self. n - 1) * self.a, 0))
+                if closing_type == 2:
+                    half_attache.translate(depl)
+                    p3.translate(depl)
+                    half_attache2 = attache.cut_half()
+                    half_attache2.rotate(np.pi)
+                    half_attache2.translate(Vec(dec + self.a * self.n, self.r_p + attache.height))
+                    self.patron += half_attache2
+                    limit_lines.append(Line.from_dir(p2, Vec(0, half_attache.height)))
+
+                limit_lines.append(Line(p3, p1 + depl / 2))
+                self.patron += half_attache
+            else : 
+                limit_lines.append(Line.from_dir(p1, depl / 2))
+            self.patron.add_shapes(limit_lines, outside=True)
+            if closing_type != 2:
+                self.patron.add_folds([b_lines[0]], "v", angle_v)
         else :
-            dec = 0
+            self.patron.add_shapes([b_lines[-1]], outside=True)
+
 
         if attache is None:
             self.patron.add_shapes([Line(Point(0, 0), Point(long, 0))], outside=True)
@@ -359,7 +428,13 @@ class TDK:
             dual_attache = attache.copy()
             dual_attache.rotate(np.pi)
             dual_attache.translate(Vec(dec, self.r_p * self.etages + attache.height))
-            dual_attache += attache.copy()
+            if closing == 2 and side == 2 and closing_type == 1:
+                dual_attache.translate(Vec(self.a, 0))
+                dual_attache += attache.copy()
+                dual_attache.translate(Vec(-self.a, 0))
+            else :
+                dual_attache += attache.copy()
+
             rho = self.angle_pli_rho(h)
             up_folds = []
             down_folds = []
@@ -368,8 +443,10 @@ class TDK:
                 dual_attache.translate(Vec(self.a, 0))
                 up_folds.append(Line(Point(i * self.a, 0), Point((i + 1) * self.a, 0)))
                 down_folds.append(Line(Point(dec + i * self.a, self.r_p * self.etages), Point(dec + (i + 1) * self.a, self.r_p * self.etages)))
-            self.patron.add_folds(up_folds, "m", rho)
-            self.patron.add_folds(down_folds, "v", rho)
+            if closing == 2 and side == 2 and closing_type == 1:
+                up_folds[-1] = Line(Point(-self.a, 0), Point(0, 0))
+            self.patron.add_folds(up_folds, "m", rho, duplicate=True)
+            self.patron.add_folds(down_folds, "v", rho, duplicate=True)
             
                 
         
@@ -412,7 +489,7 @@ class TDK:
         else :
             V = Point(self.r * np.cos(phi), self.r * np.sin(phi), h_rep) 
 
-        verts = [Polygon([U, V, W])]
+        verts = [Polygon([U, V, W, U])]
         if type == 2:
             angle_m_pc = (np.pi - self.angle_pli_montagne(h_rep)) * fold_pc / 100
             angle_v_pc = (np.pi - self.angle_pli_vallee(h_rep)) * fold_pc / 100
@@ -449,7 +526,7 @@ class TDK:
                 # angle_rho = self.angle_pli_rho(h)
                 d_mont = ep_tot / np.tan(angle_m/2) if side == 1 else 0
                 d_val = ep_tot / np.tan(angle_v/2) if side == 2 else 0
-                pol = Polygon([U, V, W]).offset([-d_val, -d_mont, 0])
+                pol = Polygon([U, V, W, U]).offset([-d_val, -d_mont, 0])
                 U = pol[0]
                 V = pol[1]
                 W = pol[2]

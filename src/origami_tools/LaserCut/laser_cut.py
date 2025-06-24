@@ -56,6 +56,26 @@ class LaserParam:
 			return f"d{self.dash_length}l{self.dash_full_ratio}r" + id_name 
 
 	@staticmethod
+	def from_id(id):
+		"""
+			renvoie un paramètre à partir de son id
+			id : id du paramètre
+		"""
+		if id.startswith("f"):
+			full = True
+			id = id[1:]
+		else:
+			full = False
+			id = id[1:]
+		
+		passe, power, speed = id.split("p")
+		passe = int(passe)
+		power = int(power[:-1])
+		speed = float(speed[:-1])
+		
+		return LaserParam("red", name=f"Laser_param_{power}_{speed}_red", ep=0.2, full=full, power=power, speed=speed, passe=passe)
+
+	@staticmethod
 	def default_cut():
 		return LaserParam("red", "def_cut")
 	
