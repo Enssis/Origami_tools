@@ -226,7 +226,7 @@ class LaserCut:
 			"params": [param.as_json() for param in self.params.values()]
 		}
 
-	def get_param_num(self, n):
+	def get_param_num(self, n) -> LaserParam:
 		""" 
 			renvoie le paramètre numero n
 		"""
@@ -234,14 +234,25 @@ class LaserCut:
 			return list(self.params.values())[n]
 		else:
 			print(f"Le paramètre {n} n'existe pas dans ce profile.")
-			return None
+			return LaserParam.default_cut()
 
-	"""
+	def get_param(self, name) -> LaserParam:
+		"""
+			renvoie le paramètre avec le nom name
+			name : nom du paramètre
+		"""
+		if name in self.names:
+			return self.params[name]
+		else:
+			print(f"Le paramètre {name} n'existe pas dans ce profile.")
+			return LaserParam.default_cut()
+
+	def save_profile(self, overwrite_file=False, overwrite_param=False, dir_path=None):
+		"""
 		sauvegarde le profil dans un fichier
 		overwrite_file : si True, écrase le fichier existant
 		overwrite_param : si True, écrase le paramètre existant dans le fichier
-	"""
-	def save_profile(self, overwrite_file=False, overwrite_param=False, dir_path=None):
+		"""
 		# sauvegarde le profil dans un fichier
 		if dir_path is None:
 			dir_path = LASER_SAVE_PATH
@@ -269,7 +280,7 @@ class LaserCut:
 								print(f"Le parametre {key} existe déjà dans le fichier de sauvegarde. Il sera écrasé.")
 								line = self.params[key].as_csv()					
 							else:
-								print(f"Le profil {self.profile} existe déjà dans le fichier de sauvegarde.")
+								print(f"Le parametre {key} existe déjà dans le fichier de sauvegarde.")
 							
 							# on supprime le nom du paramètre de la liste des noms a tester
 							param_names.remove(key)
@@ -316,7 +327,7 @@ class LaserCut:
 		print(f"Le profil {profile} n'existe pas dans le fichier de sauvegarde {path}.")
 		return None
 
-	def fab_shapes(self, shapes : Sequence[Shape] | List[Shape], param="", background=False, outline=True, origin=Point(0, 0)):
+	def fab_shapes(self, shapes : Sequence[Shape] | List[Shape], param="", background=False, outline=True, origin=Point(0, 0), all_visible=False):
 		"""
 			return a list of shapes for the laser cut \n
 			shapes : list of shapes to cut \n
@@ -331,7 +342,7 @@ class LaserCut:
 			param = self.default_cut
 
 		if outline:
-			ep = param.ep
+			ep = param.ep if not all_visible or param.ep >= 1 else 1
 		else:
 			ep = 0
 
@@ -341,17 +352,18 @@ class LaserCut:
 			fill = "none"
 
 		fab_shapes = []
+		width = param.ep if not all_visible or param.ep >= 1 else 1
 		for shape in shapes:
 			if isinstance(shape, Line):
 				if not param.full:
 					lines = shape.get_line_dashed(param.dash_length, param.dash_full_ratio)
-					fab_shapes += [line.as_svg(param.color, opacity=1, width=param.ep, origin=origin) for line in lines]
+					fab_shapes += [line.as_svg(param.color, opacity=1, width=width, origin=origin) for line in lines]
 				else:
-					fab_shapes.append(shape.as_svg(param.color, opacity=1, width=param.ep, origin=origin))
+					fab_shapes.append(shape.as_svg(param.color, opacity=1, width=width, origin=origin))
 			else:
 				if not param.full and isinstance(shape, Surface) and not isinstance(shape, Circle):
 					lines = shape.get_dashed(param.dash_length, param.dash_full_ratio)
-					fab_shapes += [line.as_svg(param.color, opacity=1, width=param.ep, origin=origin) for line in lines]
+					fab_shapes += [line.as_svg(param.color, opacity=1, width=width, origin=origin) for line in lines]
 				else:
 					fab_shapes.append(shape.as_svg(color=param.color, opacity=1, width=ep, fill=fill, origin=origin))
 		return fab_shapes
@@ -395,3 +407,15 @@ class LaserCut:
 			c_nums.append(c_num)
 		table.sortby = "Couleur num"
 		print(table)
+
+	def add_param(self, param : LaserParam):
+		"""
+			ajoute un paramètre au laser cut
+			param : LaserParam
+		"""
+		if isinstance(param, LaserParam):
+			self.params[param.name] = param
+			self.names.append(param.name)
+			print(f"Le paramètre {param.name} a été ajouté au laser cut {self.profile}.")
+		else:
+			print(f"Le paramètre {param} n'est pas un LaserParam.")

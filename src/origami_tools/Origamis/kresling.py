@@ -301,7 +301,7 @@ class TDK:
         self.patron.create_pattern() # type: ignore
 
     
-    def create_patron(self, h : Number =0, attache : Patron | None = None, laser_cut : LaserCut | None = None, closing : int = 2, side : int = 0, closing_type : int = 1) -> Patron:
+    def create_patron(self, h : Number =0, attache : Patron | None = None, laser_cut : LaserCut | None = None, closing : int = 2, side : int = 0, closing_type : int = 1, outside_param="def_pli_cut") -> Patron:
         """
         Create the patron of the Kresling tower
         :param h: height of the tower, if 0, use h1
@@ -376,11 +376,11 @@ class TDK:
                     limit_lines.append(Line.from_dir(p2, Vec(0, half_attache.height)))
                     self.patron += half_attache
             limit_lines.extend([Line(A, Point(- self.a/2, 0)), Line(Point(-self.a/2, 0), p2)])
-            self.patron.add_shapes(limit_lines, outside=True)
+            self.patron.add_shapes(limit_lines, outside=True, param=outside_param)
             self.patron.add_folds([b_lines[0]], "v", angle_v)
         else:
             if not (closing == 2 and side == 2 and closing_type == 1):
-                self.patron.add_shapes([b_lines[0]], outside=True)
+                self.patron.add_shapes([b_lines[0]], outside=True, param=outside_param)
         
         if closing == 2 and side == 2:
             p1 = Point(self.a * (self.n - 1), 0)
@@ -393,7 +393,7 @@ class TDK:
 
             else :
                 l_line = l_lines[0].copy()
-                self.patron.add_shapes([Line(l_line[0] - depl, l_line[1] - depl)], outside=True)
+                self.patron.add_shapes([Line(l_line[0] - depl, l_line[1] - depl)], outside=True, param=outside_param)
 
             
             limit_lines : list[Shape] = [Line(p1 + depl / 2, p2)]
@@ -414,16 +414,16 @@ class TDK:
                 self.patron += half_attache
             else : 
                 limit_lines.append(Line.from_dir(p1, depl / 2))
-            self.patron.add_shapes(limit_lines, outside=True)
+            self.patron.add_shapes(limit_lines, outside=True, param=outside_param)
             if closing_type != 2:
                 self.patron.add_folds([b_lines[0]], "v", angle_v)
         else :
-            self.patron.add_shapes([b_lines[-1]], outside=True)
+            self.patron.add_shapes([b_lines[-1]], outside=True, param=outside_param)
 
 
         if attache is None:
-            self.patron.add_shapes([Line(Point(0, 0), Point(long, 0))], outside=True)
-            self.patron.add_shapes([Line(Point(dec, self.r_p), Point(dec + long, self.r_p))], outside=True)
+            self.patron.add_shapes([Line(Point(0, 0), Point(long, 0))], outside=True, param=outside_param)
+            self.patron.add_shapes([Line(Point(dec, self.r_p), Point(dec + long, self.r_p))], outside=True, param=outside_param)
         else:
             dual_attache = attache.copy()
             dual_attache.rotate(np.pi)

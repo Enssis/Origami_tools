@@ -471,7 +471,7 @@ class Polygon(Surface):
         # Check decal length consistency
         if decals is not None:
             if len(decals) != n_edges:
-                raise ValueError("decals must have the same length as the number of polygon edges + 1")
+                raise ValueError(f"decals must have the same length as the number of polygon edges + 1, {len(self)} edges, got {len(decals)} decals")
 
         # Build list of points with inserted intersections
         j = 1
@@ -482,6 +482,7 @@ class Polygon(Surface):
         for i in range(n_edges - 1):
             seg = Line(self[i], self[i + 1])
             inter = line.intersection(seg)
+            # print(f"Cutting edge {i} : {self[i]} - {self[i + 1]} with line {line} : intersection = {inter}")
             if inter is not None:
                 if inter == self[i + 1]:
                     intersections.append(j)

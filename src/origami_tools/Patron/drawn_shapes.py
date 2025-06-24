@@ -120,6 +120,7 @@ class DrawnShapes():
 		elif len(self.shapes) > 1:
 			if not isinstance(self.shapes[0], Line):
 				raise ValueError("Cannot convert multiple shapes to a polygon")
+			# print("Converting multiple lines to a polygon")
 			pts = [self.shapes[0][0].copy(), self.shapes[0][1].copy()]
 			lines = self.shapes[1:]
 			done = []

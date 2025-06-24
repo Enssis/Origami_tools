@@ -76,9 +76,7 @@ class Patron:
 		self.width = width
 		self.height = height
 	
-	def set_origin(self, origin):
-		self.width = self.width + origin[0] - self.origin[0]
-		self.height = self.height + origin[1] - self.origin[1]
+	def set_origin(self, origin : Point):
 		self.origin = origin
 
 	def reset(self): 
@@ -105,12 +103,12 @@ class Patron:
 		patron.w_h(self.width, self.height)
 		return patron
 
-	def shape2svg(self, laser_cut : LaserCut):
+	def shape2svg(self, laser_cut : LaserCut, all_visible=False):
 		elems = []
 		self.shapes = sorted(self.shapes, key=lambda x: x.z_offset if isinstance(x, DrawnShapes) else 0)
 		for shape in self.shapes :
 			if isinstance(shape, DrawnShapes):
-				elems += laser_cut.fab_shapes(shape.shapes, param=shape.param, background=shape.background, outline=shape.outline, origin=self.origin) 
+				elems += laser_cut.fab_shapes(shape.shapes, param=shape.param, background=shape.background, outline=shape.outline, origin=self.origin, all_visible=all_visible) 
 				
 		return elems
 
@@ -139,6 +137,8 @@ class Patron:
 				param = "def_pli_cut"
 			else:
 				param = "def_cut"
+		if isinstance(lines, Line):
+			lines = [lines]
 		for line in lines:
 			if not isinstance(line, Line):
 				if len(line) == 4 :
@@ -219,14 +219,14 @@ class Patron:
 			if isinstance(shape, DrawnShapes):
 				shape.mirror(plane)
 
-	def show(self, repr=""):
+	def show(self, repr="", recreate = True, all_visible = False):
 		"""
 			affiche le patron dans un notebook Jupyter \n
 			repr : "cut" pour la découpe, "patron" pour le patron, "decal" pour le patron avec les plis, "lasercut" pour le patron découpé
 		"""
 		if repr != "":
 			if repr == "cut":
-				self.create()
+				self.create(all_visible=all_visible)
 			elif repr == "patron":
 				self.create_pattern()
 			elif repr == "decal":
@@ -235,6 +235,9 @@ class Patron:
 				patron = self.create_lasercut_patron()
 				patron.create()
 				self.canvas = patron.canvas
+		elif recreate:
+			self.create_pattern()
+
 		if self.canvas is None:
 			self.create_pattern()
 
@@ -316,9 +319,9 @@ class Patron:
 		patron.w_h(max(patron.width, other.width) + depl[0], max(patron.height, other.height) + depl[1])
 		return patron
 
-	def create(self):
+	def create(self, all_visible=False):
 		svg_elements = []
-		svg_elements += self.shape2svg(self.laser_cut)
+		svg_elements += self.shape2svg(self.laser_cut, all_visible=all_visible)
 		svg_elements += self.texts2svg(self.laser_cut)
 
 
@@ -512,7 +515,7 @@ class Patron:
 
 		
 
-		outside_shape = None				
+		outside_shape : DrawnShapes | None = None				
 
 		# Default offset value
 		
@@ -560,19 +563,9 @@ class Patron:
 		if outside_shape is not None:
 			d = 0 if k == 0 else -0.25
 			outside_poly = outside_shape.to_polygon()
+			# outside_poly.show()
 			outside_shape.shapes = [outside_poly.copy()]
-			dep = 0 if k == 0 else 0.25
-			outside_poly = outside_poly.copy().offset(dep).in_2D(BASE_REPERE3D)
-
-			if not full and k > 0:
-				n_patron.add_drawn_shapes(DrawnShapes(
-					[outside_poly],
-					param=param,
-					background=outside_shape.background,
-					outline=outside_shape.outline,
-					outside=True,
-					z_offset=z_offset
-				))
+			
 			shapes.append([
 						outside_poly.copy(),                # Shape
 						outside_shape.param,            # Parameter
@@ -582,8 +575,21 @@ class Patron:
 						[d] * (len(outside_poly) - 1)       # Offset distances per edge
 					])
 
+			dep = 0 if k == 0 else 0.25
+			outside_poly = outside_poly.copy().offset(dep).in_2D(BASE_REPERE3D)
+			if not full and k > 0:
+				n_patron.add_drawn_shapes(DrawnShapes(
+					[outside_poly],
+					param=param,
+					background=outside_shape.background,
+					outline=outside_shape.outline,
+					outside=True,
+					z_offset=z_offset
+				))
+
 
 		# Step 2: Cutting polygons by lines
+		# outside_poly.show() if outside_poly is not None else None
 		i = 0
 		while i < len(shapes):
 			current_shape = shapes[i][0]
@@ -610,7 +616,7 @@ class Patron:
 
 				if len(sub_polygons) == 1:
 					continue
-
+				
 				# Replace first part in place, append the others
 				shapes[j][0] = sub_polygons[0]
 				shapes[j][5] = sub_offsets[0]
