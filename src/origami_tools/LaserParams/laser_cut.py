@@ -2,12 +2,12 @@ from dataclasses import dataclass
 import os
 from typing import List, Sequence
 import prettytable as pt 
+import json
 
 from ..Utils._types import Number
 from ..Utils._svg_utils import svg_text_from_text
 from ..Geometry import Shape, Line, Surface, Point, Circle
 from . import LASER_SAVE_PATH, get_lasercut_color_num
-
 class LaserParam:
 	def __init__(self, color, name="", ep : Number =0.2, full=True, dash_length : Number = 6, dash_full_ratio : float = 0.5, power : Number =80, speed : Number =4, passe : int=1):
 		self.color = color
@@ -165,38 +165,118 @@ class LaserParam:
 		return LaserParam(color, name=name, ep=ep, full=full, dash_length=dash_length, dash_full_ratio=dash_full_ratio, power=power, speed=speed, passe=passe)
 
 
+class ListTemplate(dict[str, str]):
 
-@dataclass
-class LaserCut: 
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.__dict__ = self
 
-	def __init__(self, params : list[LaserParam] = [], default_cut = None, default_text=None, profile="default"):
-		if len(params) == 0:
-			lc = LaserCut.load_from_profile(profile)
-			if lc is None:
-				print(f"Le profil {profile} n'existe pas.")
-				return
-			params = list(lc.params.values())
-		self.params = {}
-		for param in params:
-			if isinstance(param, LaserParam):
-				self.params[param.name] = param
-			else:
-				print(f"Le paramètre {param} n'est pas un LaserParam.")
-		if default_cut is None:
-			self.default_cut = params[1]
-		else:
-			self.default_cut = default_cut
-		if default_text is None:
-			self.default_text = params[0]
-		else:
-			self.default_text = default_text
+	def __str__(self):
+		text = "ListTemplate:\n"
+		for key, value in self.items():
+			text += f"  {key} : {value}\n"
+
+		return text
+
+	def __repr__(self):
+		return self.__str__()
+
+	def as_json(self):
+		return self.__dict__
+
+	def copy(self) -> "ListTemplate":
+		return ListTemplate(**self.__dict__.copy())
+
+	def save(self, name, dir_path=None):
+		"""
+			sauvegarde le template dans un fichier
+			name : nom du template
+			dir_path : chemin du dossier dans lequel on veut sauvegarder le template
+		"""
+		if dir_path is None:
+			dir_path = LASER_SAVE_PATH
+		path = dir_path + name + ".json"
+		json.dump(self.as_json(), open(path, "w"), indent=4)
+		print(f"Template {name} sauvegardé dans {path}")
+
+	@staticmethod
+	def load(name, dir_path=None):
+		"""
+			charge le template depuis un fichier
+			name : nom du template à charger
+			dir_path : chemin du dossier dans lequel on veut charger le template
+		"""
+		if dir_path is None:
+			dir_path = LASER_SAVE_PATH
+		path = dir_path + name + ".json"
+		if not os.path.exists(path):
+			raise ValueError(f"Le template {name} n'existe pas dans le fichier de sauvegarde {path}.")
+		with open(path, "r") as f:
+			data = json.load(f)
+			return ListTemplate(**data)
+		
+	def contain_list(self, key : list[str]) -> bool:
+		"""
+			renvoie True si le template contient la liste de clés
+			key : liste de clés à tester
+		"""
+		for k in key:
+			if k not in self.keys():
+				return False
+		return True
+
+	@staticmethod
+	def default_template():
+		"""
+			renvoie un template par défaut
+		"""
+		return ListTemplate(
+			cut = "default_cut",
+			text = "default_text",
+		)
+
+class ParamList: 
+	"""
+	Class to manage a list of laser parameters.
+	"""
+
+	def __init__(self, params : dict[str, LaserParam] = {}, template : ListTemplate = ListTemplate(), profile : str = "default"):
+		self.params = params
+		self.template = template
 		self.profile = profile
+		if self.params == {}:
+			pl = ParamList.load_from_profile(self.profile)
+			if pl is None:
+				print(f"Le profil {self.profile} n'existe pas.")
+				return
+			self.params = pl.params
+			if self.template == ListTemplate():
+				self.template = pl.template
+
 		self.names = list(self.params.keys())
+
+		for value in self.template.values():
+			if value not in self.names: 
+				raise ValueError(f"{value} does not exist in the params list.")
+
+
+	
+	@classmethod
+	def from_list(cls, params : list[LaserParam], template : ListTemplate = ListTemplate() , profile="default"):
+		"""
+		Initializes a ParamList from a list of LaserParam objects.
+		params : list of LaserParam objects
+		template : optional, a dictionary or ListTemplate for additional parameters
+		profile : name of the profile for this ParamList
+		"""
+		params_dict : dict[str, LaserParam] = {param.name: param for param in params if isinstance(param, LaserParam)}
+
+		return cls(params=params_dict, template=template, profile=profile)
+
 
 	def __str__(self):
 		desc = f"LaserCut {self.profile}:\n"
-		desc += f"  default_cut : {self.default_cut.name} \n"
-		desc += f"  default_text : {self.default_text.name}\n"
+		desc += f"  template : {self.template} \n"
 		desc += "  params :\n"
 		for name, param in self.params.items():
 			desc += f"  {name} : {param}"
@@ -207,10 +287,9 @@ class LaserCut:
 		"""
 			copie le laser cut
 		"""
-		params = []
-		for param in self.params.values():
-			params.append(param.copy())
-		return LaserCut(params=params, default_cut=self.default_cut, default_text=self.default_text, profile=self.profile)
+		params = {name: param.copy() for name, param in self.params.items()}
+		template = self.template.copy()
+		return ParamList(params=params, template=template, profile=self.profile)
 
 	def __repr__(self):
 		return self.__str__()
@@ -221,8 +300,7 @@ class LaserCut:
 		"""
 		return {
 			"profile": self.profile,
-			"default_cut": self.default_cut.as_json(),
-			"default_text": self.default_text.as_json(),
+			"template": self.template.as_json() if isinstance(self.template, ListTemplate) else self.template,
 			"params": [param.as_json() for param in self.params.values()]
 		}
 
@@ -304,16 +382,26 @@ class LaserCut:
 		with open(path, "w") as f:
 			f.write(file)
 		
+		# on sauvegarde le template dans un fichier
+		self.template.save(self.profile + "_template", dir_path=dir_path)
+
 		print(f"Fichier de sauvegarde des paramètres laser dans {path}")
 
 	@staticmethod
-	def load_from_profile(profile, dir_path=None):
+	def load_from_profile(profile, dir_path=None, template_name=None):
 		if dir_path is None:
 			dir_path = LASER_SAVE_PATH
 		path = dir_path + profile + ".csv"
 		if not os.path.exists(path):
 			print(f"Le profil {profile} n'existe pas.")
 			return None
+		# on charge le template si il est spécifié
+		if template_name is None:
+			template_name = profile + "_template"
+		template = ListTemplate.load(template_name, dir_path=dir_path)
+		if template is None:
+			raise ValueError(f"Le template {template_name} n'existe pas.")
+				
 		with open(path, "r") as f:
 			lines = f.readlines()[1:]
 			params = []
@@ -322,7 +410,7 @@ class LaserCut:
 				if param is not None:
 					params.append(param)
 			if len(params) > 0:
-				return LaserCut(params=params, profile=profile)
+				return ParamList.from_list(params=params, template=template, profile=profile)
 				
 		print(f"Le profil {profile} n'existe pas dans le fichier de sauvegarde {path}.")
 		return None
@@ -338,8 +426,11 @@ class LaserCut:
 		"""
 		if param in self.names:
 			param = self.params[param]
-		else: 
-			param = self.default_cut
+		else:
+			if not self.template.contain_list([param]):
+				raise ValueError(f"The template {self.template} does not contain the key {param}.")
+			name = self.template[param]
+			param = self.params[name]
 
 		if outline:
 			ep = param.ep if not all_visible or param.ep >= 1 else 1
@@ -373,7 +464,10 @@ class LaserCut:
 		if param in self.names:
 			param = self.params[param]
 		else: 
-			param = self.default_text
+			if not self.template.contain_list(["text"]):
+				raise ValueError("The template does not contain the key 'text'.")
+			name = self.template["text"]
+			param = self.params[name]
 
 		return svg_text_from_text(text, x, y, font_size=font_size, color=param.color, text_anchor=text_anchor)
 
@@ -389,9 +483,14 @@ class LaserCut:
 	def show_param(self):
 		# Affiche le tableau des paramètres
 		table = pt.PrettyTable()
-		table.field_names = ["Nom", "Couleur", "Couleur num", "Epaisseur", "Plein", "Longueur trait", "Ratio plein/pointillé", "Puissance", "Vitesse", "Passe"]
+		table.field_names = ["Template_name","Nom", "Couleur", "Couleur num", "Epaisseur", "Plein", "Longueur trait", "Ratio plein/pointillé", "Puissance", "Vitesse", "Passe"]
 		for param in self.params.values():
-			table.add_row([param.name, param.color, str(get_lasercut_color_num(param.color)), param.ep, param.full, param.dash_length, param.dash_full_ratio, param.power, param.speed, param.passe])
+			template_name = ""
+			for key, value in self.template.items():
+				if value == param.name:
+					template_name = key
+					break
+			table.add_row([template_name, param.name, param.color, str(get_lasercut_color_num(param.color)), param.ep, param.full, param.dash_length, param.dash_full_ratio, param.power, param.speed, param.passe])
 		print(table)
 
 	def show_cut_param(self):

@@ -26,7 +26,7 @@ def get_material_path():
     config = _get_config()
     material_path = config["material_path"]
     if material_path == "":
-        material_path = os.path.dirname(__file__) + "/material_profiles/"
+        material_path = os.path.dirname(__file__) + "/LaserParams/material_profiles/"
         config["material_path"] = material_path
         _set_config(config)
     if not os.path.exists(material_path):
@@ -47,7 +47,7 @@ def set_material_path(path):
     _set_config(config)
 
 def get_materials_default():
-    return os.path.dirname(__file__) + "/material_profiles/default.csv"
+    return os.path.dirname(__file__) + "/LaserParams/material_profiles/default.csv"
 
 def get_origami_dir_default():
     return os.path.dirname(__file__) + "/Origamis/origami_saves/"
@@ -82,9 +82,9 @@ def set_origami_dir(path):
 
 
 # from .decoupe_laser import *
-from . import Geometry, LaserCut, Patron
+from . import Geometry, LaserParams, Pattern
 __all__ = [
     "Geometry", 
-    "LaserCut",
-    "Patron", 
+    "LaserParams",
+    "Pattern", 
 ]

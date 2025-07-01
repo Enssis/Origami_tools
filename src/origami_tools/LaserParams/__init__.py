@@ -47,11 +47,12 @@ def get_lasercut_color_num(color, hex = True):
 		print(f"Erreur : la couleur {color} n'est pas dans la liste des couleurs laser.")
 		return -1
 
-from .laser_cut import LaserCut, LaserParam
+from .laser_cut import ParamList, LaserParam, ListTemplate
 
 __all__ = [
     "laser_cut_colors",
     "get_lasercut_color_num",
-    "LaserCut",
-    "LaserParam"
+    "ParamList",
+    "LaserParam",
+	"ListTemplate",
 ]

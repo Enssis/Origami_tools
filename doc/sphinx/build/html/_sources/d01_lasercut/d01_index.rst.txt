@@ -2,10 +2,6 @@
 Laser cut module
 #########################################################
 
-=========
-LaserCut
-=========
-
 ===========
 LaserParam
 ===========
@@ -13,7 +9,7 @@ LaserParam
 Create a laser cutting parameter
 
 .. code-block:: python
-   
+
    from origami_tools.LaserCut import LaserParam
 
    my_laser_param = LaserParam(
@@ -33,3 +29,6 @@ change a color :
 
    my_laser_param.color = my_colors_hex[3]  # Set the color to the third HEX color
 
+=========
+LaserCut
+=========

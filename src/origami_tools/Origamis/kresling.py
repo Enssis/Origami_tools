@@ -9,8 +9,8 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from ..Geometry import *
 from ..Utils._types import Number
 from .. import get_origami_dir
-from ..Patron import Patron
-from ..LaserCut import LaserCut
+from ..Pattern import Pattern
+from ..LaserParams import ParamList
 
 
 def rotation_vect_and_point(vec, pt, angle):
@@ -282,7 +282,7 @@ class TDK:
         return np.arccos(np.dot(n_N, n_B) / (np.linalg.norm(n_N) * np.linalg.norm(n_B)))
 
     def create_motif_base(self, laser_cut, origin=Point(0, 0)):
-        motif = Patron(self.name, laser_cut, origin=origin)
+        motif = Pattern(self.name, laser_cut, origin=origin)
         angle_UVW = alkashi_angle(self.l, self.b, self.a)
         angle_VUW = alkashi_angle(self.l, self.a, self.b)
         R0 = Point(0,0)
@@ -301,22 +301,28 @@ class TDK:
         self.patron.create_pattern() # type: ignore
 
     
-    def create_patron(self, h : Number =0, attache : Patron | None = None, laser_cut : LaserCut | None = None, closing : int = 2, side : int = 0, closing_type : int = 1, outside_param="def_pli_cut") -> Patron:
+    def create_patron(self, h : Number =0, attache : Pattern | None = None, param_list : ParamList | None = None, closing : int = 2, side : int = 0, closing_type : int = 1, outside_param="fold_cut") -> Pattern:
         """
         Create the patron of the Kresling tower
         :param h: height of the tower, if 0, use h1
         :param attache: Patron to attach to the tower, if None, no attachment. Must be the first one on the top left of the patron and be open on the down side
-        :param laser_cut: LaserCut object to use for the patron, if None, use the default laser cut
+        :param laser_cut: ParamList object to use for the patron, if None, use the default list
         :param closing: number of the closing method
         :param side: 0 => no sides diff, 1 => side1, 2 => side2
         :param closing_type: 1 => closing at half pane; 2 => closigne at half 2 panes 
         :return: Patron object
         """
+
+
         if h == 0:
             h = self.h1
         w = 5 + self.a/2 if (closing == 2 and side == 1) else 5 + self.a if (closing == 2 and side == 2) else 5
-        self.patron = Patron(self.name, laser_cut=laser_cut, origin=Point(w, 5))
-        if isinstance(attache, Patron):
+        self.patron = Pattern(self.name, param_list=param_list, origin=Point(w, 5))
+        
+        if not self.patron.param_list.template.contain_list([outside_param, "fold_cut", "fold_horizontal"]):
+            raise ValueError(f"Not all parameters of {[outside_param, "fold_cut"]} is in the template list {self.patron.param_list.template}")
+        
+        if isinstance(attache, Pattern):
             attache.origin = self.patron.origin.copy() 
             self.patron.origin[1] += attache.height
 
@@ -353,8 +359,8 @@ class TDK:
         last_bline.translate(depl)
         b_lines.append(last_bline)
 
-        self.patron.add_folds(b_lines[1:-1], "v", angle_v)
-        self.patron.add_folds(l_lines, "m", angle_m)
+        self.patron.add_folds(b_lines[1:-1], "m", angle_m)
+        self.patron.add_folds(l_lines, "v", angle_v)
         
         if closing == 2 and side == 1:
             p2 = b_lines[0][1].copy()
@@ -374,10 +380,11 @@ class TDK:
                     half_attache.rotate(np.pi)
                     half_attache.translate(Vec(dec - self.a, self.r_p + attache.height))
                     limit_lines.append(Line.from_dir(p2, Vec(0, half_attache.height)))
+                    self.patron.add_shapes([Line.from_dir(Point(0,0), Vec(-half_attache.width / 2, 0))], param="fold_cut")
                     self.patron += half_attache
             limit_lines.extend([Line(A, Point(- self.a/2, 0)), Line(Point(-self.a/2, 0), p2)])
             self.patron.add_shapes(limit_lines, outside=True, param=outside_param)
-            self.patron.add_folds([b_lines[0]], "v", angle_v)
+            self.patron.add_folds([b_lines[0]], "m", angle_m)
         else:
             if not (closing == 2 and side == 2 and closing_type == 1):
                 self.patron.add_shapes([b_lines[0]], outside=True, param=outside_param)
@@ -389,7 +396,7 @@ class TDK:
             if closing_type == 2:
                 p2.translate(depl/2)
                 p1.translate(depl)
-                self.patron.add_folds([b_lines[-1]], "v", angle_v)
+                self.patron.add_folds([b_lines[-1]], "m", angle_m)
 
             else :
                 l_line = l_lines[0].copy()
@@ -408,6 +415,7 @@ class TDK:
                     half_attache2.rotate(np.pi)
                     half_attache2.translate(Vec(dec + self.a * self.n, self.r_p + attache.height))
                     self.patron += half_attache2
+                    self.patron.add_shapes([Line.from_dir(p2, Vec(- half_attache2.width / 2, 0))], param="fold_cut")
                     limit_lines.append(Line.from_dir(p2, Vec(0, half_attache.height)))
 
                 limit_lines.append(Line(p3, p1 + depl / 2))
@@ -416,7 +424,7 @@ class TDK:
                 limit_lines.append(Line.from_dir(p1, depl / 2))
             self.patron.add_shapes(limit_lines, outside=True, param=outside_param)
             if closing_type != 2:
-                self.patron.add_folds([b_lines[0]], "v", angle_v)
+                self.patron.add_folds([b_lines[0]], "m", angle_m)
         else :
             self.patron.add_shapes([b_lines[-1]], outside=True, param=outside_param)
 
@@ -445,8 +453,8 @@ class TDK:
                 down_folds.append(Line(Point(dec + i * self.a, self.r_p * self.etages), Point(dec + (i + 1) * self.a, self.r_p * self.etages)))
             if closing == 2 and side == 2 and closing_type == 1:
                 up_folds[-1] = Line(Point(-self.a, 0), Point(0, 0))
-            self.patron.add_folds(up_folds, "m", rho, duplicate=True)
-            self.patron.add_folds(down_folds, "v", rho, duplicate=True)
+            self.patron.add_folds(up_folds, "m", rho + np.pi/2, duplicate=True, param="fold_horizontal")
+            self.patron.add_folds(down_folds, "v", rho + np.pi/2, duplicate=True, param="fold_horizontal")
             
                 
         

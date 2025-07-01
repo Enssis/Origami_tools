@@ -55,3 +55,15 @@ def hex_to_rgb(hex):
 	b = int(hex[5:7], 16)
 	return f"rgb({r},{g},{b})"
 
+
+def simplifed_hex(hexcolor):
+	"""
+	Simplify a hex color.
+	"""
+	if len(hexcolor) < 7:
+		raise ValueError("Hex color must be at least 7 characters long")
+	if len(hexcolor) != 7 or hexcolor[0] != '#':
+		raise ValueError("Hex color must be in the format #RRGGBB")
+	
+	return "#" + hexcolor[1] + hexcolor[3] + hexcolor[5]
+	

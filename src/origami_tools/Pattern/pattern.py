@@ -9,40 +9,53 @@ from reportlab.graphics import renderPDF
 
 
 from ..Utils._types import Number
-from ..LaserCut import LaserCut
+from ..LaserParams import ParamList
 from ..Geometry import Point, Line, Vec, Plane, E2X, Shape, Surface, BASE_REPERE3D, HoledPolygon, Circle, Polygon, Arc
 from .drawn_shapes import DrawnShapes, Folds
 
-class Patron:
+class Pattern:
+	"""
+	Class representing a crease pattern for origami or similar applications.
+	Attributes:
+		name (str): Name of the pattern.
+		laser_cut (ParamList): Laser cutting parameters.
+		origin (Point): Origin point of the pattern on the screen.
+	"""
+	def __init__(self, name="", param_list=None, origin=Point(0, 0)):
+		"""
+		Initializes a new Pattern instance.
+		Args:
+			name (str): Name of the pattern.
+			laser_cut (ParamList, optional): Laser cutting parameters. Defaults to a new ParamList instance.
+			origin (Point, optional): Origin point of the pattern on the screen. Defaults to Point(0, 0).
+		"""
 
-	def __init__(self, name="", laser_cut=None, size = 1, origin=Point(0, 0)):
-		self.name = name
-		if laser_cut is None:
-			self.laser_cut = LaserCut()
+		if param_list is None:
+			self.param_list = ParamList()
 		else:
-			self.laser_cut = laser_cut
-		self.shapes = []
-		self.texts = []
+			self.param_list = param_list
+		
+		self._shapes = []
+		self._texts = []
 
 		self.origin = origin
 
-		self.size = size
-
 		self.width = 100
 		self.height = 100
-		self.canvas = None
+		self.__canvas = None
 
+		self.name = name
 		if self.name == "":
-			self.name = "patron"
+			self.name = "pattern"
 
-		self.shapes_id = []
+		self.__shapes_id = []
 
 	def __str__(self):
 		shapes = ""
-		for shape in self.shapes:
+		for shape in self._shapes:
 			shapes += "\t" + str(shape) + "\n"
 
-		return f"Patron : name={self.name},\n laser_cut={self.laser_cut},\n shapes=\n{shapes},\n texts={self.texts},\n origin ={self.origin}, size={self.size}, width={self.width}, height={self.height}"
+		return f"Pattenr : name={self.name},\n laser_cut={self.param_list},\n shapes=\n{shapes},\n texts={self._texts},\n origin ={self.origin}, width={self.width}, height={self.height}"
 	
 	def __repr__(self):
 		return self.__str__()
@@ -53,11 +66,10 @@ class Patron:
 		"""
 		return {
 			"name": self.name,
-			"laser_cut": self.laser_cut.as_json(),
-			"shapes": [shape.as_json() for shape in self.shapes],
-			"texts": self.texts,
+			"laser_cut": self.param_list.as_json(),
+			"shapes": [shape.as_json() for shape in self._shapes],
+			"texts": self._texts,
 			"origin": [self.origin[0], self.origin[1]],
-			"size": self.size,
 			"width": self.width,
 			"height": self.height
 		}
@@ -80,33 +92,32 @@ class Patron:
 		self.origin = origin
 
 	def reset(self): 
-		self.shapes = []
-		self.texts = []
-		self.shapes_id = []
+		self._shapes = []
+		self._texts = []
+		self.__shapes_id = []
 
-		self.canvas = None
+		self.__canvas = None
 
 	def copy(self, origin=None):
 		
 		if origin is None:
 			origin = self.origin
-		patron = Patron(self.name, laser_cut=self.laser_cut, size=self.size, origin=origin)
-		for shape in self.shapes:
+		patron = Pattern(self.name, param_list=self.param_list, origin=origin)
+		for shape in self._shapes:
 			if isinstance(shape, DrawnShapes):
 				patron.add_drawn_shapes(shape.copy())
 			elif isinstance(shape, Folds):
 				patron.add_folds(shape.shapes, fold_type=shape.fold_type, fold_value=shape.fold_value, param=shape.param)
 			else:
 				print(f"Erreur : {shape} n'est pas une forme.")
-		patron.shapes_id = self.shapes_id.copy()
-		patron.texts = self.texts.copy()
+		patron._texts = self._texts.copy()
 		patron.w_h(self.width, self.height)
 		return patron
 
-	def shape2svg(self, laser_cut : LaserCut, all_visible=False):
+	def shape2svg(self, laser_cut : ParamList, all_visible=False):
 		elems = []
-		self.shapes = sorted(self.shapes, key=lambda x: x.z_offset if isinstance(x, DrawnShapes) else 0)
-		for shape in self.shapes :
+		self._shapes = sorted(self._shapes, key=lambda x: x.z_offset if isinstance(x, DrawnShapes) else 0)
+		for shape in self._shapes :
 			if isinstance(shape, DrawnShapes):
 				elems += laser_cut.fab_shapes(shape.shapes, param=shape.param, background=shape.background, outline=shape.outline, origin=self.origin, all_visible=all_visible) 
 				
@@ -114,8 +125,8 @@ class Patron:
 
 	def texts2svg(self, laser_cut):
 		elems = []
-		for text in self.texts :
-			text_coord = [text[0][0] , text[0][1] * self.size + self.origin[0] , text[0][2] * self.size + self.origin[1]]
+		for text in self._texts :
+			text_coord = [text[0][0] , text[0][1] + self.origin[0] , text[0][2] + self.origin[1]]
 			elems.append(laser_cut.fab_text(text_coord[0], text_coord[1], text_coord[2], param=text[1], font_size=text[2], text_anchor=text[3]))
 		return elems
 
@@ -134,9 +145,9 @@ class Patron:
 		nlines = []
 		if param is None:
 			if fold_type == "m" or fold_type == "v":
-				param = "def_pli_cut"
+				param = "fold_cut"
 			else:
-				param = "def_cut"
+				param = "cut"
 		if isinstance(lines, Line):
 			lines = [lines]
 		for line in lines:
@@ -148,19 +159,19 @@ class Patron:
 			else :
 				nlines.append(line.copy())
 		f_id = Folds.create_id(param, fold_type, fold_value, duplicate, z_offset)
-		if f_id in self.shapes_id:
-			index = self.shapes_id.index(f_id)
-			self.shapes[index].shapes += nlines
+		if f_id in self.__shapes_id:
+			index = self.__shapes_id.index(f_id)
+			self._shapes[index].shapes += nlines
 		else:
-			self.shapes.append(Folds(nlines, param=param, outside=outside, z_offset=z_offset, fold_type=fold_type, duplicate=duplicate, fold_value=fold_value))
-			self.shapes_id.append(f_id)
+			self._shapes.append(Folds(nlines, param=param, outside=outside, z_offset=z_offset, fold_type=fold_type, duplicate=duplicate, fold_value=fold_value))
+			self.__shapes_id.append(f_id)
 
 
 	def add_texts(self, texts, param : str | None =None, font_size=10, text_anchor="start"):
 		if param is None:
-			param = "def_text"
+			param = "text"
 		for text in texts:
-			self.texts.append([text, param, font_size,text_anchor])
+			self._texts.append([text, param, font_size,text_anchor])
 	
 
 	def add_shapes(self, shapes : Shape | List[Shape], param : str | None = None, background=False, outline=True, outside=False, duplicate = False, z_offset : Number = 0):
@@ -183,14 +194,14 @@ class Patron:
 					print(f"Erreur : {shape} n'est pas une forme.")
 			shapes = t_shapes
 		if param is None:
-			param = "def_cut"
+			param = "cut"
 		s_id = DrawnShapes.create_id(param, background, outline, outside, duplicate, z_offset)
-		if s_id in self.shapes_id:
-			index = self.shapes_id.index(s_id)
-			self.shapes[index].shapes += shapes
+		if s_id in self.__shapes_id:
+			index = self.__shapes_id.index(s_id)
+			self._shapes[index].shapes += shapes
 		else:
-			self.shapes.append(DrawnShapes(shapes.copy(), param=param, background=background, outline=outline, outside=outside, duplicate=duplicate, z_offset=z_offset))
-			self.shapes_id.append(s_id)
+			self._shapes.append(DrawnShapes(shapes.copy(), param=param, background=background, outline=outline, outside=outside, duplicate=duplicate, z_offset=z_offset))
+			self.__shapes_id.append(s_id)
 	
 	def add_drawn_shapes(self, drawn_shapes : DrawnShapes):
 		"""
@@ -198,24 +209,24 @@ class Patron:
 			drawn_shapes : DrawnShapes() \n
 		"""
 		s_id = drawn_shapes.id()
-		if s_id in self.shapes_id:
-			index = self.shapes_id.index(s_id)
-			self.shapes[index].shapes += drawn_shapes.shapes
+		if s_id in self.__shapes_id:
+			index = self.__shapes_id.index(s_id)
+			self._shapes[index].shapes += drawn_shapes.shapes
 		else:
-			self.shapes.append(drawn_shapes)
-			self.shapes_id.append(s_id)
+			self._shapes.append(drawn_shapes)
+			self.__shapes_id.append(s_id)
 
 
 	def thicken_lines(self, l, param="", background=True, outline=False):
 		thickened = []
-		for shape in self.shapes:
+		for shape in self._shapes:
 			if isinstance(shape, Folds):
 				if shape.fold_type != "n":
 					thickened += shape.thicken_to_rect(l)
 		self.add_drawn_shapes(DrawnShapes(thickened, param=param, background=background, outline=outline))
 
 	def mirror(self, plane : Plane | Line):
-		for shape in self.shapes:
+		for shape in self._shapes:
 			if isinstance(shape, DrawnShapes):
 				shape.mirror(plane)
 
@@ -234,41 +245,41 @@ class Patron:
 			elif repr == "lasercut":
 				patron = self.create_lasercut_patron()
 				patron.create()
-				self.canvas = patron.canvas
+				self.__canvas = patron.__canvas
 		elif recreate:
 			self.create_pattern()
 
-		if self.canvas is None:
+		if self.__canvas is None:
 			self.create_pattern()
 
 
-		display(SVG(data=self.canvas.as_str())) # type: ignore
+		display(SVG(data=self.__canvas.as_str())) # type: ignore
 
 
 	def save_SVG(self, path, name=""):
 		if name == "":
 			name = self.name
-		if self.canvas is None:
+		if self.__canvas is None:
 			self.create()
 		if path[-1] != "/":
 			path += "/"
 		save_dir = path + name + ".svg"
 
 		with open(save_dir, "w") as f:
-			f.write(self.canvas.as_str()) # type: ignore
+			f.write(self.__canvas.as_str()) # type: ignore
 		print(f"Fichier SVG sauvegardé dans {save_dir}")
 
 	def save_PDF(self, path, name=""):
 		if name == "":
 			name = self.name
-		if self.canvas is None:
+		if self.__canvas is None:
 			self.create()
 		if path[-1] != "/":
 			path += "/"
 		save_dir = path + name + ".pdf"
 
 
-		svg_io = io.StringIO(self.canvas.as_str()) # type: ignore
+		svg_io = io.StringIO(self.__canvas.as_str()) # type: ignore
 		drawing = svg2rlg(svg_io) 
 		renderPDF.drawToFile(drawing, save_dir) # type: ignore
 
@@ -279,7 +290,7 @@ class Patron:
 			move the patron \n
 			v : vector to move \n
 		"""
-		for shape in self.shapes:
+		for shape in self._shapes:
 			if isinstance(shape, DrawnShapes):
 				shape.translate(v)
 			else:
@@ -295,37 +306,37 @@ class Patron:
 		"""
 		if center is None:
 			center = Point(self.width/2, self.height/2)
-		for shape in self.shapes:
+		for shape in self._shapes:
 			if isinstance(shape, DrawnShapes):
 				shape.rotate(angle, center)
 			else:
 				raise ValueError(f"Erreur : {shape} n'est pas une forme.")
 
 	def __add__(self, other):
-		if not isinstance(other, Patron):
+		if not isinstance(other, Pattern):
 			return NotImplemented
 		patron = self.copy()
 		other = other.copy()
 		depl = Vec.from_2points(patron.origin, other.origin)
 		other.translate(depl)
-		for shape in other.shapes:
+		for shape in other._shapes:
 			if isinstance(shape, DrawnShapes):
 				patron.add_drawn_shapes(shape.copy())
 			elif isinstance(shape, Folds):
 				patron.add_folds(shape.shapes, fold_type=shape.fold_type, fold_value=shape.fold_value, param=shape.param)
 			else:
 				print(f"Erreur : {shape} n'est pas une forme.")
-		patron.texts = patron.texts + other.texts
+		patron._texts = patron._texts + other._texts
 		patron.w_h(max(patron.width, other.width) + depl[0], max(patron.height, other.height) + depl[1])
 		return patron
 
 	def create(self, all_visible=False):
 		svg_elements = []
-		svg_elements += self.shape2svg(self.laser_cut, all_visible=all_visible)
-		svg_elements += self.texts2svg(self.laser_cut)
+		svg_elements += self.shape2svg(self.param_list, all_visible=all_visible)
+		svg_elements += self.texts2svg(self.param_list)
 
 
-		self.canvas = svg.SVG(
+		self.__canvas = svg.SVG(
 			width=svg.Length(self.width + 2 *self.origin[0], "mm"),
 			height=svg.Length(self.height + 2 * self.origin[1], "mm"),
 			elements=svg_elements, 
@@ -338,8 +349,8 @@ class Patron:
 		patron = self.copy()
 		patron.name += "_duplicate"
 		patron.reset()
-		patron.shapes = []
-		for shape in self.shapes:
+		patron._shapes = []
+		for shape in self._shapes:
 			if isinstance(shape, DrawnShapes):
 				if shape.duplicate:
 					dr_shape = shape.copy()
@@ -352,7 +363,7 @@ class Patron:
 
 	def create_patron_decal(self, montain, e, z_offset : Number = 1, param = ""):
 		name = self.name + "_decal_" + ("mountain" if montain else "valley")
-		new_patron = Patron(name, laser_cut=self.laser_cut, size=self.size, origin=self.origin)
+		new_patron = Pattern(name, param_list=self.param_list, origin=self.origin)
 
 		original_lines = []
 		offset_instructions = []
@@ -360,7 +371,7 @@ class Patron:
 
 
 		# Étape 1 — Séparer les lignes décalables et les autres
-		for shape in self.shapes:
+		for shape in self._shapes:
 			if isinstance(shape, Folds):
 				if not ((montain ^ (shape.fold_type == "v")) or shape.fold_type == "n" or shape.fold_value == 0 or e == 0):
 					d = 2 * e / np.tan(shape.fold_value / 2)
@@ -419,6 +430,7 @@ class Patron:
 					intersections_map[j][1].append(i)
 			for j, line in enumerate(fixed_lines):
 				inter = line_i.intersection(line, limit=True)
+				# print(f"Inter {line_i} with {line} : {inter}")
 				if inter is not None:
 					if inter == line_i[0]:
 						intersections_map[i][0].append(- j - 1)
@@ -488,14 +500,14 @@ class Patron:
 					)
 
 
-		new_patron.texts = self.texts.copy()
+		new_patron._texts = self._texts.copy()
 		new_patron.w_h(self.width, self.height)
 		return new_patron
 
 
 
 
-	def create_patron_offset(self, e: Number = 0, k : Number = 0.5, full=False, param="", z_offset : Number = 0) -> "Patron":
+	def create_patron_offset(self, e: Number = 0, k : Number = 0.5, full=False, param="", z_offset : Number = 0) -> "Pattern":
 		"""
 		Generate an offset pattern (patron) for adhesive or cutting.
 		
@@ -510,7 +522,7 @@ class Patron:
 			Patron: The new offset pattern.
 		"""
 		shapes = []
-		n_patron = Patron(self.name + "_offset", laser_cut=self.laser_cut, size=self.size, origin=self.origin)
+		n_patron = Pattern(self.name + "_offset", param_list=self.param_list, origin=self.origin)
 		n_patron.w_h(self.width, self.height)
 
 		
@@ -520,11 +532,11 @@ class Patron:
 		# Default offset value
 		
 		if full :
-			param = "def_adhesif_remove" if param == "" else param
+			param = "adhesive" if param == "" else param
 		else:
-			param = "def_pli_cut" if param == "" else param
+			param = "fold_cut" if param == "" else param
 
-		for drawnshape in self.shapes:
+		for drawnshape in self._shapes:
 			d = 0 if k == 0 else -0.25
 			# Handle outer contour (cut line)
 			if drawnshape.outside:
@@ -642,7 +654,7 @@ class Patron:
 				holes.append(offset_shape)
 			else:
 				n_patron.add_shapes(offset_shape,
-									param=param if param else "def_pli_cut",
+									param=param if param else "fold_cut",
 									background=shape[2],
 									outline=shape[3],
 									outside=shape[4],
@@ -655,7 +667,7 @@ class Patron:
 
 			holed = HoledPolygon.from_polygons(outside_poly, holes)
 			n_patron.add_shapes([holed],
-								param=param if param else "def_adhesif_remove",
+								param=param if param else "adhesive",
 								background=True,
 								outline=False,
 								outside=shapes[0][4],
@@ -664,12 +676,12 @@ class Patron:
 		return n_patron
 
 
-	def create_patron_offset3(self, e : Number =0, L : Number =2, param="def_pli_cut", closed = True):
+	def create_patron_offset3(self, e : Number =0, L : Number =2, param="fold_cut", closed = True):
 		
 		lines_list = []
 
 		# list all lines in the same table with the type of fold and d 
-		for shape in self.shapes:
+		for shape in self._shapes:
 			if isinstance(shape, Folds):
 				d = e * np.tan(shape.fold_value/2) if shape.fold_type != "n" else 0
 				for line in shape.shapes:
@@ -772,7 +784,7 @@ class Patron:
 					lines[1].append(Line(pts_list[j][1][1], pts_list[j + 1][0][1]))
 				pass
 		
-		patron = Patron(self.name + "_martyr", laser_cut=self.laser_cut, size=self.size, origin=self.origin)
+		patron = Pattern(self.name + "_martyr", param_list=self.param_list, origin=self.origin)
 		patron2 = patron.copy()
 		patron.add_folds(lines[1], param=param)
 		patron2.add_folds(lines[0], param=param)
@@ -783,7 +795,7 @@ class Patron:
 
 		return patron
 
-	def create_lasercut_patron(self, asym=False, e : Number = 0, k : Number=0.5, adhesif_param ="def_adhesif_remove", mirror=True, montain=True, cut_param=""):
+	def create_lasercut_patron(self, asym=False, e : Number = 0, k : Number=0.5, adhesif_param ="adhesive", mirror=True, montain=True, cut_param=""):
 		"""
 			return two patrons on one \n
 			asym : if True, the two patrons are asymetric \n
@@ -817,7 +829,7 @@ class Patron:
 	def create_lasercut_martyr(self, asym=False, e=0, L=2):
 		
 		lines = [[], []]
-		for shape in self.shapes:
+		for shape in self._shapes:
 			if isinstance(shape, Folds):
 				d = 0
 				if shape.fold_type != "n":
@@ -844,10 +856,10 @@ class Patron:
 							lines[i ^1].append(new_l1.copy())
 							lines[i ^1].append(new_l2.copy())
 
-		patron = Patron(self.name + "_martyr", laser_cut=self.laser_cut, size=self.size, origin=self.origin)
+		patron = Pattern(self.name + "_martyr", param_list=self.param_list, origin=self.origin)
 		patron2 = patron.copy()
-		patron.add_folds(lines[0], param="def_pli_cut")
-		patron2.add_folds(lines[1], param="def_pli_cut")
+		patron.add_folds(lines[0], param="fold_cut")
+		patron2.add_folds(lines[1], param="fold_cut")
 		patron2.mirror(Plane(Point(self.width + 2.5, 0), E2X))
 
 		patron += patron2
@@ -866,7 +878,7 @@ class Patron:
 		middle_x = self.width / 2
 		cut_line = Line(Point(middle_x, 0), Point(middle_x, self.height))
 		mult = -1 if side == 0 else 1
-		for shape in patron.shapes:
+		for shape in patron._shapes:
 			shapes = []
 			for s in shape.shapes:
 				if isinstance(s, Line):
@@ -914,8 +926,8 @@ class Patron:
 		# couleur moutain, couleur valley
 		pli_col = ["red", "blue"]
 		width = 2
-		self.shapes = sorted(self.shapes, key=lambda x: x.z_offset if isinstance(x, DrawnShapes) else 0)
-		for shape in self.shapes :
+		self._shapes = sorted(self._shapes, key=lambda x: x.z_offset if isinstance(x, DrawnShapes) else 0)
+		for shape in self._shapes :
 			if isinstance(shape, Folds):
 				i = 0 if shape.fold_type == "m" else 1
 				if shape.fold_type == "n":
@@ -928,7 +940,7 @@ class Patron:
 				print(f"Erreur : {shape} n'est pas une forme.")
 				continue
 
-		self.canvas = svg.SVG(
+		self.__canvas = svg.SVG(
 			width=svg.Length(self.width + 2 * self.origin[0], "mm"),
 			height=svg.Length(self.height + 2 * self.origin[1], "mm"),
 			elements=svg_elements, 
