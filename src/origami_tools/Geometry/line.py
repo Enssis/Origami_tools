@@ -535,6 +535,14 @@ class MultiLine(Line):
             self.break_points.insert(0, line.points[1])
             self.points[0] = line.points[0]
             return 0
+        elif self.points[0] == line.points[0]:
+            self.break_points.insert(0, line.points[0])
+            self.points[0] = line.points[1]
+            return 0
+        elif self.points[-1] == line.points[1]:
+            self.break_points.append(line.points[1])
+            self.points[-1] = line.points[0]
+            return -1
         else:
             raise ValueError("Line does not connect to MultiLine")
         

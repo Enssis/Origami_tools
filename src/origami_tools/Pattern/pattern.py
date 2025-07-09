@@ -625,72 +625,6 @@ class Pattern:
 			return poly, sub_polygons, sub_offsets, intersections, offset_values
 
 
-		def try_merge_with_waiting(current_shape, waiting_shapes, poly : Polygon, target_offset, current_offset):
-			"""
-			Try to merge the current line with a previously waiting one and perform a new cut if successful.
-
-			Returns:
-				(sub_polygons, sub_offsets, intersections, to_remove, merged: bool)
-			"""
-			to_remove = []
-			# print(f"[step2 fn try_merge_with_waiting] Trying to merge {current_shape} with waiting shapes...")
-			for w_idx, (waiting_shape, known_inters, waiting_offsets, _) in enumerate(waiting_shapes):
-				if waiting_shape == current_shape:
-					continue
-
-				inter = current_shape.intersection(waiting_shape, limit=True)
-				if inter is None:
-					continue
-
-				# Check whether the intersection is new and lies on both line endpoints
-				is_new = inter not in known_inters
-				is_endpoint = (
-					inter == current_shape[0] or inter == current_shape[1]
-				) and (inter == waiting_shape[0] or inter == waiting_shape[1])
-
-				# If it's already part of a MultiLine and contains the line, skip
-				if isinstance(waiting_shape, MultiLine) and waiting_shape.has_line(current_shape):
-					continue
-
-				if is_new and is_endpoint:
-					temp_line = waiting_shape.copy()
-
-					# Try to merge the two lines
-					if isinstance(waiting_shape, MultiLine):
-						placement = waiting_shape.add_line(current_shape)
-						waiting_shapes[w_idx][2] = (
-							current_offset + waiting_offsets if placement == 0
-							else waiting_offsets + current_offset
-						)
-					else:
-						new_ml, order = MultiLine.from_lines([waiting_shape, current_shape])
-						if new_ml is None:
-							continue  # Merge failed
-						waiting_shape = new_ml
-						waiting_shapes[w_idx][0] = new_ml
-						waiting_shapes[w_idx][2] = (
-							waiting_offsets + current_offset if order == [0, 1]
-							else current_offset + waiting_offsets
-						)
-
-					# Perform a new cut using the combined MultiLine
-					offset_values = target_offset + waiting_shapes[w_idx][2]
-					sub_polygons, sub_offsets, intersections = poly.cut(waiting_shape, offset_values)
-					
-					# if len(sub_polygons) > 1:
-					# 	print(f"[step2 fn try_merge_with_waiting] Cutting polygon by Line: {waiting_shape}, Target Shape: {poly}, Line Offset: {waiting_shapes[w_idx][2]}, Target Offset: {target_offset}, offset_values = {offset_values}")
-					# 	print(f"[step2 fn try_merge_with_waiting] Resulting sub_polygons: {sub_polygons}, sub_offsets: {sub_offsets}, intersections: {intersections}\n")
-					# else:
-					# 	print(f"[step2 fn try_merge_with_waiting] No cut performed for {poly} by {waiting_shape} with offsets {offset_values}\n")
-
-					if intersections is None:
-						to_remove.extend([waiting_shape, temp_line])  # Cleanup
-
-					return sub_polygons, sub_offsets, intersections, to_remove, True
-
-			return None, None, None, [], False
-
-
 		def cleanup_waiting_shapes(to_remove, waiting_shapes):
 			"""
 				Remove shapes from the waiting list if they have been processed or merged.
@@ -747,11 +681,12 @@ class Pattern:
 
 		i = 0
 		waiting_shapes = []  # Format: [shape, known_intersections, offsets, original_index]
-
+		used_shapes = []  # Track used shapes to avoid duplicates
 		while i < len(shapes):
 			current_shape = shapes[i][0]
 			# print(f"[step2] Processing shape {i}: {current_shape} with offsets {shapes[i][5]}")
-			if not isinstance(current_shape, Line):
+			# print(f"[step2] Waiting shapes: {waiting_shapes}; used shapes: {used_shapes}\n")
+			if not isinstance(current_shape, Line) or i in used_shapes:
 				i += 1
 				continue
 
@@ -771,33 +706,61 @@ class Pattern:
 					if len(intersections) == 0:
 						continue
 					used = True
+					ml, _ = MultiLine.from_lines([current_shape])
+					if ml is None:
+						print(f"[step2] Warning: MultiLine creation failed for {current_shape}. Skipping.")
+						continue
+					offsets = shapes[i][5]
+					tries = 0
+					temp_used = []
+					while len(sub_polygons) <= 1:
 
-					# Try to resolve with previously waiting shapes
-					sub_polygons2, sub_offsets2, _, to_remove, merged = try_merge_with_waiting(
-						current_shape, waiting_shapes, poly, shapes[j][5], shapes[i][5]
-					)
+						to_connect = ml[0] if ml[0] not in intersections else ml[1] # type: ignore
+						# print(f"\n[step2] Trying to connect {to_connect} with other shapes...")
+						# print(f"[step2] Current MultiLine: {ml}, Target Shape: {target_shape}, Offsets: {offsets}, Sub-Polygons: {sub_polygons}")
+						
+						for k in range(len(shapes)):
+							if not isinstance(shapes[k][0], Line) or current_shape == shapes[k][0] or k in used_shapes or k in temp_used:
+								continue
+								
+							# print(f"[step2] Checking shape {shapes[k][0]} for intersection with {to_connect}...")
 
-					if merged:
-						# print(f"[step2] Merged {current_shape} with waiting shapes, resulting in sub_polygons: {sub_polygons2}, sub_offsets: {sub_offsets2}")
-						sub_polygons = sub_polygons2 or sub_polygons
-						sub_offsets = sub_offsets2 or sub_offsets
-						cleanup_waiting_shapes(to_remove, waiting_shapes)
-					else:
-						for ws in waiting_shapes:
-							if ws[0] == current_shape:
-								for inter in intersections:
-									if inter not in ws[1]:
-										ws[1].append(inter)
-										# print(f"[step2] Adding intersection {inter} to waiting shape {ws[0]}")
+							if shapes[k][0][0] == to_connect or shapes[k][0][1] == to_connect:
+								if shapes[k][0][0] in ml.break_points or shapes[k][0][1] in ml.break_points:
+									# print(f"[step2] Skipping shape {shapes[k][0]} as it is already part of the MultiLine {ml}")
+									continue
+								# print(f"[step2] Found intersection with shape {shapes[k][0]} at {to_connect}")	
+								order = ml.add_line(shapes[k][0])
+								if order == -1:
+									offsets = offsets + shapes[k][5]
+								else:
+									offsets = shapes[k][5] + offsets
+								cleanup_waiting_shapes([shapes[k][0]], waiting_shapes)
+								temp_used.append(k)
 								break
-						else:
-							waiting_shapes.append([current_shape.copy(), intersections, shapes[i][5], i])
-						# print(f"[step2] No merge for {current_shape}, keeping as is.")
+						else: 
+							# print(f"[step2] No intersection found for {to_connect} with other shapes. Trying to merge with waiting shapes...")
+							used = False
+							break
+							
+						
+						tries += 1
+						offset_values = shapes[j][5] + offsets
+						sub_polygons, sub_offsets, intersections = poly.cut(ml, offset_values)
+						if tries > 20:
+							# print(f"[step2] Warning: Too many iterations for shape {current_shape} with target {target_shape}.")
+							break
+					else:
+						used_shapes.extend(temp_used)
+
+					# print(f"[step2] Final sub-polygons after merging: {sub_polygons}, offsets: {sub_offsets}, intersections: {intersections}, ml: {ml}")
+
 				else:
 					cleanup_waiting_shapes([current_shape], waiting_shapes)
 
 				if len(sub_polygons) > 1:
 					used = True
+					used_shapes.append(i)
 					append_sub_polygons(shapes, j, sub_polygons, sub_offsets)
 					readd_waiting_shapes(shapes, waiting_shapes)
 					waiting_shapes.clear()
