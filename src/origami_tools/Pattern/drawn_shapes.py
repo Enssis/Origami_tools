@@ -140,6 +140,61 @@ class DrawnShapes():
 						continue
 					done.append(j)
 		return Polygon(pts) # type: ignore
+	
+	def to_multi_lines(self):
+		"""
+			Transform the shapes in a list of lines
+		"""
+		lines = []
+		# create longuest multilines possible  
+		for shape in self.shapes:
+			if isinstance(shape, Line):
+				lines.append(shape)		
+		
+		lines_connection = [[] for _ in range(len(lines))]  # list of lists to store connections
+		for i in range(len(lines)):
+			for j in range(i + 1, len(lines)):
+				if lines[i][1] == lines[j][0]:
+					lines_connection[i].append(j)
+					lines_connection[j].append(-i - 1)
+				elif lines[i][0] == lines[j][1]:
+					lines_connection[i].append(-j - 1)
+					lines_connection[j].append(i)
+				elif lines[i][0] == lines[j][0]:
+					lines_connection[i].append(-j - 1)
+					lines_connection[j].append(-i - 1)
+				elif lines[i][1] == lines[j][1]:
+					lines_connection[i].append(j)
+					lines_connection[j].append(i)
+		
+		multilines = []
+		essai = 0
+		while len(lines_connection) > 0:
+			line_list = []
+			first = min(range(len(lines_connection)), key=lambda x: len(lines_connection[x]))
+			if len(lines_connection[first]) == 0:
+				multilines.append(lines[first])
+				lines_connection.pop(first)
+			else:
+				line_list.append(lines[first]) 
+				#TODO (continue the line by taking the line with the max scalar product of their directions )
+				next_line = lines_connection[first][0]
+				lines_connection.pop(first)
+				if next_line < 0:
+					next_line = -next_line - 1
+					line_list.append(lines[next_line])
+				else:
+					line_list.append(lines[next_line])
+				lines_connection.pop(next_line)
+			
+			essai += 1
+			if essai > 1000:
+				print("Too many iterations, stopping")
+				break
+
+		print("Lines connection:", lines_connection)
+
+		return multilines
 
 
 @dataclass			

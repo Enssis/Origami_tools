@@ -1,3 +1,4 @@
+from dataclasses import field
 from .vector import *
 from .shape import Shape
 from . import skewm
@@ -25,6 +26,15 @@ class Line(Shape):
             return f"Line({self.points[0]}, {self.points[1]}) \n"
         else:
             return f"Line({self.points[0]}, {self.points[1]}) \n"
+
+    def __eq__(self, other):
+        """Check if two lines are equal."""
+        if not isinstance(other, Line):
+            return False
+        if self.dimension != other.dimension:
+            return False
+        return (self.points[0] == other.points[0] and self.points[1] == other.points[1]) or \
+               (self.points[0] == other.points[1] and self.points[1] == other.points[0])
 
     @classmethod
     def from_dir(cls, point : Point, direction : Vec):
@@ -324,22 +334,25 @@ class Line(Shape):
         gap_size = dash_length * (1 - dash_ratio)
         pattern_size = dash_size + gap_size
 
-        n_patterns = int((total_length + gap_size + dash_size / 2) // pattern_size)
+        n_patterns = int((total_length) // pattern_size)
 
         dashes = []
-        cursor = p0
+        start_dec = (total_length - (n_patterns * pattern_size + gap_size) ) / 2
+        cursor = p0 + dir_vec * (start_dec + gap_size)
+        if start_dec > 0.5:
+            dashes.append(Line(p0, cursor - dir_vec * gap_size))
 
         for i in range(n_patterns):
             dash_start = cursor
             dash_end = dash_start + dir_vec * dash_size
-            if i == 0:
-                dash_end -= dir_vec * dash_size / 2  # Ensure first dash starts with a visible segment
-            if dash_start.distance(p0) > total_length:
+            if p0.distance(dash_start) >= total_length:
                 break
             if dash_end.distance(p0) > total_length:
                 dash_end = p1
 
-            dashes.append(Line(dash_start, dash_end))
+            dash = Line(dash_start, dash_end)
+            if dash.length() > 0.5:  # Avoid zero-length dashes
+                dashes.append(dash)
 
             cursor = dash_end + dir_vec * gap_size
             if cursor.distance(p0) >= total_length:
@@ -347,11 +360,12 @@ class Line(Shape):
 
         # Force final dash if not aligned exactly at end
         if dashes:
-            last_end = dashes[-1].points[1]
-            if last_end.distance(p1) > 1e-6:
-                dash_start = last_end + dir_vec * gap_size
-                if dash_start.distance(p1) < dash_size:
-                    dashes.append(Line(dash_start, p1))
+            last_end = dashes[-1].points[1] + gap_size * dir_vec
+            if Vec.from_2points(last_end, p1) * dir_vec > 0 : 
+                if last_end.distance(p1) > 1:
+                    dash_start = last_end
+                    if last_end.distance(p1) < dash_size:
+                        dashes.append(Line(last_end, p1))
 
         return dashes
 
@@ -398,3 +412,156 @@ class Line(Shape):
         
         return A, B, -C
         
+
+@dataclass
+class MultiLine(Line):
+    break_points : list[Point] = field(default_factory=list)
+
+    @classmethod
+    def from_lines(cls, lines: list["Line"]):
+        """
+        Create a MultiLine from a list of Line objects.
+        The lines are connected if their endpoints match.
+
+        Parameters:
+            lines (list[Line]): List of Line objects to be connected.
+
+        Returns:
+            MultiLine or None if the connection fails.
+        """
+        if not lines:
+            raise ValueError("List of lines cannot be empty.")
+
+        # Extract list of point sequences from each line
+        segments = [line.points for line in lines]
+
+        # Track original indices of the lines to preserve connection order
+        order = [[i] for i in range(len(segments))]
+
+        while len(segments) > 1:
+            for i in range(1, len(segments)):
+                # Case 1: segments[i].start == segments[0].start → reverse segment 0
+                if segments[i][0] == segments[0][0]:
+                    segments[0] = segments[0][::-1][:-1] + segments[i]
+                    order[0] = order[0][::-1] + order[i]
+                    break
+
+                # Case 2: segments[i].end == segments[0].start → prepend i to 0
+                elif segments[i][-1] == segments[0][0]:
+                    segments[0] = segments[i] + segments[0][1:]
+                    order[0] = order[i] + order[0]
+                    break
+
+                # Case 3: segments[i].start == segments[0].end → append i to 0
+                elif segments[i][0] == segments[0][-1]:
+                    segments[0] = segments[0][:-1] + segments[i]
+                    order[0] = order[0] + order[i]
+                    break
+
+                # Case 4: segments[i].end == segments[0].end → reverse segment 0 and append i
+                elif segments[i][-1] == segments[0][-1]:
+                    segments[0] = segments[i] + segments[0][::-1][1:]
+                    order[0] = order[i] + order[0][::-1]
+                    break
+
+            else:
+                # No connection found → cannot merge further
+                print("No connection found for segment:", segments[0])
+                print("Remaining segments:", segments)
+                return None, None
+
+            # Remove the used segment and its order
+            segments.pop(i)
+            order.pop(i)
+
+        # At this point, segments[0] contains the full connected polyline
+
+        return cls([segments[0][0], segments[0][-1]], dashed=lines[0].dashed, dash_length=lines[0].dash_length, dash_ratio=lines[0].dash_ratio, break_points=segments[0][1:-1]), order[0]
+
+        
+    def intersection(self, other, limit = True):
+        """Calculate the intersection with a line"""
+        points = [self[0]] + self.break_points + [self[-1]]
+        for i in range(len(points) - 1, 0, -1):
+            line = Line(points[i - 1], points[i])
+            inter = line.intersection(other, limit=limit)
+            if inter is not None:
+                return inter
+        return None
+        
+    def show(self, ax = None, show = False):
+        """Show the surface."""
+        points = [self[0]] + self.break_points + [self[-1]]
+        nb_pts = len(points)
+        if self.dimension == 2:
+            if ax is None:
+                fig, ax = plt.subplots()
+            plt.plot([points[i % nb_pts][0] for i in range(nb_pts + 1)], [points[i % nb_pts][1] for i in range(nb_pts + 1)])
+        else:
+            if ax is None:
+                fig = plt.figure()
+                ax = fig.add_subplot(111, projection='3d')
+            ax.plot([points[i % nb_pts][0] for i in range(nb_pts + 1)], [points[i % nb_pts][1] for i in range(nb_pts + 1)], [points[i % nb_pts][2] for i in range(nb_pts + 1)])
+        if show:
+            plt.show()
+        else :
+            return ax
+        
+
+    def direction_vect(self):
+        """Calculate the direction vector of the line."""
+                    
+        vect = Vec.from_2points(self.points[0], self.break_points[0])
+        for i in range(len(self.break_points)):
+            if i == len(self.break_points) - 1:
+                vect += Vec.from_2points(self.break_points[i], self.points[1])
+            else:
+                vect += Vec.from_2points(self.break_points[i], self.break_points[i + 1])
+        return vect.normalize()
+    
+    def add_line(self, line: Line):
+        """Add a line to the MultiLine. return -1 if the line is added at the end, 0 if it is added at the beginning."""
+        if not isinstance(line, Line):
+            raise TypeError("Expected a Line object")
+        if self.dimension != line.dimension:
+            raise ValueError("Line must have the same dimension as MultiLine")
+        
+        # Check if the line can be added
+        if self.points[-1] == line.points[0]:
+            self.break_points.append(line.points[0])
+            self.points[-1] = line.points[1]
+            return -1
+        elif self.points[0] == line.points[1]:
+            self.break_points.insert(0, line.points[1])
+            self.points[0] = line.points[0]
+            return 0
+        else:
+            raise ValueError("Line does not connect to MultiLine")
+        
+    def __str__(self):
+        
+        return f"MultiLine from {self.points[0]} to {self.points[1]} with {self.break_points} break points in {self.dimension}D\n"
+    
+    def __repr__(self):
+        return f"MultiLine({self.points[0]}, {self.points[1]}, break_points={self.break_points}) \n"
+    
+    def get_lines(self):
+        """Get the list of lines that compose the MultiLine."""
+        lines = []
+        points = [self[0]] + self.break_points + [self[-1]]
+        for i in range(len(points) - 1):
+            lines.append(Line(points[i], points[i + 1], self.dashed, self.dash_length, self.dash_ratio))
+        return lines
+    
+    def has_line(self, line: Line):
+        """Check if the MultiLine contains a line."""
+        if not isinstance(line, Line):
+            raise TypeError("Expected a Line object")
+        if self.dimension != line.dimension:
+            raise ValueError("Line must have the same dimension as MultiLine")
+        
+        points = [self[0]] + self.break_points + [self[-1]]
+        for i in range(len(points) - 1):
+            if Line(points[i], points[i + 1]) == line:
+                return True
+        return False

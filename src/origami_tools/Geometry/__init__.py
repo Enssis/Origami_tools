@@ -29,7 +29,7 @@ def skewm(v):
 from .vector import Vec, Point, E2X, E2Y, E3X, E3Y, E3Z, O20, O30
 from .repere import Repere 
 from .plane import Plane
-from .line import Line
+from .line import Line, MultiLine
 from .shape import Shape
 from .surface import Surface, Polygon, Circle, HoledPolygon, RegularPolygon, Rectangle, Arc
 from .volume import Volume   
@@ -47,6 +47,7 @@ __all__ = [
     "Repere",
     "Plane",
     "Line",
+    "MultiLine",
     "Shape",
     "Surface",
     "Polygon",

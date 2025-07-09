@@ -5,7 +5,7 @@ import prettytable as pt
 import json
 
 from ..Utils._types import Number
-from ..Utils._svg_utils import svg_text_from_text
+from ..Utils._svg_utils import svg_text_from_text, simplifed_hex
 from ..Geometry import Shape, Line, Surface, Point, Circle
 from . import LASER_SAVE_PATH, get_lasercut_color_num
 class LaserParam:
@@ -53,7 +53,7 @@ class LaserParam:
 		if self.full:
 			return "f" + id_name
 		else:
-			return f"d{self.dash_length}l{self.dash_full_ratio}r" + id_name 
+			return f"d{self.dash_length}l{int(self.dash_full_ratio) * 100}r" + id_name 
 
 	@staticmethod
 	def from_id(id):
@@ -210,7 +210,8 @@ class ListTemplate(dict[str, str]):
 			dir_path = LASER_SAVE_PATH
 		path = dir_path + name + ".json"
 		if not os.path.exists(path):
-			raise ValueError(f"Le template {name} n'existe pas dans le fichier de sauvegarde {path}.")
+			print(f"Le template {name} n'existe pas dans le fichier de sauvegarde {path}.")
+			return None
 		with open(path, "r") as f:
 			data = json.load(f)
 			return ListTemplate(**data)
@@ -400,7 +401,8 @@ class ParamList:
 			template_name = profile + "_template"
 		template = ListTemplate.load(template_name, dir_path=dir_path)
 		if template is None:
-			raise ValueError(f"Le template {template_name} n'existe pas.")
+			template = ListTemplate()
+			# raise ValueError(f"Le template {template_name} n'existe pas.")
 				
 		with open(path, "r") as f:
 			lines = f.readlines()[1:]
@@ -479,10 +481,26 @@ class ParamList:
 		with open(path) as fp:
 			mytable = pt.from_csv(fp)
 		return mytable
+	
+	@staticmethod
+	def update_names(profile,dir_path=None):
+		pl = ParamList.load_from_profile(profile, dir_path)
+		if pl is None:
+			print(f"Le profil {profile} n'existe pas.")
+			return
+		for key, value in pl.params.items():
+			value.name = value.id() + "_" + simplifed_hex(value.color)
 
-	def show_param(self):
+		pl.params = {key: value for key, value in pl.params.items() if isinstance(value, LaserParam)}
+		pl.names = list(pl.params.keys())
+		pl.save_profile(overwrite_file=True, overwrite_param=True, dir_path=dir_path)
+
+	def show_param(self, markdown=False):
 		# Affiche le tableau des paramètres
 		table = pt.PrettyTable()
+		if markdown:
+			table.set_style(pt.TableStyle.MARKDOWN)
+
 		table.field_names = ["Template_name","Nom", "Couleur", "Couleur num", "Epaisseur", "Plein", "Longueur trait", "Ratio plein/pointillé", "Puissance", "Vitesse", "Passe"]
 		for param in self.params.values():
 			template_name = ""
@@ -490,7 +508,8 @@ class ParamList:
 				if value == param.name:
 					template_name = key
 					break
-			table.add_row([template_name, param.name, param.color, str(get_lasercut_color_num(param.color)), param.ep, param.full, param.dash_length, param.dash_full_ratio, param.power, param.speed, param.passe])
+			color = "`" + param.color + "`" if markdown else param.color
+			table.add_row([template_name, param.name, color, str(get_lasercut_color_num(param.color)), param.ep, param.full, param.dash_length, param.dash_full_ratio, param.power, param.speed, param.passe])
 		print(table)
 
 	def show_cut_param(self):

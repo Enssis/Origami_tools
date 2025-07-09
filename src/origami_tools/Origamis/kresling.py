@@ -605,7 +605,7 @@ class TDK:
                 volume = volume + plaque_volume
         return volume
 
-    def show_3D(self, h : Number | None = None, constr_type=0, fold_pc=100, ep=0.5, show_type=0, recreate = False):
+    def show_3D(self, h : Number | None = None, constr_type=0, fold_pc=100, ep=0.5, show_type=0, recreate = False, camera_pos= [45, 0, 25]):
         """
         type : 
             O => les plis ne sont pas des bonnes longuers (utilisation de phi)
@@ -647,6 +647,10 @@ class TDK:
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z') # type: ignore
+
+        ax.azim = camera_pos[0] # type: ignore
+        ax.dist = camera_pos[1] # type: ignore
+        ax.elev = camera_pos[2] # type: ignore
 
         plt.show()  
 

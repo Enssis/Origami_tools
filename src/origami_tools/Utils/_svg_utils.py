@@ -67,3 +67,37 @@ def simplifed_hex(hexcolor):
 	
 	return "#" + hexcolor[1] + hexcolor[3] + hexcolor[5]
 	
+def hsv_to_hex(h, s, v):
+    """
+    Convert HSV to HEX color format.
+    """
+    h = float(h)
+    s = float(s)
+    v = float(v)
+
+    if s == 0.0:
+        r = g = b = int(v * 255)
+        return "#{:02x}{:02x}{:02x}".format(r, g, b)
+
+    i = int(h * 6.0)  # Assume h is [0,1]
+    f = (h * 6.0) - i
+    p = int(v * (1.0 - s) * 255)
+    q = int(v * (1.0 - f * s) * 255)
+    t = int(v * (1.0 - (1.0 - f) * s) * 255)
+    v = int(v * 255)
+
+    i %= 6
+    if i == 0:
+        r, g, b = v, t, p
+    elif i == 1:
+        r, g, b = q, v, p
+    elif i == 2:
+        r, g, b = p, v, t
+    elif i == 3:
+        r, g, b = p, q, v
+    elif i == 4:
+        r, g, b = t, p, v
+    else:
+        r, g, b = v, p, q
+
+    return "#{:02x}{:02x}{:02x}".format(r, g, b)

@@ -10,7 +10,7 @@ from reportlab.graphics import renderPDF
 
 from ..Utils._types import Number
 from ..LaserParams import ParamList
-from ..Geometry import Point, Line, Vec, Plane, E2X, Shape, Surface, BASE_REPERE3D, HoledPolygon, Circle, Polygon, Arc
+from ..Geometry import Point, Line, Vec, Plane, E2X, Shape, Surface, BASE_REPERE3D, HoledPolygon, Circle, Polygon, Arc, MultiLine
 from .drawn_shapes import DrawnShapes, Folds
 
 class Pattern:
@@ -130,7 +130,7 @@ class Pattern:
 			elems.append(laser_cut.fab_text(text_coord[0], text_coord[1], text_coord[2], param=text[1], font_size=text[2], text_anchor=text[3]))
 		return elems
 
-	def add_folds(self, lines, fold_type="n", fold_value : Number = 0, param : str | None =None, outside=False, duplicate = False, z_offset : Number = 0):
+	def add_folds(self, lines, fold_type="n", fold_value : Number = np.pi / 2, param : str | None =None, outside=False, duplicate = False, z_offset : Number = 0):
 		"""
 			ajoute des lignes au patron \n
 			lines : liste de lignes à ajouter \n
@@ -239,7 +239,7 @@ class Pattern:
 			if repr == "cut":
 				self.create(all_visible=all_visible)
 			elif repr == "patron":
-				self.create_pattern()
+				self.create_pattern(all_visible=all_visible)
 			elif repr == "decal":
 				self.create_patron_decal(False, 0)
 			elif repr == "lasercut":
@@ -484,8 +484,8 @@ class Pattern:
 					inter = offset_line.intersection(other_offset, limit=False)
 					if inter is not None:
 						offset_line[j] = inter
-					else:
-						print(f"Erreur : pas d'intersection entre {offset_line} et {other_offset} pour la ligne {i}, index {index}, sign {sign}, j {j}")
+					# else:
+					# 	print(f"Erreur : pas d'intersection entre {offset_line} et {other_offset} pour la ligne {i}, index {index}, sign {sign}, j {j}")
 
 				# print(f"cut_points for line {i}: {len(cut_points)}, cut_points={cut_points}")
 
@@ -503,7 +503,6 @@ class Pattern:
 		new_patron._texts = self._texts.copy()
 		new_patron.w_h(self.width, self.height)
 		return new_patron
-
 
 
 
@@ -600,44 +599,223 @@ class Pattern:
 				))
 
 
-		# Step 2: Cutting polygons by lines
-		# outside_poly.show() if outside_poly is not None else None
+		## Step 2: Cutting polygons by lines
+
+		def process_cut(line, target_shape, line_offset, target_offset):
+			"""
+			Perform a cut of a polygon by a line with combined offset values.
+
+			Args:
+				line: Line or MultiLine used to cut.
+				target_shape: Polygon or convertible to Polygon.
+				line_offset: Offset(s) for the line (list or float).
+				target_offset: Offset(s) for the polygon.
+
+			Returns:
+				Tuple (polygon, sub_polygons, sub_offsets, intersections, combined_offsets)
+			"""
+			poly = target_shape if isinstance(target_shape, Polygon) else target_shape.to_polygon()
+			offset_values = target_offset + line_offset
+			sub_polygons, sub_offsets, intersections = poly.cut(line, offset_values)
+			# if len(sub_polygons) > 1:
+			# 	print(f"[step2 fn process_cut] Cutting polygon by Line: {line}, Target Shape: {target_shape}, Line Offset: {line_offset}, Target Offset: {target_offset}, offset_values = {offset_values}")
+			# 	print(f"[step2 fn process_cut] Resulting sub_polygons: {sub_polygons}, sub_offsets: {sub_offsets}, intersections: {intersections}\n")
+			# else:
+			# 	print(f"[step2 fn process_cut] No cut performed for {target_shape} by {line} with offsets {offset_values}\n")
+			return poly, sub_polygons, sub_offsets, intersections, offset_values
+
+
+		def try_merge_with_waiting(current_shape, waiting_shapes, poly : Polygon, target_offset, current_offset):
+			"""
+			Try to merge the current line with a previously waiting one and perform a new cut if successful.
+
+			Returns:
+				(sub_polygons, sub_offsets, intersections, to_remove, merged: bool)
+			"""
+			to_remove = []
+			# print(f"[step2 fn try_merge_with_waiting] Trying to merge {current_shape} with waiting shapes...")
+			for w_idx, (waiting_shape, known_inters, waiting_offsets, _) in enumerate(waiting_shapes):
+				if waiting_shape == current_shape:
+					continue
+
+				inter = current_shape.intersection(waiting_shape, limit=True)
+				if inter is None:
+					continue
+
+				# Check whether the intersection is new and lies on both line endpoints
+				is_new = inter not in known_inters
+				is_endpoint = (
+					inter == current_shape[0] or inter == current_shape[1]
+				) and (inter == waiting_shape[0] or inter == waiting_shape[1])
+
+				# If it's already part of a MultiLine and contains the line, skip
+				if isinstance(waiting_shape, MultiLine) and waiting_shape.has_line(current_shape):
+					continue
+
+				if is_new and is_endpoint:
+					temp_line = waiting_shape.copy()
+
+					# Try to merge the two lines
+					if isinstance(waiting_shape, MultiLine):
+						placement = waiting_shape.add_line(current_shape)
+						waiting_shapes[w_idx][2] = (
+							current_offset + waiting_offsets if placement == 0
+							else waiting_offsets + current_offset
+						)
+					else:
+						new_ml, order = MultiLine.from_lines([waiting_shape, current_shape])
+						if new_ml is None:
+							continue  # Merge failed
+						waiting_shape = new_ml
+						waiting_shapes[w_idx][0] = new_ml
+						waiting_shapes[w_idx][2] = (
+							waiting_offsets + current_offset if order == [0, 1]
+							else current_offset + waiting_offsets
+						)
+
+					# Perform a new cut using the combined MultiLine
+					offset_values = target_offset + waiting_shapes[w_idx][2]
+					sub_polygons, sub_offsets, intersections = poly.cut(waiting_shape, offset_values)
+					
+					# if len(sub_polygons) > 1:
+					# 	print(f"[step2 fn try_merge_with_waiting] Cutting polygon by Line: {waiting_shape}, Target Shape: {poly}, Line Offset: {waiting_shapes[w_idx][2]}, Target Offset: {target_offset}, offset_values = {offset_values}")
+					# 	print(f"[step2 fn try_merge_with_waiting] Resulting sub_polygons: {sub_polygons}, sub_offsets: {sub_offsets}, intersections: {intersections}\n")
+					# else:
+					# 	print(f"[step2 fn try_merge_with_waiting] No cut performed for {poly} by {waiting_shape} with offsets {offset_values}\n")
+
+					if intersections is None:
+						to_remove.extend([waiting_shape, temp_line])  # Cleanup
+
+					return sub_polygons, sub_offsets, intersections, to_remove, True
+
+			return None, None, None, [], False
+
+
+		def cleanup_waiting_shapes(to_remove, waiting_shapes):
+			"""
+				Remove shapes from the waiting list if they have been processed or merged.
+			"""
+			for w_idx in reversed(range(len(waiting_shapes))):
+				w_shape = waiting_shapes[w_idx][0]
+				if w_shape in to_remove:
+					waiting_shapes.pop(w_idx)
+					continue
+				if isinstance(w_shape, MultiLine):
+					if any(line in to_remove for line in w_shape.get_lines()):
+						waiting_shapes.pop(w_idx)
+
+
+		def append_sub_polygons(shapes, index, sub_polygons, sub_offsets):
+			"""
+			Replace the original polygon by the first sub-polygon,
+			and append the others at the end of the list.
+			"""
+			shapes[index][0] = sub_polygons[0]
+			shapes[index][5] = sub_offsets[0]
+			for k in range(1, len(sub_polygons)):
+				shapes.append([
+					sub_polygons[k],
+					shapes[index][1],
+					shapes[index][2],
+					shapes[index][3],
+					shapes[index][4],
+					sub_offsets[k],
+				])
+
+
+		def readd_waiting_shapes(shapes, waiting_shapes):
+			"""
+			Re-insert waiting shapes (e.g., lines not yet processed) back into the shapes list.
+			"""
+			added_shapes = []
+			for waiting_shape, _, waiting_offsets, index in waiting_shapes:
+				if not isinstance(waiting_shape, MultiLine) and shapes[index] not in added_shapes:
+					shapes.append(shapes[index])
+					added_shapes.append(shapes[index])
+				elif isinstance(waiting_shape, MultiLine):
+					for k, line in enumerate(waiting_shape.get_lines()):
+						if line not in added_shapes:
+							shapes.append([
+								line,
+								shapes[index][1],
+								shapes[index][2],
+								shapes[index][3],
+								shapes[index][4],
+								[waiting_offsets[k]]
+							])
+							added_shapes.append(line)
+
 		i = 0
+		waiting_shapes = []  # Format: [shape, known_intersections, offsets, original_index]
+
 		while i < len(shapes):
 			current_shape = shapes[i][0]
+			# print(f"[step2] Processing shape {i}: {current_shape} with offsets {shapes[i][5]}")
 			if not isinstance(current_shape, Line):
 				i += 1
 				continue
 
+			used = False
+
 			for j in range(len(shapes)):
-				if isinstance(shapes[j][0], Line):
+				target_shape = shapes[j][0]
+				if isinstance(target_shape, Line):
 					continue
 
-				poly = shapes[j][0]
-				if not isinstance(poly, Polygon):
-					poly = poly.to_polygon()
+				# Attempt to cut polygon by the current line
+				poly, sub_polygons, sub_offsets, intersections, offset_values = process_cut(
+					current_shape, target_shape, shapes[i][5], shapes[j][5]
+				)
 
-				# Combine offsets from both shapes
-				offset_values = shapes[j][5] + shapes[i][5]
-				# print(f"Offsets: before : {shapes[j][5]} + {shapes[i][5]} = {offset_values}")
-				# Perform the cut
-				sub_polygons, sub_offsets = poly.cut(current_shape, offset_values)
-				# print(f"Cutting {j} : {poly} with {current_shape} resulted in {len(sub_polygons)} sub-polygons.")
-				# print(f"Offsets: before : {shapes[j][5]} + {shapes[i][5]} = {offset_values} ; after {sub_offsets}")
-				# print(f"sub_polygons: {sub_polygons}\n")
+				if intersections is not None:
+					if len(intersections) == 0:
+						continue
+					used = True
 
-				if len(sub_polygons) == 1:
-					continue
-				
-				# Replace first part in place, append the others
-				shapes[j][0] = sub_polygons[0]
-				shapes[j][5] = sub_offsets[0]
-				for k in range(1, len(sub_polygons)):
-					shapes.append([
-						sub_polygons[k], shapes[j][1], shapes[j][2], shapes[j][3], shapes[j][4], sub_offsets[k]
-					])
+					# Try to resolve with previously waiting shapes
+					sub_polygons2, sub_offsets2, _, to_remove, merged = try_merge_with_waiting(
+						current_shape, waiting_shapes, poly, shapes[j][5], shapes[i][5]
+					)
+
+					if merged:
+						# print(f"[step2] Merged {current_shape} with waiting shapes, resulting in sub_polygons: {sub_polygons2}, sub_offsets: {sub_offsets2}")
+						sub_polygons = sub_polygons2 or sub_polygons
+						sub_offsets = sub_offsets2 or sub_offsets
+						cleanup_waiting_shapes(to_remove, waiting_shapes)
+					else:
+						for ws in waiting_shapes:
+							if ws[0] == current_shape:
+								for inter in intersections:
+									if inter not in ws[1]:
+										ws[1].append(inter)
+										# print(f"[step2] Adding intersection {inter} to waiting shape {ws[0]}")
+								break
+						else:
+							waiting_shapes.append([current_shape.copy(), intersections, shapes[i][5], i])
+						# print(f"[step2] No merge for {current_shape}, keeping as is.")
+				else:
+					cleanup_waiting_shapes([current_shape], waiting_shapes)
+
+				if len(sub_polygons) > 1:
+					used = True
+					append_sub_polygons(shapes, j, sub_polygons, sub_offsets)
+					readd_waiting_shapes(shapes, waiting_shapes)
+					waiting_shapes.clear()
+					break
+
+			# If unused, keep shape for possible later merge
+			if not used and current_shape not in [w[0] for w in waiting_shapes]:
+				waiting_shapes.append([current_shape.copy(), [], shapes[i][5], i])
+
+			# print(f"[step2] Waiting shapes: {waiting_shapes}\n\n")
 
 			i += 1
+
+			# If loop ends but waiting shapes exist, try to re-insert them
+			if i >= len(shapes) and waiting_shapes:
+				readd_waiting_shapes(shapes, waiting_shapes)
+
+
 
 		# Step 3: Apply offset and render shapes
 		holes = []
@@ -920,7 +1098,7 @@ class Pattern:
 			shape.shapes = shapes
 		return patron
 
-	def create_pattern(self):
+	def create_pattern(self, all_visible=False):
 		svg_elements = []
 		contour_col = "black"
 		# couleur moutain, couleur valley
@@ -933,7 +1111,8 @@ class Pattern:
 				if shape.fold_type == "n":
 					svg_elements += shape.to_svg(color=contour_col, opacity=1, width=width, origin=self.origin)
 				else:
-					svg_elements += shape.to_svg(color=pli_col[i], opacity=1.0 - shape.fold_value / np.pi, width=width, origin=self.origin)
+					opacity = 1 if all_visible else 1.0 - shape.fold_value / np.pi
+					svg_elements += shape.to_svg(color=pli_col[i], opacity=opacity, width=width, origin=self.origin)
 			elif isinstance(shape, DrawnShapes):
 				svg_elements += shape.to_svg(color=contour_col, opacity=1, width=width, fill="black" if shape.background else "none", origin=self.origin)
 			else:

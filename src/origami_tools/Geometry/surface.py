@@ -1,5 +1,6 @@
+from typing import Sequence
 from .shape import *
-from .line import Line
+from .line import Line, MultiLine
 from .repere import Repere
 from .plane import Plane
 
@@ -445,6 +446,16 @@ class Polygon(Surface):
 
         super().__post_init__()
 
+    @classmethod
+    def from_multiline(cls, multiline: MultiLine):
+        """Convert the MultiLine to a Polygon."""
+        if not len(multiline.break_points) > 0:
+            raise ValueError("MultiLine must have at least one break point to form a polygon")
+        pts = [multiline.points[0]] + multiline.break_points + [multiline.points[-1]]
+        pts += [pts[0]]  if multiline.points[0] != pts[-1] else []
+        return cls(pts)
+
+
     def __repr__(self):
         return super().__repr__()
     
@@ -452,61 +463,70 @@ class Polygon(Surface):
         """Create a copy of the polygon."""
         return Polygon([point.copy() for point in self])
 
-    def cut(self, line: Line, decals: list[Number] | None = None):
+    def cut(self, line: Line, decals: Sequence[Number] | None = None):
         """
         Cut the polygon by a given line.
 
         Args:
-            line (Line): The cutting line.
-            decals (list[Number] | None): Optional offset values for each polygon edge.
-                Expected length: number of polygon edges (len(self)) + 1 for the new edge.
+            line (Line): Cutting line (can be MultiLine).
+            decals (list[Number] | None): Optional offsets. Expected length = polygon edges + line segments - 1.
 
         Returns:
-            tuple: 
-                - List of Polygon objects created by the cut.
-                - List of decal lists corresponding to each polygon.
+            tuple:
+                - List of new Polygon objects created by the cut.
+                - List of offset lists (decals) per polygon.
+                - List of intersection points if only partial cut, else None.
         """
         n_edges = len(self)
+        nb_lines = len(line.break_points) + 1 if isinstance(line, MultiLine) else 1
 
-        # Check decal length consistency
+        # Check that decal list has correct length
         if decals is not None:
-            if len(decals) != n_edges:
-                raise ValueError(f"decals must have the same length as the number of polygon edges + 1, {len(self)} edges, got {len(decals)} decals")
+            expected = n_edges + nb_lines - 1
+            if len(decals) != expected:
+                raise ValueError(f"Expected {expected} decals, got {len(decals)}")
 
-        # Build list of points with inserted intersections
-        j = 1
-        pts = [self[0].copy()]
-        intersections : list[int] = []
-        insert_decals = [decals[0]] if not decals is None else [] # decals.copy() if decals is not None else []
+        j = 1  # Point index for insertion
+        pts = [self[0].copy()]  # List of new points (with intersections)
+        intersections: list[int] = []  # Indices of inserted intersections
+        insert_decals = [decals[0]] if decals is not None else []
 
+        # Loop through polygon edges
         for i in range(n_edges - 1):
             seg = Line(self[i], self[i + 1])
             inter = line.intersection(seg)
-            # print(f"Cutting edge {i} : {self[i]} - {self[i + 1]} with line {line} : intersection = {inter}")
+
+            # If intersection found, insert it
             if inter is not None:
-                if inter == self[i + 1]:
+                if inter == self[i + 1]:  # At end of edge
                     intersections.append(j)
-                elif inter != self[i]:
+                elif inter != self[i]:  # Insert in middle of edge
                     pts.append(inter)
                     intersections.append(j)
                     if decals is not None:
-                        # Insert matching decal value at the new edge
-                        insert_decals.append(decals[(i) % (n_edges - 1)])
+                        insert_decals.append(decals[i % (n_edges - 1)])
                     j += 1
-            
-            if decals is not None:
-                insert_decals.append(decals[(i + 1) % (n_edges - 1)])
-            # No intersection, just copy the point
+
+            # Copy end point of current edge
             pts.append(self[i + 1].copy())
             j += 1
+            if decals is not None:
+                insert_decals.append(decals[(i + 1) % (n_edges - 1)])
+
+        # Add decal values for extra line segments
         if decals is not None:
-            insert_decals.append(decals[-1])
+            insert_decals.extend(decals[-nb_lines:])
 
-        # If no intersection or odd number → invalid cut
-        if len(intersections) % 2 != 0 or len(intersections) == 0:
-            return [self.copy()], [decals[:-1]] if decals is not None else []
+        # No cut if no intersections
+        if len(intersections) == 0:
+            return [self.copy()], [decals[:-1]] if decals is not None else [], []
 
-        # Build resulting sub-polygons
+        # Only one intersection → can't form a new polygon
+        if len(intersections) == 1:
+            pts_intersection = [pts[k] for k in intersections]
+            return [self.copy()], [decals[:-1]] if decals is not None else [], pts_intersection
+
+        # Multiple intersections → start building sub-polygons
         start = intersections[0]
         polygons = []
         new_pts = [pts[start].copy()]
@@ -517,24 +537,43 @@ class Polygon(Surface):
             index = (i + start) % (j - 1) + 1
             new_pts.append(pts[index].copy())
 
+            # Add corresponding decal
             if decals is not None:
                 n_decals[n_poly].append(insert_decals[index])
 
             if index in intersections:
-                # Close current polygon
+                # If MultiLine, insert intermediate break points
+                if isinstance(line, MultiLine):
+                    points = [bp.copy() for bp in line.break_points]
+                    if new_pts[0] == line[0]:  # Direction check
+                        points = points[::-1]
+                    new_pts.extend(points)
+
+                # Close polygon and store it
                 new_pts.append(new_pts[0].copy())
                 polygons.append(Polygon(new_pts).in_2D())
+
+                # Prepare for next polygon
                 new_pts = [pts[index].copy()]
 
                 if decals is not None:
-                    # The last inserted decal is the one for the added segment
-                    n_decals[n_poly][-1] = insert_decals[-1]
-                n_poly += 1
-                n_decals.append(
-                    [insert_decals[index]] if decals is not None else []
-                )
+                    n_decals[n_poly].pop()  # Remove last edge decal (replaced)
+                    if isinstance(line, MultiLine):
+                        ml_decals = insert_decals[-nb_lines:]
+                        if new_pts[0] == line[1]:
+                            ml_decals = ml_decals[::-1]
+                        n_decals[n_poly].extend(ml_decals)
+                    else:
+                        n_decals[n_poly].append(insert_decals[-1])  # Final decal
 
-        return polygons, n_decals
+                n_poly += 1
+                n_decals.append([insert_decals[index]] if decals is not None else [])
+
+        # If odd number of intersections, return them
+        pts_intersection = [pts[k] for k in intersections] if len(intersections) % 2 == 1 else None
+        return polygons, n_decals, pts_intersection
+
+
 
     
     def as_svg(self, color="black", opacity : Number =1, width : Number =1, fill="none", origin=Point(0, 0)):

@@ -3,6 +3,8 @@ __all__ = [
     "_types"   # type: ignore
 ]
 
+import numpy as np
+
 def csv_to_latex(csv_file : str, latex_file : str):
     """
         Convert a csv file to a latex file
@@ -47,4 +49,8 @@ def csv_to_latex(csv_file : str, latex_file : str):
 '''.format(caption=name, label="fig:" + name))
         
 
+def deg2rad(deg):
+    return deg * np.pi / 180
 
+def rad2deg(rad):
+    return rad * 180 / np.pi
