@@ -339,10 +339,10 @@ class Line(Shape):
         dashes = []
         start_dec = (total_length - (n_patterns * pattern_size + gap_size) ) / 2
         cursor = p0 + dir_vec * (start_dec + gap_size)
-        if start_dec > 0.5:
+        if start_dec > 0.2:
             dashes.append(Line(p0, cursor - dir_vec * gap_size))
 
-        for i in range(n_patterns):
+        for _ in range(n_patterns):
             dash_start = cursor
             dash_end = dash_start + dir_vec * dash_size
             if p0.distance(dash_start) >= total_length:
@@ -362,8 +362,7 @@ class Line(Shape):
         if dashes:
             last_end = dashes[-1].points[1] + gap_size * dir_vec
             if Vec.from_2points(last_end, p1) * dir_vec > 0 : 
-                if last_end.distance(p1) > 1:
-                    dash_start = last_end
+                if last_end.distance(p1) > 0.2:
                     if last_end.distance(p1) < dash_size:
                         dashes.append(Line(last_end, p1))
 

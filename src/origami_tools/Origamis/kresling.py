@@ -387,7 +387,7 @@ class TDK:
             self.patron.add_folds([b_lines[0]], "m", angle_m)
         else:
             if not (closing == 2 and side == 2 and closing_type == 1):
-                self.patron.add_shapes([b_lines[0]], outside=True, param=outside_param)
+                self.patron.add_folds([b_lines[0]], "m", angle_m, outside=True, param=outside_param)
         
         if closing == 2 and side == 2:
             p1 = Point(self.a * (self.n - 1), 0)
@@ -426,7 +426,7 @@ class TDK:
             if closing_type != 2:
                 self.patron.add_folds([b_lines[0]], "m", angle_m)
         else :
-            self.patron.add_shapes([b_lines[-1]], outside=True, param=outside_param)
+            self.patron.add_folds([b_lines[-1]], "m", angle_m, outside=True, param=outside_param)
 
 
         if attache is None:
@@ -450,11 +450,11 @@ class TDK:
                 self.patron += dual_attache.copy()
                 dual_attache.translate(Vec(self.a, 0))
                 up_folds.append(Line(Point(i * self.a, 0), Point((i + 1) * self.a, 0)))
-                down_folds.append(Line(Point(dec + i * self.a, self.r_p * self.etages), Point(dec + (i + 1) * self.a, self.r_p * self.etages)))
+                up_folds.append(Line(Point(dec + i * self.a, self.r_p * self.etages), Point(dec + (i + 1) * self.a, self.r_p * self.etages)))
             if closing == 2 and side == 2 and closing_type == 1:
                 up_folds[-1] = Line(Point(-self.a, 0), Point(0, 0))
             self.patron.add_folds(up_folds, "m", rho + np.pi/2, duplicate=True, param="fold_horizontal")
-            self.patron.add_folds(down_folds, "v", rho + np.pi/2, duplicate=True, param="fold_horizontal")
+            # self.patron.add_folds(down_folds, "v", rho + np.pi/2, duplicate=True, param="fold_horizontal")
             
                 
         

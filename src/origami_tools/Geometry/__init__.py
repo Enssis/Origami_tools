@@ -14,6 +14,9 @@ def alkashi(ac, bc, c):
 
 # application du theoreme d'alkashi pour trouver l'angle
 def alkashi_angle(ac, bc, ab):
+    """
+    Calculate the angle opposite to side ab in a triangle with sides ac and bc.
+    """
 	return np.arccos((ac**2 + bc**2 - ab**2) / (2 * ac * bc))
 
 

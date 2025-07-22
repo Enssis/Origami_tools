@@ -130,7 +130,7 @@ class Pattern:
 			elems.append(laser_cut.fab_text(text_coord[0], text_coord[1], text_coord[2], param=text[1], font_size=text[2], text_anchor=text[3]))
 		return elems
 
-	def add_folds(self, lines, fold_type="n", fold_value : Number = np.pi / 2, param : str | None =None, outside=False, duplicate = False, z_offset : Number = 0):
+	def add_folds(self, lines, fold_type="n", fold_value : Number = np.pi / 2, param : str | None =None, outside=False, duplicate = False, z_offset : Number = 0, k : Number | None = None):
 		"""
 			ajoute des lignes au patron \n
 			lines : liste de lignes à ajouter \n
@@ -141,6 +141,11 @@ class Pattern:
 				"n" : pas de pli \n
 			fold_value : valeur du fold totalement foldé] \n
 			param : nom du paramètre de découpe \n
+			outside : si True, les lignes sont ajoutées à l'extérieur du patron \n
+			duplicate : si True, les lignes sont dupliquées \n
+			z_offset : décalage en z des lignes \n
+			k : épaisseur du trait, si None, la valeur par défaut est utilisée \n
+
 		"""
 		nlines = []
 		if param is None:
@@ -158,12 +163,12 @@ class Pattern:
 					nlines.append(Line(line[0], line[1]))
 			else :
 				nlines.append(line.copy())
-		f_id = Folds.create_id(param, fold_type, fold_value, duplicate, z_offset)
+		f_id = Folds.create_id(param, fold_type, fold_value, duplicate, z_offset, outside)
 		if f_id in self.__shapes_id:
 			index = self.__shapes_id.index(f_id)
 			self._shapes[index].shapes += nlines
 		else:
-			self._shapes.append(Folds(nlines, param=param, outside=outside, z_offset=z_offset, fold_type=fold_type, duplicate=duplicate, fold_value=fold_value))
+			self._shapes.append(Folds(nlines, param=param, outside=outside, z_offset=z_offset, fold_type=fold_type, duplicate=duplicate, fold_value=fold_value, k=k))
 			self.__shapes_id.append(f_id)
 
 
@@ -174,7 +179,7 @@ class Pattern:
 			self._texts.append([text, param, font_size,text_anchor])
 	
 
-	def add_shapes(self, shapes : Shape | List[Shape], param : str | None = None, background=False, outline=True, outside=False, duplicate = False, z_offset : Number = 0):
+	def add_shapes(self, shapes : Shape | List[Shape], param : str | None = None, background=False, outline=True, outside=False, duplicate = False, z_offset : Number = 0, k : Number | None = None):
 		"""
 			add shapes to the patron \n
 			shapes : list of shapes to add \n
@@ -182,6 +187,11 @@ class Pattern:
 			param : name of the parameter to use \n
 			background : if True, the shape is filled \n
 			outline : if True, the shape is outlined \n
+			outside : if True, the shape is added outside the pattern \n
+			duplicate : if True, the shape is duplicated \n
+			z_offset : z offset of the shape, used for the order of the shapes \n
+			k : thickness of the line, if None, the default value is used \n
+
 		"""
 		if isinstance(shapes, Shape):
 			shapes = [shapes]
@@ -200,7 +210,7 @@ class Pattern:
 			index = self.__shapes_id.index(s_id)
 			self._shapes[index].shapes += shapes
 		else:
-			self._shapes.append(DrawnShapes(shapes.copy(), param=param, background=background, outline=outline, outside=outside, duplicate=duplicate, z_offset=z_offset))
+			self._shapes.append(DrawnShapes(shapes.copy(), param=param, background=background, outline=outline, outside=outside, duplicate=duplicate, z_offset=z_offset, k=k))
 			self.__shapes_id.append(s_id)
 	
 	def add_drawn_shapes(self, drawn_shapes : DrawnShapes):
@@ -506,16 +516,18 @@ class Pattern:
 
 
 
-	def create_patron_offset(self, e: Number = 0, k : Number = 0.5, full=False, param="", z_offset : Number = 0) -> "Pattern":
+	def create_patron_offset(self, e: Number = 0, k : Number = 0.5, full=False, param="", z_offset : Number = 0, fold_type: str = "", search_intersections=True) -> "Pattern":
 		"""
 		Generate an offset pattern (patron) for adhesive or cutting.
 		
 		Args:
 			mountain (bool): If True, treat folds as mountain folds, otherwise valley.
 			e (Number): Thickness or extrusion amount (for fold-based offsets).
-			L (Number): Offset length for all shapes.
+			k (Number): Offset length for all shapes.
 			full (bool): If True, generate a full offset shape with cut-out holes.
 			param (str): Parameter name for resulting shapes.
+			z_offset (Number): Z offset for the shapes.
+			fold_type (str): if asymetry is needed, specify "m" for mountain or "v" for valley folds.
 		
 		Returns:
 			Patron: The new offset pattern.
@@ -527,7 +539,7 @@ class Pattern:
 		
 
 		outside_shape : DrawnShapes | None = None				
-
+		outside_d : list[Number] = []
 		# Default offset value
 		
 		if full :
@@ -536,20 +548,32 @@ class Pattern:
 			param = "fold_cut" if param == "" else param
 
 		for drawnshape in self._shapes:
-			d = 0 if k == 0 else -0.25
-			# Handle outer contour (cut line)
-			if drawnshape.outside:
-				if outside_shape is None:
-					outside_shape = drawnshape.copy()
-				else:
-					outside_shape.shapes += drawnshape.shapes
+			
+			if not isinstance(drawnshape, DrawnShapes) and not isinstance(drawnshape, Folds):
+				print(f"Warning: {drawnshape} is not a DrawnShapes or Folds instance. Skipping.")
 				continue
-				
+
+			shape_k = k if drawnshape.k is None else drawnshape.k 
+			d = 0 if shape_k == 0 else -0.25
 
 			# Handle fold lines (with optional thickness-based offset)
 			if isinstance(drawnshape, Folds):
-				if drawnshape.fold_type != "n":  # Skip neutral folds
-					d = -e / np.tan(drawnshape.fold_value / 2) - k / 2
+				if drawnshape.fold_type == "m" and fold_type != "v" or drawnshape.fold_type == "v" and fold_type != "m":
+					d = -e / np.tan(drawnshape.fold_value / 2) - shape_k / 2
+				else :
+					d = - shape_k / 2
+				
+			# Handle outer contour (cut line)
+			# print(f"[create_patron_offset] Processing drawnshape: {drawnshape}, d: {d}, k: {k}, shape_k: {shape_k}")
+			if drawnshape.outside:
+				# print(f"[create_patron_offset] Adding outside shape: {drawnshape}, d: {d}")
+				if outside_shape is None:
+					outside_shape = drawnshape.copy()
+				else:
+					outside_shape.shapes += drawnshape.shapes # type: ignore
+				outside_d += [d] * len(drawnshape.shapes)
+				continue
+
 			
 			# Process individual shapes
 			for shape in drawnshape.shapes:
@@ -572,23 +596,28 @@ class Pattern:
 
 		outside_poly = None
 		if outside_shape is not None:
-			d = 0 if k == 0 else -0.25
-			outside_poly = outside_shape.to_polygon()
+			shape_k = k if outside_shape.k is None else outside_shape.k 
+			d = 0 if shape_k == 0 else -0.25
+			# print(f"[create_patron_offset] outside_shape: {outside_shape}, shape_k: {shape_k}, d: {d}")
+			outside_poly, order = outside_shape.to_polygon()
+			# print(order)
 			# outside_poly.show()
 			outside_shape.shapes = [outside_poly.copy()]
 			
+			
+
 			shapes.append([
 						outside_poly.copy(),                # Shape
 						outside_shape.param,            # Parameter
 						outside_shape.background,       # Background flag
 						outside_shape.outline,          # Outline flag
 						outside_shape.outside,          # Outside flag
-						[d] * (len(outside_poly) - 1)       # Offset distances per edge
+						[outside_d[i] for i in order]       # Offset distances per edge
 					])
 
-			dep = 0 if k == 0 else 0.25
+			dep = 0 if shape_k == 0 else 0.25
 			outside_poly = outside_poly.copy().offset(dep).in_2D(BASE_REPERE3D)
-			if not full and k > 0:
+			if not full and shape_k > 0:
 				n_patron.add_drawn_shapes(DrawnShapes(
 					[outside_poly],
 					param=param,
@@ -702,7 +731,9 @@ class Pattern:
 					current_shape, target_shape, shapes[i][5], shapes[j][5]
 				)
 
-				if intersections is not None:
+				# print(f"[step2] Cut result for {current_shape} with {target_shape}: sub_polygons={len(sub_polygons)}, sub_offsets={sub_offsets}, intersections={intersections}")
+
+				if intersections is not None and search_intersections:
 					if len(intersections) == 0:
 						continue
 					used = True
@@ -816,127 +847,7 @@ class Pattern:
 
 		return n_patron
 
-
-	def create_patron_offset3(self, e : Number =0, L : Number =2, param="fold_cut", closed = True):
-		
-		lines_list = []
-
-		# list all lines in the same table with the type of fold and d 
-		for shape in self._shapes:
-			if isinstance(shape, Folds):
-				d = e * np.tan(shape.fold_value/2) if shape.fold_type != "n" else 0
-				for line in shape.shapes:
-					if isinstance(line, Line):
-						lines_list.append([line.copy(), shape.fold_type, d, L if shape.fold_type != "n" else 0])
-			elif isinstance(shape, DrawnShapes):
-				for line in shape.shapes:
-					if isinstance(line, Line):
-						lines_list.append([line.copy(), "n", 0, 0])
-		
-		# list all offseted lines for each side
-		lines = [[], []]
-		for i in range(len(lines_list)):
-			# get the line and its normal vector
-			line = lines_list[i][0]
-			# gets intersected_lines for the start point, the end point 
-			intersect_lines = [[], []]
-			# and middle point for each side
-			middle_lines = []
-			d = lines_list[i][2]
-			L = lines_list[i][3]
-
-			# search for intersection
-			for j in range(len(lines_list)):
-				# if the line is the same, we skip it
-				if j == i:
-					continue
-				line2 = lines_list[j][0]
-				# get the intersection between the two lines
-				inter = line.intersection(line2)
-				if inter is not None:
-					# if the intersection is a limit point we add the line to the intersected_lines
-					if inter.distance(line[0]) < 1e-5:
-						intersect_lines[0].append(lines_list[j])
-					elif inter.distance(line[1]) < 1e-5:
-						intersect_lines[1].append(lines_list[j])
-					else:
-						# if the intersection is not a limit point, we add it to the middle_lines
-						pts = [pt[1] for pt in middle_lines]
-						if inter in pts:
-							middle_lines[pts.index(inter)].append(lines_list[j])
-						else :
-							start_dist = inter.distance(line[0])
-							for k in range(len(pts)):
-								if start_dist < pts[k].distance(line[0]):
-									middle_lines.insert(k, [[lines_list[j]], inter])
-									break
-							else:
-								middle_lines.append([[lines_list[j]], inter])
-			
-			# pts start and end
-			# pts left right
-			# pts side 1, side 2 
-			pts = [[],[]]
-
-			for j in range(2):
-				# if there are intersected lines
-				l0 = Line(line[j], line[1^j])
-				normal = l0.normal_vect().normalize()
-				
-				if len(intersect_lines[j]) > 0:
-					
-					pts[j].extend(l0.offset_intersect_lines(intersect_lines[j], line[j], d, L))
-
-					
-				else :
-					pt_left_s1 = line[j] + normal * (L/2 + d)
-					pt_right_s1 = line[j] - normal * (L/2 + d)
-					pt_left_s2 = line[j] + normal * (L/2)
-					pt_right_s2 = line[j] - normal * (L/2)
-					pts[j].append([pt_left_s1, pt_left_s2])
-					pts[j].append([pt_right_s1, pt_right_s2])
-					if closed:
-						lines[0].append(Line(pt_left_s1.copy(), pt_right_s1.copy()))
-						lines[1].append(Line(pt_left_s2.copy(), pt_right_s2.copy()))
-
-
-			if len(middle_lines) == 0:
-				lines[0].append(Line(pts[0][0][0], pts[1][1][0]))
-				lines[0].append(Line(pts[0][1][0], pts[1][0][0]))
-
-				lines[1].append(Line(pts[0][0][1], pts[1][1][1]))
-				lines[1].append(Line(pts[0][1][1], pts[1][0][1]))
-			else:
-				pts_list = [pts[0]]
-				for j in range(len(middle_lines)):
-					inter = middle_lines[j][1]
-					intersect_lines = middle_lines[j][0]
-					line0 = Line(inter, line[0])
-					line1 = Line(inter, line[1])
-					pts_list.append(line0.offset_intersect_lines(intersect_lines + [[line1, lines_list[i][1], d, lines_list[i][3]]], inter, d, lines_list[i][3]))
-					pts_list.append(line1.offset_intersect_lines(intersect_lines + [[line0, lines_list[i][1], d, lines_list[i][3]]], inter, d, lines_list[i][3]))
-				pts_list.append(pts[1])
-				for j in range(0, len(pts_list), 2):
-
-					lines[0].append(Line(pts_list[j][0][0], pts_list[j + 1][1][0]))
-					lines[0].append(Line(pts_list[j][1][0], pts_list[j + 1][0][0]))
-
-					lines[1].append(Line(pts_list[j][0][1], pts_list[j + 1][1][1]))
-					lines[1].append(Line(pts_list[j][1][1], pts_list[j + 1][0][1]))
-				pass
-		
-		patron = Pattern(self.name + "_martyr", param_list=self.param_list, origin=self.origin)
-		patron2 = patron.copy()
-		patron.add_folds(lines[1], param=param)
-		patron2.add_folds(lines[0], param=param)
-		patron2.mirror(Line(Point(self.width + 2.5, 0), Point(self.width + 2.5, 5)))
-
-		patron += patron2
-		patron.w_h(self.width  * 2 + 5 + self.origin[0], self.height + self.origin[1])
-
-		return patron
-
-	def create_lasercut_patron(self, asym=False, e : Number = 0, k : Number=0.5, adhesif_param ="adhesive", mirror=True, montain=True, cut_param=""):
+	def create_lasercut_patron(self, asym=False, e : Number = 0, k : Number=0.5, adhesif_param ="adhesive", mirror=True, mountain=True, cut_param="", search_intersections=True):
 		"""
 			return two patrons on one \n
 			asym : if True, the two patrons are asymetric \n
@@ -949,16 +860,16 @@ class Pattern:
 		patron = self.copy()
 		if not asym:
 			e = 0
-		patron_offset_m = patron.create_patron_offset(e, k, True, adhesif_param)
-		patron_offset_mcut = patron.create_patron_decal(montain, e, param=cut_param)
+		patron_offset_m = patron.create_patron_offset(e, k, True, adhesif_param, fold_type="v" if mountain else "m", search_intersections=search_intersections)
+		patron_offset_mcut = patron.create_patron_decal(mountain, e, param=cut_param)
 
 		if mirror:
 			w_mirror = patron.width + 2.5
 			mirror_line = Line(Point(w_mirror, 0), Point(w_mirror, 5))
 			patron.mirror(mirror_line)
 			patron.w_h(w_mirror * 2, patron.height)
-			patron_offset_v = patron.create_patron_offset(e, k, True, adhesif_param)
-			patron_offset_vcut = patron.create_patron_decal(not montain, e, param=cut_param)
+			patron_offset_v = patron.create_patron_offset(e, k, True, adhesif_param, fold_type="m" if mountain else "v", search_intersections=search_intersections)
+			patron_offset_vcut = patron.create_patron_decal(not mountain, e, param=cut_param)
 			full_patron = patron_offset_m + patron_offset_mcut + patron_offset_v + patron_offset_vcut
 		else:
 			full_patron = patron_offset_m + patron_offset_mcut

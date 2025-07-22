@@ -1,7 +1,7 @@
-__all__ = [
-    "_svg_utils", # type: ignore
-    "_types"   # type: ignore
-]
+from ._svg_utils import hsv_to_hex, rgb_to_hex, hex_to_rgb, simplifed_hex, mm_str, save_svg
+from ._types import Number, Group
+
+
 
 import numpy as np
 
@@ -54,3 +54,18 @@ def deg2rad(deg):
 
 def rad2deg(rad):
     return rad * 180 / np.pi
+
+__all__ = [
+    "csv_to_latex",
+    "deg2rad",
+    "rad2deg",
+    "hsv_to_hex",
+    "rgb_to_hex",
+    "hex_to_rgb",
+    "simplifed_hex",
+    "mm_str",
+    "save_svg",
+    "Number",
+    "Group"
+
+]

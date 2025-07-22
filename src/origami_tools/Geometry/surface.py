@@ -441,7 +441,8 @@ class Polygon(Surface):
         if len(self) < 3:
             raise ValueError("Polygon must have at least 3 points")
         # Close the polygon by adding the first point at the end
-        
+        if self[0] != self[-1]:
+            self.points.append(self[0].copy())
         self.n_points = len(self)
 
         super().__post_init__()

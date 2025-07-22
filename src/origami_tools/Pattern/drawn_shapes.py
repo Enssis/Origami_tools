@@ -17,6 +17,7 @@ class DrawnShapes():
 		:param outline: si True, le patron est dessiné avec un contour
 		:param outside: si True, la forme est dessinée à l'extérieur de la forme, sinon à l'intérieur
 		:param z_offset: décalage en z pour le dessin, utilisé pour l'ordre des patrons
+		:param k: valeur de k pour cette forme, utilisé pour l'ablation de l'adhésif dans les patrons
 	"""
 	shapes: Sequence[Shape]  # Liste des formes à dessiner
 	param: str  # Nom du paramètre à utiliser pour le dessin
@@ -25,9 +26,10 @@ class DrawnShapes():
 	outside: bool = False  # Si True, la forme est dessinée à l'extérieur de la forme, sinon à l'intérieur
 	duplicate: bool = False  # Si True, la forme sera dupliquée lors du dessin
 	z_offset: Number = 0  # Décalage en z pour le dessin, utilisé pour l'ordre des patrons 
+	k : Number | None = None
 
 	def __str__(self):
-		return f"DrawnShape {self.id()}: {self.shapes}, param={self.param}, background={self.background}, outline={self.outline}, outside={self.outside}, z_offset={self.z_offset}"
+		return f"DrawnShape {self.id()}: {self.shapes}, param={self.param}, background={self.background}, outline={self.outline}, outside={self.outside}, z_offset={self.z_offset}, duplicate={self.duplicate}, k={self.k}"
 	
 	def __repr__(self):
 		return self.__str__()
@@ -48,7 +50,8 @@ class DrawnShapes():
 			"outline": self.outline,
 			"outside": self.outside,
 			"duplicate": self.duplicate,
-			"z_offset": self.z_offset
+			"z_offset": self.z_offset,
+			"k": self.k
 		}
 
 	def id(self):
@@ -87,7 +90,7 @@ class DrawnShapes():
 		new_shapes = []
 		for shape in self.shapes:
 			new_shapes.append(shape.copy())
-		return DrawnShapes(new_shapes, param=self.param, background=self.background, outline=self.outline, outside=self.outside, duplicate=self.duplicate, z_offset=self.z_offset)
+		return DrawnShapes(new_shapes, param=self.param, background=self.background, outline=self.outline, outside=self.outside, duplicate=self.duplicate, z_offset=self.z_offset, k=self.k)
 	
 	def to_svg(self, color="black", opacity=1, width=1, fill=None, origin=Point(0, 0)):
 		"""
@@ -110,20 +113,20 @@ class DrawnShapes():
 	def to_polygon(self):
 		if len(self.shapes) == 1:
 			if isinstance(self.shapes[0], Polygon):
-				return self.shapes[0]
+				return self.shapes[0], [i for i in range(len(self.shapes[0].points))]
 			if isinstance(self.shapes[0], Line):
 				raise ValueError("Cannot convert a line to a polygon")
 			if isinstance(self.shapes[0], Circle):
-				return RegularPolygon.from_center_and_radius(self.shapes[0][0], self.shapes[0].radius, 20)
+				return RegularPolygon.from_center_and_radius(self.shapes[0][0], self.shapes[0].radius, 20), [i for i in range(20)]
 			if isinstance(self.shapes[0], Rectangle):
-				return Polygon(self.shapes[0].get_corners())
+				return Polygon(self.shapes[0].get_corners()), [i for i in range(4)]
 		elif len(self.shapes) > 1:
 			if not isinstance(self.shapes[0], Line):
 				raise ValueError("Cannot convert multiple shapes to a polygon")
 			# print("Converting multiple lines to a polygon")
 			pts = [self.shapes[0][0].copy(), self.shapes[0][1].copy()]
 			lines = self.shapes[1:]
-			done = []
+			done : list[int] = []
 			for _ in range(1, len(self.shapes)):
 				for j in range(len(lines)):
 					if j in done:
@@ -139,7 +142,9 @@ class DrawnShapes():
 					else:
 						continue
 					done.append(j)
-		return Polygon(pts) # type: ignore
+			order = [0] + [i + 1 for i in done]
+			# print("done:", done, "lines:", lines)
+		return Polygon(pts), order # type: ignore
 	
 	def to_multi_lines(self):
 		"""
@@ -237,11 +242,11 @@ class Folds(DrawnShapes):
 		return self.__str__()
 	
 	@staticmethod
-	def create_id(param_name, fold_type, fold_value, duplicate, z_offset : Number = 0): # type: ignore
-		return f"{param_name}_{fold_type}_{int(fold_value * 100) / 100}_{int(duplicate)}_{int(z_offset * 100) / 100}"
+	def create_id(param_name, fold_type, fold_value, duplicate, z_offset : Number = 0, outside = False): # type: ignore
+		return f"{param_name}_{fold_type}_{int(fold_value * 100) / 100}_{int(duplicate)}_{int(z_offset * 100) / 100}_{int(outside)}"
 
 	def id(self):
-		return Folds.create_id(self.param, self.fold_type, self.fold_value, self.duplicate, self.z_offset)
+		return Folds.create_id(self.param, self.fold_type, self.fold_value, self.duplicate, self.z_offset, self.outside)
 
 	def copy(self):
 		"""
@@ -250,7 +255,7 @@ class Folds(DrawnShapes):
 		new_shapes = []
 		for shape in self.shapes:
 			new_shapes.append(shape.copy())
-		return Folds(new_shapes, param=self.param, fold_type=self.fold_type, fold_value=self.fold_value, outside=self.outside, duplicate=self.duplicate, z_offset=self.z_offset)
+		return Folds(new_shapes, param=self.param, fold_type=self.fold_type, fold_value=self.fold_value, outside=self.outside, duplicate=self.duplicate, z_offset=self.z_offset, k=self.k)
 	
 	def thicken_to_rect(self, l):
 		"""
