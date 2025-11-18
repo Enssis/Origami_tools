@@ -4,3 +4,4 @@ sphinx-copybutton
 sphinx-tabs
 sphinx_rtd_theme
 sphinx-design
+sphinx_autodoc_typehints
