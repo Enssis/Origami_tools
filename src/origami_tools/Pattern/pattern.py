@@ -18,15 +18,15 @@ class Pattern:
 	Class representing a crease pattern for origami or similar applications.
 	Attributes:
 		name (str): Name of the pattern.
-		laser_cut (ParamList): Laser cutting parameters.
+		param_list (ParamList): Laser cutting parameters.
 		origin (Point): Origin point of the pattern on the screen.
 	"""
-	def __init__(self, name="", param_list=None, origin=Point(0, 0)):
+	def __init__(self, name="pattern", param_list=None, origin=Point(0, 0)):
 		"""
 		Initializes a new Pattern instance.
 		Args:
 			name (str): Name of the pattern.
-			laser_cut (ParamList, optional): Laser cutting parameters. Defaults to a new ParamList instance.
+			param_list (ParamList, optional): Laser cutting parameters. Defaults to a new ParamList instance.
 			origin (Point, optional): Origin point of the pattern on the screen. Defaults to Point(0, 0).
 		"""
 
@@ -45,8 +45,6 @@ class Pattern:
 		self.__canvas = None
 
 		self.name = name
-		if self.name == "":
-			self.name = "pattern"
 
 		self.__shapes_id = []
 
@@ -130,7 +128,7 @@ class Pattern:
 			elems.append(laser_cut.fab_text(text_coord[0], text_coord[1], text_coord[2], param=text[1], font_size=text[2], text_anchor=text[3]))
 		return elems
 
-	def add_folds(self, lines, fold_type="n", fold_value : Number = np.pi / 2, param : str | None =None, outside=False, duplicate = False, z_offset : Number = 0, k : Number | None = None):
+	def add_folds(self, lines, fold_type="n", fold_value : Number = 0, param : str | None =None, outside=False, duplicate = False, z_offset : Number = 0, k : Number | None = None):
 		"""
 			ajoute des lignes au patron \n
 			lines : liste de lignes à ajouter \n
@@ -290,7 +288,7 @@ class Pattern:
 
 
 		svg_io = io.StringIO(self.__canvas.as_str()) # type: ignore
-		drawing = svg2rlg(svg_io) 
+		drawing = svg2rlg(svg_io) # type: ignore
 		renderPDF.drawToFile(drawing, save_dir) # type: ignore
 
 		print(f"Fichier PDF sauvegardé dans {save_dir}")
@@ -975,6 +973,7 @@ class Pattern:
 	def create_pattern(self, all_visible=False):
 		svg_elements = []
 		contour_col = "black"
+		n_fold_col = "purple"
 		# couleur moutain, couleur valley
 		pli_col = ["red", "blue"]
 		width = 2
@@ -983,9 +982,9 @@ class Pattern:
 			if isinstance(shape, Folds):
 				i = 0 if shape.fold_type == "m" else 1
 				if shape.fold_type == "n":
-					svg_elements += shape.to_svg(color=contour_col, opacity=1, width=width, origin=self.origin)
+					svg_elements += shape.to_svg(color=n_fold_col, opacity=1, width=width, origin=self.origin)
 				else:
-					opacity = 1 if all_visible else 1.0 - shape.fold_value / np.pi
+					opacity = 1 if all_visible else min(max(0, 1.0 - shape.fold_value / np.pi), 1)
 					svg_elements += shape.to_svg(color=pli_col[i], opacity=opacity, width=width, origin=self.origin)
 			elif isinstance(shape, DrawnShapes):
 				svg_elements += shape.to_svg(color=contour_col, opacity=1, width=width, fill="black" if shape.background else "none", origin=self.origin)

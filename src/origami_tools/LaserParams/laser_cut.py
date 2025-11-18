@@ -166,6 +166,10 @@ class LaserParam:
 
 
 class ListTemplate(dict[str, str]):
+	"""
+		Class to manage a template for laser parameters.
+	"""
+
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -210,7 +214,7 @@ class ListTemplate(dict[str, str]):
 			dir_path = LASER_SAVE_PATH
 		path = dir_path + name + ".json"
 		if not os.path.exists(path):
-			print(f"Le template {name} n'existe pas dans le fichier de sauvegarde {path}.")
+			# print(f"Le template {name} n'existe pas dans le fichier de sauvegarde {path}.")
 			return None
 		with open(path, "r") as f:
 			data = json.load(f)
@@ -241,21 +245,36 @@ class ParamList:
 	Class to manage a list of laser parameters.
 	"""
 
-	def __init__(self, params : dict[str, LaserParam] = {}, template : ListTemplate = ListTemplate(), profile : str = "default"):
+	def __init__(self, params : dict[str, LaserParam] = {}, template : ListTemplate | None = None, profile : str = "default"):
+		""" Initializes a ParamList object.
+
+			Args:  
+				params : Dictionary of LaserParam objects, keyed by their names.
+				template : ListTemplate object used to associate name with parameters.
+				profile : Name of the profile for this ParamList.
+    """  
 		self.params = params
 		self.template = template
 		self.profile = profile
+
+		# if params is empty, load from profile
 		if self.params == {}:
 			pl = ParamList.load_from_profile(self.profile)
 			if pl is None:
 				print(f"Le profil {self.profile} n'existe pas.")
 				return
 			self.params = pl.params
-			if self.template == ListTemplate():
+			if self.template == None:
 				self.template = pl.template
 
 		self.names = list(self.params.keys())
 
+		if self.template is None:
+			self.template = ListTemplate()
+			for name in self.names:
+				self.template[name] = name
+
+		#check that all template values are in params
 		for value in self.template.values():
 			if value not in self.names: 
 				raise ValueError(f"{value} does not exist in the params list.")
@@ -263,7 +282,7 @@ class ParamList:
 
 	
 	@classmethod
-	def from_list(cls, params : list[LaserParam], template : ListTemplate = ListTemplate() , profile="default"):
+	def from_list(cls, params : list[LaserParam], template : ListTemplate | None = None , profile="default"):
 		"""
 		Initializes a ParamList from a list of LaserParam objects.
 		params : list of LaserParam objects
@@ -389,21 +408,36 @@ class ParamList:
 		print(f"Fichier de sauvegarde des paramètres laser dans {path}")
 
 	@staticmethod
-	def load_from_profile(profile, dir_path=None, template_name=None):
-		if dir_path is None:
-			dir_path = LASER_SAVE_PATH
+	def load_from_profile(profile : str , dir_path = None, template_name = None) -> "ParamList | None":
+		"""Load a ParamList from a saved profile. 
+
+		Args:  
+			profile : name of the profile to load.
+			dir_path : directory path where the profile is stored. If None, use LASER_SAVE_PATH.  
+			template_name : name of the template to use. If None, use profile + "_template".
+
+		Returns:  
+			the loaded ParamList object, or None if the profile does not exist. 
+    """  
+		
+		if dir_path is None: # use default path
+			dir_path = LASER_SAVE_PATH 
+		
 		path = dir_path + profile + ".csv"
-		if not os.path.exists(path):
+
+		if not os.path.exists(path): # check if profile exists
 			print(f"Le profil {profile} n'existe pas.")
 			return None
-		# on charge le template si il est spécifié
-		if template_name is None:
+		
+		if template_name is None: # use default template name
 			template_name = profile + "_template"
+		
 		template = ListTemplate.load(template_name, dir_path=dir_path)
+		empty_template = False
 		if template is None:
 			template = ListTemplate()
-			# raise ValueError(f"Le template {template_name} n'existe pas.")
-				
+			empty_template = True
+
 		with open(path, "r") as f:
 			lines = f.readlines()[1:]
 			params = []
@@ -411,6 +445,9 @@ class ParamList:
 				param = LaserParam.load_from_csv(line)
 				if param is not None:
 					params.append(param)
+					if empty_template:
+						template[param.name] = param.name
+
 			if len(params) > 0:
 				return ParamList.from_list(params=params, template=template, profile=profile)
 				

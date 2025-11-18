@@ -1,0 +1,1024 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>origami_tools.Pattern package &mdash; origami_tools Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="origami_tools.Utils package" href="origami_tools.Utils.html" />
+    <link rel="prev" title="origami_tools.Origamis package" href="origami_tools.Origamis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            origami_tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">origami_tools</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="origami_tools.html">origami_tools package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="origami_tools.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html">origami_tools.Geometry package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html">origami_tools.LaserParams package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html">origami_tools.Origamis package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">origami_tools.Pattern package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Utils.html">origami_tools.Utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.html#module-origami_tools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">Quick Start</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">origami_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">origami_tools</a></li>
+          <li class="breadcrumb-item"><a href="origami_tools.html">origami_tools package</a></li>
+      <li class="breadcrumb-item active">origami_tools.Pattern package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/origami_tools.Pattern.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="origami-tools-pattern-package">
+<h1>origami_tools.Pattern package<a class="headerlink" href="#origami-tools-pattern-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-origami_tools.Pattern.drawn_shapes">
+<span id="origami-tools-pattern-drawn-shapes-module"></span><h2>origami_tools.Pattern.drawn_shapes module<a class="headerlink" href="#module-origami_tools.Pattern.drawn_shapes" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.Pattern.drawn_shapes.</span></span><span class="sig-name descname"><span class="pre">DrawnShapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Classe représentant un patron dessiné, qui peut contenir plusieurs formes.
+Les formes peuvent être des lignes, des polygones, des cercles, etc.
+:type shapes: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape" title="origami_tools.Geometry.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>]</span>
+:param shapes: liste de formes à dessiner
+:type param: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param param: nom du paramètre à utiliser pour le dessin
+:type background: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
+:param background: si True, le patron est dessiné en arrière-plan
+:type outline: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
+:param outline: si True, le patron est dessiné avec un contour
+:type outside: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
+:param outside: si True, la forme est dessinée à l’extérieur de la forme, sinon à l’intérieur
+:type z_offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param z_offset: décalage en z pour le dessin, utilisé pour l’ordre des patrons
+:type k: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>
+:param k: valeur de k pour cette forme, utilisé pour l’ablation de l’adhésif dans les patrons</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le patron sous forme de json</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.background">
+<span class="sig-name descname"><span class="pre">background</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.background" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.copy" title="Link to this definition"></a></dt>
+<dd><p>copie le patron</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.create_id">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.create_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.duplicate">
+<span class="sig-name descname"><span class="pre">duplicate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.duplicate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.id" title="Link to this definition"></a></dt>
+<dd><p>renvoie l’id du patron</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.k">
+<span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> <span class="pre">|</span> <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> <span class="pre">|</span> <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.k" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.mirror">
+<span class="sig-name descname"><span class="pre">mirror</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plane</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.mirror" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.outline">
+<span class="sig-name descname"><span class="pre">outline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.outline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.outside">
+<span class="sig-name descname"><span class="pre">outside</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.outside" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.param">
+<span class="sig-name descname"><span class="pre">param</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.param" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.rotate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.shapes">
+<span class="sig-name descname"><span class="pre">shapes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code><span class="pre">[</span><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape" title="origami_tools.Geometry.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.shapes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.to_multi_lines">
+<span class="sig-name descname"><span class="pre">to_multi_lines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.to_multi_lines" title="Link to this definition"></a></dt>
+<dd><p>Transform the shapes in a list of lines</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.to_polygon">
+<span class="sig-name descname"><span class="pre">to_polygon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.to_polygon" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.to_svg">
+<span class="sig-name descname"><span class="pre">to_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.to_svg" title="Link to this definition"></a></dt>
+<dd><p>Transform the shapes in the SVG shapes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.translate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.DrawnShapes.z_offset">
+<span class="sig-name descname"><span class="pre">z_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> <span class="pre">|</span> <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes.z_offset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.FoldLine">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.Pattern.drawn_shapes.</span></span><span class="sig-name descname"><span class="pre">FoldLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dash_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dash_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'n'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.FoldLine" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line" title="origami_tools.Geometry.line.Line"><code class="xref py py-class docutils literal notranslate"><span class="pre">Line</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.FoldLine.L">
+<span class="sig-name descname"><span class="pre">L</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> <span class="pre">|</span> <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.FoldLine.L" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.FoldLine.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'n'</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.FoldLine.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.Folds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.Pattern.drawn_shapes.</span></span><span class="sig-name descname"><span class="pre">Folds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'n'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.Folds" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes" title="origami_tools.Pattern.drawn_shapes.DrawnShapes"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrawnShapes</span></code></a></p>
+<p>Classe représentant un pli dans un patron, qui peut contenir plusieurs lignes.
+:param lines: liste de lignes à plier
+:type param: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param param: nom du paramètre à utiliser pour le pli
+:type fold_type: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param fold_type: type de pli</p>
+<blockquote>
+<div><p>“m” : pli montagne</p>
+<p>“v” : pli vallée</p>
+<p>“n” : pas de pli</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fold_value</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – valeur maximale du pli</p></li>
+<li><p><strong>outside</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – si True, le pli est dessiné à l’extérieur de la forme, sinon à l’intérieur</p></li>
+<li><p><strong>z_offset</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – décalage en z pour le pli, utilisé pour l’ordre des plis</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.Folds.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.Folds.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le pli sous forme de json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.Folds.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.Folds.copy" title="Link to this definition"></a></dt>
+<dd><p>copie le pli</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.Folds.create_id">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.Folds.create_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.Folds.fold_type">
+<span class="sig-name descname"><span class="pre">fold_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'n'</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.Folds.fold_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.Folds.fold_value">
+<span class="sig-name descname"><span class="pre">fold_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> <span class="pre">|</span> <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.Folds.fold_value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.Folds.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.Folds.id" title="Link to this definition"></a></dt>
+<dd><p>renvoie l’id du patron</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.Folds.thicken_to_rect">
+<span class="sig-name descname"><span class="pre">thicken_to_rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.Folds.thicken_to_rect" title="Link to this definition"></a></dt>
+<dd><p>renvoie un rectangle épais de l’épaisseur l</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.drawn_shapes.Folds.to_svg">
+<span class="sig-name descname"><span class="pre">to_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.drawn_shapes.Folds.to_svg" title="Link to this definition"></a></dt>
+<dd><p>Transform the shapes in the SVG shapes</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-origami_tools.Pattern.pattern">
+<span id="origami-tools-pattern-pattern-module"></span><h2>origami_tools.Pattern.pattern module<a class="headerlink" href="#module-origami_tools.Pattern.pattern" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.Pattern.pattern.</span></span><span class="sig-name descname"><span class="pre">Pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pattern'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class representing a crease pattern for origami or similar applications.
+.. attribute:: name</p>
+<blockquote>
+<div><p>Name of the pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.param_list">
+<span class="sig-name descname"><span class="pre">param_list</span></span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.param_list" title="Link to this definition"></a></dt>
+<dd><p>Laser cutting parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList" title="origami_tools.LaserParams.laser_cut.ParamList">ParamList</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.origin">
+<span class="sig-name descname"><span class="pre">origin</span></span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.origin" title="Link to this definition"></a></dt>
+<dd><p>Origin point of the pattern on the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Point" title="origami_tools.Geometry.vector.Point">Point</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.add_drawn_shapes">
+<span class="sig-name descname"><span class="pre">add_drawn_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drawn_shapes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.add_drawn_shapes" title="Link to this definition"></a></dt>
+<dd><p>add drawn shapes to the patron</p>
+<p>drawn_shapes : DrawnShapes()</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.add_folds">
+<span class="sig-name descname"><span class="pre">add_folds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'n'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.add_folds" title="Link to this definition"></a></dt>
+<dd><p>ajoute des lignes au patron</p>
+<p>lines : liste de lignes à ajouter</p>
+<blockquote>
+<div><p>ligne : [x0, y0, x1, y1] ou Line (A, B)</p>
+</div></blockquote>
+<p>fold_type : type de fold</p>
+<blockquote>
+<div><p>“m” : pli montagne</p>
+<p>“v” : pli vallée</p>
+<p>“n” : pas de pli</p>
+</div></blockquote>
+<p>fold_value : valeur du fold totalement foldé]</p>
+<p>param : nom du paramètre de découpe</p>
+<p>outside : si True, les lignes sont ajoutées à l’extérieur du patron</p>
+<p>duplicate : si True, les lignes sont dupliquées</p>
+<p>z_offset : décalage en z des lignes</p>
+<p>k : épaisseur du trait, si None, la valeur par défaut est utilisée</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.add_shapes">
+<span class="sig-name descname"><span class="pre">add_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.add_shapes" title="Link to this definition"></a></dt>
+<dd><p>add shapes to the patron</p>
+<p>shapes : list of shapes to add</p>
+<blockquote>
+<div><p>shape : Line(), Circle(), Rectangle(), Polygon(), Shape() , HoledPolygon()</p>
+</div></blockquote>
+<p>param : name of the parameter to use</p>
+<p>background : if True, the shape is filled</p>
+<p>outline : if True, the shape is outlined</p>
+<p>outside : if True, the shape is added outside the pattern</p>
+<p>duplicate : if True, the shape is duplicated</p>
+<p>z_offset : z offset of the shape, used for the order of the shapes</p>
+<p>k : thickness of the line, if None, the default value is used</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.add_texts">
+<span class="sig-name descname"><span class="pre">add_texts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_anchor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'start'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.add_texts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le patron sous forme de json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.copy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.create" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.create_lasercut_martyr">
+<span class="sig-name descname"><span class="pre">create_lasercut_martyr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.create_lasercut_martyr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.create_lasercut_patron">
+<span class="sig-name descname"><span class="pre">create_lasercut_patron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adhesif_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'adhesive'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mirror</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mountain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_intersections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.create_lasercut_patron" title="Link to this definition"></a></dt>
+<dd><p>return two patrons on one</p>
+<p>asym : if True, the two patrons are asymetric</p>
+<p>e : thickness of the fold</p>
+<p>l : thickness of the removed adhesive</p>
+<p>adhesif_param : name of the parameter to use for the adhesive</p>
+<p>mirror : if True, the patron is mirrored</p>
+<p>montain : if True, the patron is a mountain fold</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.create_patron_decal">
+<span class="sig-name descname"><span class="pre">create_patron_decal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">montain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.create_patron_decal" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.create_patron_offset">
+<span class="sig-name descname"><span class="pre">create_patron_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_intersections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.create_patron_offset" title="Link to this definition"></a></dt>
+<dd><p>Generate an offset pattern (patron) for adhesive or cutting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mountain</strong> (<em>bool</em>) – If True, treat folds as mountain folds, otherwise valley.</p></li>
+<li><p><strong>e</strong> (<em>Number</em>) – Thickness or extrusion amount (for fold-based offsets).</p></li>
+<li><p><strong>k</strong> (<em>Number</em>) – Offset length for all shapes.</p></li>
+<li><p><strong>full</strong> (<em>bool</em>) – If True, generate a full offset shape with cut-out holes.</p></li>
+<li><p><strong>param</strong> (<em>str</em>) – Parameter name for resulting shapes.</p></li>
+<li><p><strong>z_offset</strong> (<em>Number</em>) – Z offset for the shapes.</p></li>
+<li><p><strong>fold_type</strong> (<em>str</em>) – if asymetry is needed, specify “m” for mountain or “v” for valley folds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new offset pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Patron</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.create_pattern">
+<span class="sig-name descname"><span class="pre">create_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.create_pattern" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.cut_half">
+<span class="sig-name descname"><span class="pre">cut_half</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.cut_half" title="Link to this definition"></a></dt>
+<dd><p>cut the patron in half</p>
+<p>side : 0 for left, 1 for right</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.get_duplicate">
+<span class="sig-name descname"><span class="pre">get_duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.get_duplicate" title="Link to this definition"></a></dt>
+<dd><p>renvoie un patron dupliqué</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.mirror">
+<span class="sig-name descname"><span class="pre">mirror</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plane</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.mirror" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.reset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.rotate" title="Link to this definition"></a></dt>
+<dd><p>rotate the patron</p>
+<p>angle : angle in degrees</p>
+<p>center : center of rotation, if None, the center of the patron is used</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.save_PDF">
+<span class="sig-name descname"><span class="pre">save_PDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.save_PDF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.save_SVG">
+<span class="sig-name descname"><span class="pre">save_SVG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.save_SVG" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.save_json">
+<span class="sig-name descname"><span class="pre">save_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.save_json" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.set_origin">
+<span class="sig-name descname"><span class="pre">set_origin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.set_origin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.shape2svg">
+<span class="sig-name descname"><span class="pre">shape2svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">laser_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.shape2svg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recreate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.show" title="Link to this definition"></a></dt>
+<dd><p>affiche le patron dans un notebook Jupyter</p>
+<p>repr : “cut” pour la découpe, “patron” pour le patron, “decal” pour le patron avec les plis, “lasercut” pour le patron découpé</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.texts2svg">
+<span class="sig-name descname"><span class="pre">texts2svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">laser_cut</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.texts2svg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.thicken_lines">
+<span class="sig-name descname"><span class="pre">thicken_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.thicken_lines" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.translate" title="Link to this definition"></a></dt>
+<dd><p>move the patron</p>
+<p>v : vector to move</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.pattern.Pattern.w_h">
+<span class="sig-name descname"><span class="pre">w_h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.pattern.Pattern.w_h" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-origami_tools.Pattern">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-origami_tools.Pattern" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.Pattern.</span></span><span class="sig-name descname"><span class="pre">DrawnShapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Classe représentant un patron dessiné, qui peut contenir plusieurs formes.
+Les formes peuvent être des lignes, des polygones, des cercles, etc.
+:type shapes: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code>[<a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape" title="origami_tools.Geometry.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a>]</span>
+:param shapes: liste de formes à dessiner
+:type param: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param param: nom du paramètre à utiliser pour le dessin
+:type background: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
+:param background: si True, le patron est dessiné en arrière-plan
+:type outline: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
+:param outline: si True, le patron est dessiné avec un contour
+:type outside: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>
+:param outside: si True, la forme est dessinée à l’extérieur de la forme, sinon à l’intérieur
+:type z_offset: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
+:param z_offset: décalage en z pour le dessin, utilisé pour l’ordre des patrons
+:type k: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>
+:param k: valeur de k pour cette forme, utilisé pour l’ablation de l’adhésif dans les patrons</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le patron sous forme de json</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.background">
+<span class="sig-name descname"><span class="pre">background</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.background" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.copy" title="Link to this definition"></a></dt>
+<dd><p>copie le patron</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.create_id">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.create_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.duplicate">
+<span class="sig-name descname"><span class="pre">duplicate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.duplicate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.id" title="Link to this definition"></a></dt>
+<dd><p>renvoie l’id du patron</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.k">
+<span class="sig-name descname"><span class="pre">k</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> <span class="pre">|</span> <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> <span class="pre">|</span> <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.k" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.mirror">
+<span class="sig-name descname"><span class="pre">mirror</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plane</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.mirror" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.outline">
+<span class="sig-name descname"><span class="pre">outline</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.outline" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.outside">
+<span class="sig-name descname"><span class="pre">outside</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.outside" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.param">
+<span class="sig-name descname"><span class="pre">param</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.param" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.rotate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.shapes">
+<span class="sig-name descname"><span class="pre">shapes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code><span class="pre">[</span><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape" title="origami_tools.Geometry.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.shapes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.to_multi_lines">
+<span class="sig-name descname"><span class="pre">to_multi_lines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.to_multi_lines" title="Link to this definition"></a></dt>
+<dd><p>Transform the shapes in a list of lines</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.to_polygon">
+<span class="sig-name descname"><span class="pre">to_polygon</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.to_polygon" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.to_svg">
+<span class="sig-name descname"><span class="pre">to_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.to_svg" title="Link to this definition"></a></dt>
+<dd><p>Transform the shapes in the SVG shapes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.translate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.DrawnShapes.z_offset">
+<span class="sig-name descname"><span class="pre">z_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> <span class="pre">|</span> <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#origami_tools.Pattern.DrawnShapes.z_offset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.Pattern.</span></span><span class="sig-name descname"><span class="pre">Folds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'n'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Folds" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#origami_tools.Pattern.drawn_shapes.DrawnShapes" title="origami_tools.Pattern.drawn_shapes.DrawnShapes"><code class="xref py py-class docutils literal notranslate"><span class="pre">DrawnShapes</span></code></a></p>
+<p>Classe représentant un pli dans un patron, qui peut contenir plusieurs lignes.
+:param lines: liste de lignes à plier
+:type param: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param param: nom du paramètre à utiliser pour le pli
+:type fold_type: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>
+:param fold_type: type de pli</p>
+<blockquote>
+<div><p>“m” : pli montagne</p>
+<p>“v” : pli vallée</p>
+<p>“n” : pas de pli</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fold_value</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – valeur maximale du pli</p></li>
+<li><p><strong>outside</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – si True, le pli est dessiné à l’extérieur de la forme, sinon à l’intérieur</p></li>
+<li><p><strong>z_offset</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> | <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – décalage en z pour le pli, utilisé pour l’ordre des plis</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Folds.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le pli sous forme de json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Folds.copy" title="Link to this definition"></a></dt>
+<dd><p>copie le pli</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.create_id">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Folds.create_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.fold_type">
+<span class="sig-name descname"><span class="pre">fold_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'n'</span></em><a class="headerlink" href="#origami_tools.Pattern.Folds.fold_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.fold_value">
+<span class="sig-name descname"><span class="pre">fold_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code> <span class="pre">|</span> <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#origami_tools.Pattern.Folds.fold_value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Folds.id" title="Link to this definition"></a></dt>
+<dd><p>renvoie l’id du patron</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.param">
+<span class="sig-name descname"><span class="pre">param</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#origami_tools.Pattern.Folds.param" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.shapes">
+<span class="sig-name descname"><span class="pre">shapes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">Sequence</span></code><span class="pre">[</span><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape" title="origami_tools.Geometry.shape.Shape"><code class="xref py py-class docutils literal notranslate"><span class="pre">Shape</span></code></a><span class="pre">]</span></em><a class="headerlink" href="#origami_tools.Pattern.Folds.shapes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.thicken_to_rect">
+<span class="sig-name descname"><span class="pre">thicken_to_rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Folds.thicken_to_rect" title="Link to this definition"></a></dt>
+<dd><p>renvoie un rectangle épais de l’épaisseur l</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Folds.to_svg">
+<span class="sig-name descname"><span class="pre">to_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Folds.to_svg" title="Link to this definition"></a></dt>
+<dd><p>Transform the shapes in the SVG shapes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.Pattern.</span></span><span class="sig-name descname"><span class="pre">Pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pattern'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class representing a crease pattern for origami or similar applications.
+.. attribute:: name</p>
+<blockquote>
+<div><p>Name of the pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.param_list">
+<span class="sig-name descname"><span class="pre">param_list</span></span><a class="headerlink" href="#origami_tools.Pattern.Pattern.param_list" title="Link to this definition"></a></dt>
+<dd><p>Laser cutting parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList" title="origami_tools.LaserParams.laser_cut.ParamList">ParamList</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.origin">
+<span class="sig-name descname"><span class="pre">origin</span></span><a class="headerlink" href="#origami_tools.Pattern.Pattern.origin" title="Link to this definition"></a></dt>
+<dd><p>Origin point of the pattern on the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Point" title="origami_tools.Geometry.vector.Point">Point</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.add_drawn_shapes">
+<span class="sig-name descname"><span class="pre">add_drawn_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">drawn_shapes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.add_drawn_shapes" title="Link to this definition"></a></dt>
+<dd><p>add drawn shapes to the patron</p>
+<p>drawn_shapes : DrawnShapes()</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.add_folds">
+<span class="sig-name descname"><span class="pre">add_folds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'n'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.add_folds" title="Link to this definition"></a></dt>
+<dd><p>ajoute des lignes au patron</p>
+<p>lines : liste de lignes à ajouter</p>
+<blockquote>
+<div><p>ligne : [x0, y0, x1, y1] ou Line (A, B)</p>
+</div></blockquote>
+<p>fold_type : type de fold</p>
+<blockquote>
+<div><p>“m” : pli montagne</p>
+<p>“v” : pli vallée</p>
+<p>“n” : pas de pli</p>
+</div></blockquote>
+<p>fold_value : valeur du fold totalement foldé]</p>
+<p>param : nom du paramètre de découpe</p>
+<p>outside : si True, les lignes sont ajoutées à l’extérieur du patron</p>
+<p>duplicate : si True, les lignes sont dupliquées</p>
+<p>z_offset : décalage en z des lignes</p>
+<p>k : épaisseur du trait, si None, la valeur par défaut est utilisée</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.add_shapes">
+<span class="sig-name descname"><span class="pre">add_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outside</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duplicate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.add_shapes" title="Link to this definition"></a></dt>
+<dd><p>add shapes to the patron</p>
+<p>shapes : list of shapes to add</p>
+<blockquote>
+<div><p>shape : Line(), Circle(), Rectangle(), Polygon(), Shape() , HoledPolygon()</p>
+</div></blockquote>
+<p>param : name of the parameter to use</p>
+<p>background : if True, the shape is filled</p>
+<p>outline : if True, the shape is outlined</p>
+<p>outside : if True, the shape is added outside the pattern</p>
+<p>duplicate : if True, the shape is duplicated</p>
+<p>z_offset : z offset of the shape, used for the order of the shapes</p>
+<p>k : thickness of the line, if None, the default value is used</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.add_texts">
+<span class="sig-name descname"><span class="pre">add_texts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">texts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_anchor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'start'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.add_texts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le patron sous forme de json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.copy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.create" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.create_lasercut_martyr">
+<span class="sig-name descname"><span class="pre">create_lasercut_martyr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.create_lasercut_martyr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.create_lasercut_patron">
+<span class="sig-name descname"><span class="pre">create_lasercut_patron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">asym</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adhesif_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'adhesive'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mirror</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mountain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_intersections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.create_lasercut_patron" title="Link to this definition"></a></dt>
+<dd><p>return two patrons on one</p>
+<p>asym : if True, the two patrons are asymetric</p>
+<p>e : thickness of the fold</p>
+<p>l : thickness of the removed adhesive</p>
+<p>adhesif_param : name of the parameter to use for the adhesive</p>
+<p>mirror : if True, the patron is mirrored</p>
+<p>montain : if True, the patron is a mountain fold</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.create_patron_decal">
+<span class="sig-name descname"><span class="pre">create_patron_decal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">montain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.create_patron_decal" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.create_patron_offset">
+<span class="sig-name descname"><span class="pre">create_patron_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_intersections</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.create_patron_offset" title="Link to this definition"></a></dt>
+<dd><p>Generate an offset pattern (patron) for adhesive or cutting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mountain</strong> (<em>bool</em>) – If True, treat folds as mountain folds, otherwise valley.</p></li>
+<li><p><strong>e</strong> (<em>Number</em>) – Thickness or extrusion amount (for fold-based offsets).</p></li>
+<li><p><strong>k</strong> (<em>Number</em>) – Offset length for all shapes.</p></li>
+<li><p><strong>full</strong> (<em>bool</em>) – If True, generate a full offset shape with cut-out holes.</p></li>
+<li><p><strong>param</strong> (<em>str</em>) – Parameter name for resulting shapes.</p></li>
+<li><p><strong>z_offset</strong> (<em>Number</em>) – Z offset for the shapes.</p></li>
+<li><p><strong>fold_type</strong> (<em>str</em>) – if asymetry is needed, specify “m” for mountain or “v” for valley folds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The new offset pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Patron</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.create_pattern">
+<span class="sig-name descname"><span class="pre">create_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.create_pattern" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.cut_half">
+<span class="sig-name descname"><span class="pre">cut_half</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.cut_half" title="Link to this definition"></a></dt>
+<dd><p>cut the patron in half</p>
+<p>side : 0 for left, 1 for right</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.get_duplicate">
+<span class="sig-name descname"><span class="pre">get_duplicate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.get_duplicate" title="Link to this definition"></a></dt>
+<dd><p>renvoie un patron dupliqué</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.mirror">
+<span class="sig-name descname"><span class="pre">mirror</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plane</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.mirror" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.reset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.rotate" title="Link to this definition"></a></dt>
+<dd><p>rotate the patron</p>
+<p>angle : angle in degrees</p>
+<p>center : center of rotation, if None, the center of the patron is used</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.save_PDF">
+<span class="sig-name descname"><span class="pre">save_PDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.save_PDF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.save_SVG">
+<span class="sig-name descname"><span class="pre">save_SVG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.save_SVG" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.save_json">
+<span class="sig-name descname"><span class="pre">save_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.save_json" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.set_origin">
+<span class="sig-name descname"><span class="pre">set_origin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.set_origin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.shape2svg">
+<span class="sig-name descname"><span class="pre">shape2svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">laser_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.shape2svg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recreate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.show" title="Link to this definition"></a></dt>
+<dd><p>affiche le patron dans un notebook Jupyter</p>
+<p>repr : “cut” pour la découpe, “patron” pour le patron, “decal” pour le patron avec les plis, “lasercut” pour le patron découpé</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.texts2svg">
+<span class="sig-name descname"><span class="pre">texts2svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">laser_cut</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.texts2svg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.thicken_lines">
+<span class="sig-name descname"><span class="pre">thicken_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.thicken_lines" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.translate" title="Link to this definition"></a></dt>
+<dd><p>move the patron</p>
+<p>v : vector to move</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.Pattern.Pattern.w_h">
+<span class="sig-name descname"><span class="pre">w_h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.Pattern.Pattern.w_h" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="origami_tools.Origamis.html" class="btn btn-neutral float-left" title="origami_tools.Origamis package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="origami_tools.Utils.html" class="btn btn-neutral float-right" title="origami_tools.Utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Druart Mateo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

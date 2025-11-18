@@ -17,7 +17,13 @@ def alkashi_angle(ac, bc, ab):
     """
     Calculate the angle opposite to side ab in a triangle with sides ac and bc.
     """
-	return np.arccos((ac**2 + bc**2 - ab**2) / (2 * ac * bc))
+    return np.arccos((ac**2 + bc**2 - ab**2) / (2 * ac * bc))
+
+# calcul d'aire d'un triangle a partir de ses 3 cotes
+def area_triangle(a, b, c):
+    s = (a + b + c) / 2
+    return np.sqrt(s * (s - a) * (s - b) * (s - c))
+
 
 
 def skewm(v):
@@ -44,6 +50,7 @@ __all__ = [
     "merge_close_points",
     "alkashi",
     "alkashi_angle",
+    "area_triangle",
     "skewm",
     "Vec",
     "Point",

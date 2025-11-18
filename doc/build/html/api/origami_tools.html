@@ -1,0 +1,845 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>origami_tools package &mdash; origami_tools Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="origami_tools.Geometry package" href="origami_tools.Geometry.html" />
+    <link rel="prev" title="origami_tools" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            origami_tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">origami_tools</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">origami_tools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html">origami_tools.Geometry package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html">origami_tools.LaserParams package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html">origami_tools.Origamis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html">origami_tools.Pattern package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Utils.html">origami_tools.Utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-origami_tools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">Quick Start</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">origami_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">origami_tools</a></li>
+      <li class="breadcrumb-item active">origami_tools package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/origami_tools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="origami-tools-package">
+<h1>origami_tools package<a class="headerlink" href="#origami-tools-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="origami_tools.Geometry.html">origami_tools.Geometry package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Geometry.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Geometry.html#module-origami_tools.Geometry.line">origami_tools.Geometry.line module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line"><code class="docutils literal notranslate"><span class="pre">Line</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.angles_with"><code class="docutils literal notranslate"><span class="pre">Line.angles_with()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.as_homogeneous"><code class="docutils literal notranslate"><span class="pre">Line.as_homogeneous()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.as_svg"><code class="docutils literal notranslate"><span class="pre">Line.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.coefficients"><code class="docutils literal notranslate"><span class="pre">Line.coefficients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.copy"><code class="docutils literal notranslate"><span class="pre">Line.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.dash_length"><code class="docutils literal notranslate"><span class="pre">Line.dash_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.dash_ratio"><code class="docutils literal notranslate"><span class="pre">Line.dash_ratio</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.dashed"><code class="docutils literal notranslate"><span class="pre">Line.dashed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.direction_vect"><code class="docutils literal notranslate"><span class="pre">Line.direction_vect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.find_lines_near_point"><code class="docutils literal notranslate"><span class="pre">Line.find_lines_near_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.from_angle"><code class="docutils literal notranslate"><span class="pre">Line.from_angle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.from_dir"><code class="docutils literal notranslate"><span class="pre">Line.from_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.from_point_normal"><code class="docutils literal notranslate"><span class="pre">Line.from_point_normal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.get_line_dashed"><code class="docutils literal notranslate"><span class="pre">Line.get_line_dashed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.has_point"><code class="docutils literal notranslate"><span class="pre">Line.has_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.intersection"><code class="docutils literal notranslate"><span class="pre">Line.intersection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.is_dashed"><code class="docutils literal notranslate"><span class="pre">Line.is_dashed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.length"><code class="docutils literal notranslate"><span class="pre">Line.length()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.midpoint"><code class="docutils literal notranslate"><span class="pre">Line.midpoint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.normal_vect"><code class="docutils literal notranslate"><span class="pre">Line.normal_vect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.offset_intersect_lines"><code class="docutils literal notranslate"><span class="pre">Line.offset_intersect_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.shape_intersection"><code class="docutils literal notranslate"><span class="pre">Line.shape_intersection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.slope"><code class="docutils literal notranslate"><span class="pre">Line.slope()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.Line.thicken_to_rect"><code class="docutils literal notranslate"><span class="pre">Line.thicken_to_rect()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.MultiLine"><code class="docutils literal notranslate"><span class="pre">MultiLine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.MultiLine.add_line"><code class="docutils literal notranslate"><span class="pre">MultiLine.add_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.MultiLine.break_points"><code class="docutils literal notranslate"><span class="pre">MultiLine.break_points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.MultiLine.direction_vect"><code class="docutils literal notranslate"><span class="pre">MultiLine.direction_vect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.MultiLine.from_lines"><code class="docutils literal notranslate"><span class="pre">MultiLine.from_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.MultiLine.get_lines"><code class="docutils literal notranslate"><span class="pre">MultiLine.get_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.MultiLine.has_line"><code class="docutils literal notranslate"><span class="pre">MultiLine.has_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.MultiLine.intersection"><code class="docutils literal notranslate"><span class="pre">MultiLine.intersection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.line.MultiLine.show"><code class="docutils literal notranslate"><span class="pre">MultiLine.show()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Geometry.html#module-origami_tools.Geometry.plane">origami_tools.Geometry.plane module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.plane.Plane"><code class="docutils literal notranslate"><span class="pre">Plane</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.plane.Plane.from_points"><code class="docutils literal notranslate"><span class="pre">Plane.from_points()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.plane.Plane.homogeneous"><code class="docutils literal notranslate"><span class="pre">Plane.homogeneous()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.plane.Plane.normal"><code class="docutils literal notranslate"><span class="pre">Plane.normal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.plane.Plane.point"><code class="docutils literal notranslate"><span class="pre">Plane.point</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Geometry.html#module-origami_tools.Geometry.repere">origami_tools.Geometry.repere module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere"><code class="docutils literal notranslate"><span class="pre">Repere</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere.axis"><code class="docutils literal notranslate"><span class="pre">Repere.axis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere.base"><code class="docutils literal notranslate"><span class="pre">Repere.base()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere.copy"><code class="docutils literal notranslate"><span class="pre">Repere.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere.dimension"><code class="docutils literal notranslate"><span class="pre">Repere.dimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere.origin"><code class="docutils literal notranslate"><span class="pre">Repere.origin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere.rotate"><code class="docutils literal notranslate"><span class="pre">Repere.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere.rotation_mat"><code class="docutils literal notranslate"><span class="pre">Repere.rotation_mat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere.transformation_mat"><code class="docutils literal notranslate"><span class="pre">Repere.transformation_mat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.repere.Repere.translate"><code class="docutils literal notranslate"><span class="pre">Repere.translate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Geometry.html#module-origami_tools.Geometry.shape">origami_tools.Geometry.shape module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape"><code class="docutils literal notranslate"><span class="pre">Shape</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.as_json"><code class="docutils literal notranslate"><span class="pre">Shape.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.as_svg"><code class="docutils literal notranslate"><span class="pre">Shape.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.center"><code class="docutils literal notranslate"><span class="pre">Shape.center()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.change_direction"><code class="docutils literal notranslate"><span class="pre">Shape.change_direction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.copy"><code class="docutils literal notranslate"><span class="pre">Shape.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.get_mirror"><code class="docutils literal notranslate"><span class="pre">Shape.get_mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.mirror"><code class="docutils literal notranslate"><span class="pre">Shape.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.perimeter"><code class="docutils literal notranslate"><span class="pre">Shape.perimeter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.points"><code class="docutils literal notranslate"><span class="pre">Shape.points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.repr_3D"><code class="docutils literal notranslate"><span class="pre">Shape.repr_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.rotate"><code class="docutils literal notranslate"><span class="pre">Shape.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.scale"><code class="docutils literal notranslate"><span class="pre">Shape.scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.show"><code class="docutils literal notranslate"><span class="pre">Shape.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.transform"><code class="docutils literal notranslate"><span class="pre">Shape.transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.shape.Shape.translate"><code class="docutils literal notranslate"><span class="pre">Shape.translate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Geometry.html#module-origami_tools.Geometry.surface">origami_tools.Geometry.surface module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Arc"><code class="docutils literal notranslate"><span class="pre">Arc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Arc.as_svg"><code class="docutils literal notranslate"><span class="pre">Arc.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Arc.copy"><code class="docutils literal notranslate"><span class="pre">Arc.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Arc.from_angles"><code class="docutils literal notranslate"><span class="pre">Arc.from_angles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Arc.get_angles"><code class="docutils literal notranslate"><span class="pre">Arc.get_angles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Arc.mirror"><code class="docutils literal notranslate"><span class="pre">Arc.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Arc.sweep"><code class="docutils literal notranslate"><span class="pre">Arc.sweep</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Circle"><code class="docutils literal notranslate"><span class="pre">Circle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Circle.as_svg"><code class="docutils literal notranslate"><span class="pre">Circle.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Circle.copy"><code class="docutils literal notranslate"><span class="pre">Circle.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Circle.from_center_and_point"><code class="docutils literal notranslate"><span class="pre">Circle.from_center_and_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Circle.from_diameter"><code class="docutils literal notranslate"><span class="pre">Circle.from_diameter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Circle.line_intersection"><code class="docutils literal notranslate"><span class="pre">Circle.line_intersection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Circle.normal"><code class="docutils literal notranslate"><span class="pre">Circle.normal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Circle.radius"><code class="docutils literal notranslate"><span class="pre">Circle.radius</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.HoledPolygon"><code class="docutils literal notranslate"><span class="pre">HoledPolygon</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.HoledPolygon.as_svg"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.HoledPolygon.copy"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.HoledPolygon.from_polygons"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.from_polygons()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.HoledPolygon.holes"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.holes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.HoledPolygon.outside"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.outside</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.HoledPolygon.update"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Polygon"><code class="docutils literal notranslate"><span class="pre">Polygon</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Polygon.as_svg"><code class="docutils literal notranslate"><span class="pre">Polygon.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Polygon.copy"><code class="docutils literal notranslate"><span class="pre">Polygon.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Polygon.cut"><code class="docutils literal notranslate"><span class="pre">Polygon.cut()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Polygon.from_multiline"><code class="docutils literal notranslate"><span class="pre">Polygon.from_multiline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Polygon.n_points"><code class="docutils literal notranslate"><span class="pre">Polygon.n_points</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle"><code class="docutils literal notranslate"><span class="pre">Rectangle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.area"><code class="docutils literal notranslate"><span class="pre">Rectangle.area()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.as_svg"><code class="docutils literal notranslate"><span class="pre">Rectangle.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.copy"><code class="docutils literal notranslate"><span class="pre">Rectangle.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.from_corner_size"><code class="docutils literal notranslate"><span class="pre">Rectangle.from_corner_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.from_points"><code class="docutils literal notranslate"><span class="pre">Rectangle.from_points()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.get_corners"><code class="docutils literal notranslate"><span class="pre">Rectangle.get_corners()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.height"><code class="docutils literal notranslate"><span class="pre">Rectangle.height</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.mirror"><code class="docutils literal notranslate"><span class="pre">Rectangle.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.to_polygon"><code class="docutils literal notranslate"><span class="pre">Rectangle.to_polygon()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Rectangle.width"><code class="docutils literal notranslate"><span class="pre">Rectangle.width</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.RegularPolygon"><code class="docutils literal notranslate"><span class="pre">RegularPolygon</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.RegularPolygon.copy"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.RegularPolygon.from_center_and_radius"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.from_center_and_radius()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.RegularPolygon.plane"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.plane</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.RegularPolygon.radius"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.radius</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.RegularPolygon.rotation"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.rotation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface"><code class="docutils literal notranslate"><span class="pre">Surface</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.copy"><code class="docutils literal notranslate"><span class="pre">Surface.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.edges"><code class="docutils literal notranslate"><span class="pre">Surface.edges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.extrude"><code class="docutils literal notranslate"><span class="pre">Surface.extrude()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.get_dashed"><code class="docutils literal notranslate"><span class="pre">Surface.get_dashed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.get_lines"><code class="docutils literal notranslate"><span class="pre">Surface.get_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.in_2D"><code class="docutils literal notranslate"><span class="pre">Surface.in_2D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.in_3D"><code class="docutils literal notranslate"><span class="pre">Surface.in_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.normal_vect"><code class="docutils literal notranslate"><span class="pre">Surface.normal_vect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.offset"><code class="docutils literal notranslate"><span class="pre">Surface.offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.surface.Surface.triangulate"><code class="docutils literal notranslate"><span class="pre">Surface.triangulate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Geometry.html#module-origami_tools.Geometry.vector">origami_tools.Geometry.vector module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Point"><code class="docutils literal notranslate"><span class="pre">Point</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Point.as_homogeneous"><code class="docutils literal notranslate"><span class="pre">Point.as_homogeneous()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Point.from_homogeneous"><code class="docutils literal notranslate"><span class="pre">Point.from_homogeneous()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec"><code class="docutils literal notranslate"><span class="pre">Vec</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.angle"><code class="docutils literal notranslate"><span class="pre">Vec.angle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.as_array"><code class="docutils literal notranslate"><span class="pre">Vec.as_array()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.copy"><code class="docutils literal notranslate"><span class="pre">Vec.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.dimension"><code class="docutils literal notranslate"><span class="pre">Vec.dimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.distance"><code class="docutils literal notranslate"><span class="pre">Vec.distance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.from_list"><code class="docutils literal notranslate"><span class="pre">Vec.from_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.in_3D"><code class="docutils literal notranslate"><span class="pre">Vec.in_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.mirror"><code class="docutils literal notranslate"><span class="pre">Vec.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.norm"><code class="docutils literal notranslate"><span class="pre">Vec.norm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.normal"><code class="docutils literal notranslate"><span class="pre">Vec.normal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.normalize"><code class="docutils literal notranslate"><span class="pre">Vec.normalize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.project"><code class="docutils literal notranslate"><span class="pre">Vec.project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.show"><code class="docutils literal notranslate"><span class="pre">Vec.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.to_roation_matrix"><code class="docutils literal notranslate"><span class="pre">Vec.to_roation_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.transform"><code class="docutils literal notranslate"><span class="pre">Vec.transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.x"><code class="docutils literal notranslate"><span class="pre">Vec.x</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.y"><code class="docutils literal notranslate"><span class="pre">Vec.y</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.vector.Vec.z"><code class="docutils literal notranslate"><span class="pre">Vec.z</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Geometry.html#module-origami_tools.Geometry.volume">origami_tools.Geometry.volume module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Parallelepiped"><code class="docutils literal notranslate"><span class="pre">Parallelepiped</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Volume"><code class="docutils literal notranslate"><span class="pre">Volume</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Volume.copy"><code class="docutils literal notranslate"><span class="pre">Volume.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Volume.mesh_3D"><code class="docutils literal notranslate"><span class="pre">Volume.mesh_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Volume.n_surfaces"><code class="docutils literal notranslate"><span class="pre">Volume.n_surfaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Volume.save"><code class="docutils literal notranslate"><span class="pre">Volume.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Volume.show"><code class="docutils literal notranslate"><span class="pre">Volume.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Volume.surfaces"><code class="docutils literal notranslate"><span class="pre">Volume.surfaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Volume.translate"><code class="docutils literal notranslate"><span class="pre">Volume.translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.volume.Volume.wireframe"><code class="docutils literal notranslate"><span class="pre">Volume.wireframe()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Geometry.html#module-origami_tools.Geometry">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Arc"><code class="docutils literal notranslate"><span class="pre">Arc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Arc.as_svg"><code class="docutils literal notranslate"><span class="pre">Arc.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Arc.copy"><code class="docutils literal notranslate"><span class="pre">Arc.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Arc.from_angles"><code class="docutils literal notranslate"><span class="pre">Arc.from_angles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Arc.get_angles"><code class="docutils literal notranslate"><span class="pre">Arc.get_angles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Arc.mirror"><code class="docutils literal notranslate"><span class="pre">Arc.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Arc.points"><code class="docutils literal notranslate"><span class="pre">Arc.points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Arc.radius"><code class="docutils literal notranslate"><span class="pre">Arc.radius</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Arc.sweep"><code class="docutils literal notranslate"><span class="pre">Arc.sweep</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Circle"><code class="docutils literal notranslate"><span class="pre">Circle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Circle.as_svg"><code class="docutils literal notranslate"><span class="pre">Circle.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Circle.copy"><code class="docutils literal notranslate"><span class="pre">Circle.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Circle.from_center_and_point"><code class="docutils literal notranslate"><span class="pre">Circle.from_center_and_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Circle.from_diameter"><code class="docutils literal notranslate"><span class="pre">Circle.from_diameter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Circle.line_intersection"><code class="docutils literal notranslate"><span class="pre">Circle.line_intersection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Circle.normal"><code class="docutils literal notranslate"><span class="pre">Circle.normal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Circle.points"><code class="docutils literal notranslate"><span class="pre">Circle.points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Circle.radius"><code class="docutils literal notranslate"><span class="pre">Circle.radius</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.HoledPolygon"><code class="docutils literal notranslate"><span class="pre">HoledPolygon</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.HoledPolygon.as_svg"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.HoledPolygon.copy"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.HoledPolygon.from_polygons"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.from_polygons()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.HoledPolygon.holes"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.holes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.HoledPolygon.outside"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.outside</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.HoledPolygon.points"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.HoledPolygon.update"><code class="docutils literal notranslate"><span class="pre">HoledPolygon.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line"><code class="docutils literal notranslate"><span class="pre">Line</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.angles_with"><code class="docutils literal notranslate"><span class="pre">Line.angles_with()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.as_homogeneous"><code class="docutils literal notranslate"><span class="pre">Line.as_homogeneous()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.as_svg"><code class="docutils literal notranslate"><span class="pre">Line.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.coefficients"><code class="docutils literal notranslate"><span class="pre">Line.coefficients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.copy"><code class="docutils literal notranslate"><span class="pre">Line.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.dash_length"><code class="docutils literal notranslate"><span class="pre">Line.dash_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.dash_ratio"><code class="docutils literal notranslate"><span class="pre">Line.dash_ratio</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.dashed"><code class="docutils literal notranslate"><span class="pre">Line.dashed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.direction_vect"><code class="docutils literal notranslate"><span class="pre">Line.direction_vect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.find_lines_near_point"><code class="docutils literal notranslate"><span class="pre">Line.find_lines_near_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.from_angle"><code class="docutils literal notranslate"><span class="pre">Line.from_angle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.from_dir"><code class="docutils literal notranslate"><span class="pre">Line.from_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.from_point_normal"><code class="docutils literal notranslate"><span class="pre">Line.from_point_normal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.get_line_dashed"><code class="docutils literal notranslate"><span class="pre">Line.get_line_dashed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.has_point"><code class="docutils literal notranslate"><span class="pre">Line.has_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.intersection"><code class="docutils literal notranslate"><span class="pre">Line.intersection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.is_dashed"><code class="docutils literal notranslate"><span class="pre">Line.is_dashed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.length"><code class="docutils literal notranslate"><span class="pre">Line.length()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.midpoint"><code class="docutils literal notranslate"><span class="pre">Line.midpoint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.normal_vect"><code class="docutils literal notranslate"><span class="pre">Line.normal_vect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.offset_intersect_lines"><code class="docutils literal notranslate"><span class="pre">Line.offset_intersect_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.points"><code class="docutils literal notranslate"><span class="pre">Line.points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.shape_intersection"><code class="docutils literal notranslate"><span class="pre">Line.shape_intersection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.slope"><code class="docutils literal notranslate"><span class="pre">Line.slope()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Line.thicken_to_rect"><code class="docutils literal notranslate"><span class="pre">Line.thicken_to_rect()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine"><code class="docutils literal notranslate"><span class="pre">MultiLine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine.add_line"><code class="docutils literal notranslate"><span class="pre">MultiLine.add_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine.break_points"><code class="docutils literal notranslate"><span class="pre">MultiLine.break_points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine.direction_vect"><code class="docutils literal notranslate"><span class="pre">MultiLine.direction_vect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine.from_lines"><code class="docutils literal notranslate"><span class="pre">MultiLine.from_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine.get_lines"><code class="docutils literal notranslate"><span class="pre">MultiLine.get_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine.has_line"><code class="docutils literal notranslate"><span class="pre">MultiLine.has_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine.intersection"><code class="docutils literal notranslate"><span class="pre">MultiLine.intersection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine.points"><code class="docutils literal notranslate"><span class="pre">MultiLine.points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.MultiLine.show"><code class="docutils literal notranslate"><span class="pre">MultiLine.show()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Plane"><code class="docutils literal notranslate"><span class="pre">Plane</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Plane.from_points"><code class="docutils literal notranslate"><span class="pre">Plane.from_points()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Plane.homogeneous"><code class="docutils literal notranslate"><span class="pre">Plane.homogeneous()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Plane.normal"><code class="docutils literal notranslate"><span class="pre">Plane.normal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Plane.point"><code class="docutils literal notranslate"><span class="pre">Plane.point</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Point"><code class="docutils literal notranslate"><span class="pre">Point</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Point.as_homogeneous"><code class="docutils literal notranslate"><span class="pre">Point.as_homogeneous()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Point.from_homogeneous"><code class="docutils literal notranslate"><span class="pre">Point.from_homogeneous()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Polygon"><code class="docutils literal notranslate"><span class="pre">Polygon</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Polygon.as_svg"><code class="docutils literal notranslate"><span class="pre">Polygon.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Polygon.copy"><code class="docutils literal notranslate"><span class="pre">Polygon.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Polygon.cut"><code class="docutils literal notranslate"><span class="pre">Polygon.cut()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Polygon.from_multiline"><code class="docutils literal notranslate"><span class="pre">Polygon.from_multiline()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Polygon.n_points"><code class="docutils literal notranslate"><span class="pre">Polygon.n_points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Polygon.points"><code class="docutils literal notranslate"><span class="pre">Polygon.points</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle"><code class="docutils literal notranslate"><span class="pre">Rectangle</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.area"><code class="docutils literal notranslate"><span class="pre">Rectangle.area()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.as_svg"><code class="docutils literal notranslate"><span class="pre">Rectangle.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.copy"><code class="docutils literal notranslate"><span class="pre">Rectangle.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.from_corner_size"><code class="docutils literal notranslate"><span class="pre">Rectangle.from_corner_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.from_points"><code class="docutils literal notranslate"><span class="pre">Rectangle.from_points()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.get_corners"><code class="docutils literal notranslate"><span class="pre">Rectangle.get_corners()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.height"><code class="docutils literal notranslate"><span class="pre">Rectangle.height</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.mirror"><code class="docutils literal notranslate"><span class="pre">Rectangle.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.points"><code class="docutils literal notranslate"><span class="pre">Rectangle.points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.to_polygon"><code class="docutils literal notranslate"><span class="pre">Rectangle.to_polygon()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Rectangle.width"><code class="docutils literal notranslate"><span class="pre">Rectangle.width</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.RegularPolygon"><code class="docutils literal notranslate"><span class="pre">RegularPolygon</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.RegularPolygon.copy"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.RegularPolygon.from_center_and_radius"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.from_center_and_radius()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.RegularPolygon.plane"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.plane</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.RegularPolygon.points"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.RegularPolygon.radius"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.radius</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.RegularPolygon.rotation"><code class="docutils literal notranslate"><span class="pre">RegularPolygon.rotation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere"><code class="docutils literal notranslate"><span class="pre">Repere</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere.axis"><code class="docutils literal notranslate"><span class="pre">Repere.axis</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere.base"><code class="docutils literal notranslate"><span class="pre">Repere.base()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere.copy"><code class="docutils literal notranslate"><span class="pre">Repere.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere.dimension"><code class="docutils literal notranslate"><span class="pre">Repere.dimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere.origin"><code class="docutils literal notranslate"><span class="pre">Repere.origin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere.rotate"><code class="docutils literal notranslate"><span class="pre">Repere.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere.rotation_mat"><code class="docutils literal notranslate"><span class="pre">Repere.rotation_mat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere.transformation_mat"><code class="docutils literal notranslate"><span class="pre">Repere.transformation_mat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Repere.translate"><code class="docutils literal notranslate"><span class="pre">Repere.translate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape"><code class="docutils literal notranslate"><span class="pre">Shape</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.as_json"><code class="docutils literal notranslate"><span class="pre">Shape.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.as_svg"><code class="docutils literal notranslate"><span class="pre">Shape.as_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.center"><code class="docutils literal notranslate"><span class="pre">Shape.center()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.change_direction"><code class="docutils literal notranslate"><span class="pre">Shape.change_direction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.copy"><code class="docutils literal notranslate"><span class="pre">Shape.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.get_mirror"><code class="docutils literal notranslate"><span class="pre">Shape.get_mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.mirror"><code class="docutils literal notranslate"><span class="pre">Shape.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.perimeter"><code class="docutils literal notranslate"><span class="pre">Shape.perimeter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.points"><code class="docutils literal notranslate"><span class="pre">Shape.points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.repr_3D"><code class="docutils literal notranslate"><span class="pre">Shape.repr_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.rotate"><code class="docutils literal notranslate"><span class="pre">Shape.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.scale"><code class="docutils literal notranslate"><span class="pre">Shape.scale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.show"><code class="docutils literal notranslate"><span class="pre">Shape.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.transform"><code class="docutils literal notranslate"><span class="pre">Shape.transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Shape.translate"><code class="docutils literal notranslate"><span class="pre">Shape.translate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface"><code class="docutils literal notranslate"><span class="pre">Surface</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.copy"><code class="docutils literal notranslate"><span class="pre">Surface.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.edges"><code class="docutils literal notranslate"><span class="pre">Surface.edges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.extrude"><code class="docutils literal notranslate"><span class="pre">Surface.extrude()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.get_dashed"><code class="docutils literal notranslate"><span class="pre">Surface.get_dashed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.get_lines"><code class="docutils literal notranslate"><span class="pre">Surface.get_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.in_2D"><code class="docutils literal notranslate"><span class="pre">Surface.in_2D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.in_3D"><code class="docutils literal notranslate"><span class="pre">Surface.in_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.normal_vect"><code class="docutils literal notranslate"><span class="pre">Surface.normal_vect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.offset"><code class="docutils literal notranslate"><span class="pre">Surface.offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Surface.triangulate"><code class="docutils literal notranslate"><span class="pre">Surface.triangulate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec"><code class="docutils literal notranslate"><span class="pre">Vec</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.angle"><code class="docutils literal notranslate"><span class="pre">Vec.angle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.as_array"><code class="docutils literal notranslate"><span class="pre">Vec.as_array()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.copy"><code class="docutils literal notranslate"><span class="pre">Vec.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.dimension"><code class="docutils literal notranslate"><span class="pre">Vec.dimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.distance"><code class="docutils literal notranslate"><span class="pre">Vec.distance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.from_list"><code class="docutils literal notranslate"><span class="pre">Vec.from_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.in_3D"><code class="docutils literal notranslate"><span class="pre">Vec.in_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.mirror"><code class="docutils literal notranslate"><span class="pre">Vec.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.norm"><code class="docutils literal notranslate"><span class="pre">Vec.norm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.normal"><code class="docutils literal notranslate"><span class="pre">Vec.normal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.normalize"><code class="docutils literal notranslate"><span class="pre">Vec.normalize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.project"><code class="docutils literal notranslate"><span class="pre">Vec.project()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.show"><code class="docutils literal notranslate"><span class="pre">Vec.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.to_roation_matrix"><code class="docutils literal notranslate"><span class="pre">Vec.to_roation_matrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.transform"><code class="docutils literal notranslate"><span class="pre">Vec.transform()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.x"><code class="docutils literal notranslate"><span class="pre">Vec.x</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.y"><code class="docutils literal notranslate"><span class="pre">Vec.y</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Vec.z"><code class="docutils literal notranslate"><span class="pre">Vec.z</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Volume"><code class="docutils literal notranslate"><span class="pre">Volume</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Volume.copy"><code class="docutils literal notranslate"><span class="pre">Volume.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Volume.mesh_3D"><code class="docutils literal notranslate"><span class="pre">Volume.mesh_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Volume.n_surfaces"><code class="docutils literal notranslate"><span class="pre">Volume.n_surfaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Volume.save"><code class="docutils literal notranslate"><span class="pre">Volume.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Volume.show"><code class="docutils literal notranslate"><span class="pre">Volume.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Volume.surfaces"><code class="docutils literal notranslate"><span class="pre">Volume.surfaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Volume.translate"><code class="docutils literal notranslate"><span class="pre">Volume.translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.Volume.wireframe"><code class="docutils literal notranslate"><span class="pre">Volume.wireframe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.alkashi"><code class="docutils literal notranslate"><span class="pre">alkashi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.alkashi_angle"><code class="docutils literal notranslate"><span class="pre">alkashi_angle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.area_triangle"><code class="docutils literal notranslate"><span class="pre">area_triangle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.merge_close_points"><code class="docutils literal notranslate"><span class="pre">merge_close_points()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Geometry.html#origami_tools.Geometry.skewm"><code class="docutils literal notranslate"><span class="pre">skewm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="origami_tools.LaserParams.html">origami_tools.LaserParams package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.LaserParams.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.LaserParams.html#module-origami_tools.LaserParams.laser_cut">origami_tools.LaserParams.laser_cut module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam"><code class="docutils literal notranslate"><span class="pre">LaserParam</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.as_csv"><code class="docutils literal notranslate"><span class="pre">LaserParam.as_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.as_json"><code class="docutils literal notranslate"><span class="pre">LaserParam.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.copy"><code class="docutils literal notranslate"><span class="pre">LaserParam.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.default_cut"><code class="docutils literal notranslate"><span class="pre">LaserParam.default_cut()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.default_dash"><code class="docutils literal notranslate"><span class="pre">LaserParam.default_dash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.default_text"><code class="docutils literal notranslate"><span class="pre">LaserParam.default_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.from_id"><code class="docutils literal notranslate"><span class="pre">LaserParam.from_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.id"><code class="docutils literal notranslate"><span class="pre">LaserParam.id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.load"><code class="docutils literal notranslate"><span class="pre">LaserParam.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.load_from_csv"><code class="docutils literal notranslate"><span class="pre">LaserParam.load_from_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.load_from_str"><code class="docutils literal notranslate"><span class="pre">LaserParam.load_from_str()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.LaserParam.save"><code class="docutils literal notranslate"><span class="pre">LaserParam.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ListTemplate"><code class="docutils literal notranslate"><span class="pre">ListTemplate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ListTemplate.as_json"><code class="docutils literal notranslate"><span class="pre">ListTemplate.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ListTemplate.contain_list"><code class="docutils literal notranslate"><span class="pre">ListTemplate.contain_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ListTemplate.copy"><code class="docutils literal notranslate"><span class="pre">ListTemplate.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ListTemplate.default_template"><code class="docutils literal notranslate"><span class="pre">ListTemplate.default_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ListTemplate.load"><code class="docutils literal notranslate"><span class="pre">ListTemplate.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ListTemplate.save"><code class="docutils literal notranslate"><span class="pre">ListTemplate.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList"><code class="docutils literal notranslate"><span class="pre">ParamList</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.add_param"><code class="docutils literal notranslate"><span class="pre">ParamList.add_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.as_json"><code class="docutils literal notranslate"><span class="pre">ParamList.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.copy"><code class="docutils literal notranslate"><span class="pre">ParamList.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.fab_shapes"><code class="docutils literal notranslate"><span class="pre">ParamList.fab_shapes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.fab_text"><code class="docutils literal notranslate"><span class="pre">ParamList.fab_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.from_list"><code class="docutils literal notranslate"><span class="pre">ParamList.from_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.get_param"><code class="docutils literal notranslate"><span class="pre">ParamList.get_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.get_param_num"><code class="docutils literal notranslate"><span class="pre">ParamList.get_param_num()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.load_from_profile"><code class="docutils literal notranslate"><span class="pre">ParamList.load_from_profile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.save_profile"><code class="docutils literal notranslate"><span class="pre">ParamList.save_profile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.show_cut_param"><code class="docutils literal notranslate"><span class="pre">ParamList.show_cut_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.show_param"><code class="docutils literal notranslate"><span class="pre">ParamList.show_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.table_from_profile"><code class="docutils literal notranslate"><span class="pre">ParamList.table_from_profile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut.ParamList.update_names"><code class="docutils literal notranslate"><span class="pre">ParamList.update_names()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.LaserParams.html#module-origami_tools.LaserParams">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam"><code class="docutils literal notranslate"><span class="pre">LaserParam</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.as_csv"><code class="docutils literal notranslate"><span class="pre">LaserParam.as_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.as_json"><code class="docutils literal notranslate"><span class="pre">LaserParam.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.copy"><code class="docutils literal notranslate"><span class="pre">LaserParam.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.default_cut"><code class="docutils literal notranslate"><span class="pre">LaserParam.default_cut()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.default_dash"><code class="docutils literal notranslate"><span class="pre">LaserParam.default_dash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.default_text"><code class="docutils literal notranslate"><span class="pre">LaserParam.default_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.from_id"><code class="docutils literal notranslate"><span class="pre">LaserParam.from_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.id"><code class="docutils literal notranslate"><span class="pre">LaserParam.id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.load"><code class="docutils literal notranslate"><span class="pre">LaserParam.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.load_from_csv"><code class="docutils literal notranslate"><span class="pre">LaserParam.load_from_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.load_from_str"><code class="docutils literal notranslate"><span class="pre">LaserParam.load_from_str()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.LaserParam.save"><code class="docutils literal notranslate"><span class="pre">LaserParam.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ListTemplate"><code class="docutils literal notranslate"><span class="pre">ListTemplate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ListTemplate.as_json"><code class="docutils literal notranslate"><span class="pre">ListTemplate.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ListTemplate.contain_list"><code class="docutils literal notranslate"><span class="pre">ListTemplate.contain_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ListTemplate.copy"><code class="docutils literal notranslate"><span class="pre">ListTemplate.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ListTemplate.default_template"><code class="docutils literal notranslate"><span class="pre">ListTemplate.default_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ListTemplate.load"><code class="docutils literal notranslate"><span class="pre">ListTemplate.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ListTemplate.save"><code class="docutils literal notranslate"><span class="pre">ListTemplate.save()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList"><code class="docutils literal notranslate"><span class="pre">ParamList</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.add_param"><code class="docutils literal notranslate"><span class="pre">ParamList.add_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.as_json"><code class="docutils literal notranslate"><span class="pre">ParamList.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.copy"><code class="docutils literal notranslate"><span class="pre">ParamList.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.fab_shapes"><code class="docutils literal notranslate"><span class="pre">ParamList.fab_shapes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.fab_text"><code class="docutils literal notranslate"><span class="pre">ParamList.fab_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.from_list"><code class="docutils literal notranslate"><span class="pre">ParamList.from_list()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.get_param"><code class="docutils literal notranslate"><span class="pre">ParamList.get_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.get_param_num"><code class="docutils literal notranslate"><span class="pre">ParamList.get_param_num()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.load_from_profile"><code class="docutils literal notranslate"><span class="pre">ParamList.load_from_profile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.save_profile"><code class="docutils literal notranslate"><span class="pre">ParamList.save_profile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.show_cut_param"><code class="docutils literal notranslate"><span class="pre">ParamList.show_cut_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.show_param"><code class="docutils literal notranslate"><span class="pre">ParamList.show_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.table_from_profile"><code class="docutils literal notranslate"><span class="pre">ParamList.table_from_profile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.ParamList.update_names"><code class="docutils literal notranslate"><span class="pre">ParamList.update_names()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.get_lasercut_color_num"><code class="docutils literal notranslate"><span class="pre">get_lasercut_color_num()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.LaserParams.html#origami_tools.LaserParams.laser_cut_colors"><code class="docutils literal notranslate"><span class="pre">laser_cut_colors()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="origami_tools.Origamis.html">origami_tools.Origamis package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Origamis.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Origamis.html#module-origami_tools.Origamis.kresling">origami_tools.Origamis.kresling module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK"><code class="docutils literal notranslate"><span class="pre">TDK</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.a"><code class="docutils literal notranslate"><span class="pre">TDK.a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.angle_pli_montagne"><code class="docutils literal notranslate"><span class="pre">TDK.angle_pli_montagne()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.angle_pli_rho"><code class="docutils literal notranslate"><span class="pre">TDK.angle_pli_rho()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.angle_pli_vallee"><code class="docutils literal notranslate"><span class="pre">TDK.angle_pli_vallee()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.as_dict"><code class="docutils literal notranslate"><span class="pre">TDK.as_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.b"><code class="docutils literal notranslate"><span class="pre">TDK.b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.create_3D"><code class="docutils literal notranslate"><span class="pre">TDK.create_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.create_motif_base"><code class="docutils literal notranslate"><span class="pre">TDK.create_motif_base()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.create_patron"><code class="docutils literal notranslate"><span class="pre">TDK.create_patron()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.create_patron_simu"><code class="docutils literal notranslate"><span class="pre">TDK.create_patron_simu()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.create_volume"><code class="docutils literal notranslate"><span class="pre">TDK.create_volume()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.etages"><code class="docutils literal notranslate"><span class="pre">TDK.etages</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.from_dict"><code class="docutils literal notranslate"><span class="pre">TDK.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.from_eta"><code class="docutils literal notranslate"><span class="pre">TDK.from_eta()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.from_n_r_h"><code class="docutils literal notranslate"><span class="pre">TDK.from_n_r_h()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.h1"><code class="docutils literal notranslate"><span class="pre">TDK.h1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.h2"><code class="docutils literal notranslate"><span class="pre">TDK.h2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.l"><code class="docutils literal notranslate"><span class="pre">TDK.l</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.load"><code class="docutils literal notranslate"><span class="pre">TDK.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.n"><code class="docutils literal notranslate"><span class="pre">TDK.n</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.name"><code class="docutils literal notranslate"><span class="pre">TDK.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.names"><code class="docutils literal notranslate"><span class="pre">TDK.names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.nb_stable"><code class="docutils literal notranslate"><span class="pre">TDK.nb_stable</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.phi"><code class="docutils literal notranslate"><span class="pre">TDK.phi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.phi_b"><code class="docutils literal notranslate"><span class="pre">TDK.phi_b()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.phi_l"><code class="docutils literal notranslate"><span class="pre">TDK.phi_l()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.r"><code class="docutils literal notranslate"><span class="pre">TDK.r</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.r_p"><code class="docutils literal notranslate"><span class="pre">TDK.r_p</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.save"><code class="docutils literal notranslate"><span class="pre">TDK.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.save_stl"><code class="docutils literal notranslate"><span class="pre">TDK.save_stl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.show"><code class="docutils literal notranslate"><span class="pre">TDK.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.show_3D"><code class="docutils literal notranslate"><span class="pre">TDK.show_3D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.surface"><code class="docutils literal notranslate"><span class="pre">TDK.surface()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.TDK.tours_john"><code class="docutils literal notranslate"><span class="pre">TDK.tours_john()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Origamis.html#origami_tools.Origamis.kresling.rotation_vect_and_point"><code class="docutils literal notranslate"><span class="pre">rotation_vect_and_point()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Origamis.html#module-origami_tools.Origamis">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="origami_tools.Pattern.html">origami_tools.Pattern package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Pattern.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Pattern.html#module-origami_tools.Pattern.drawn_shapes">origami_tools.Pattern.drawn_shapes module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes"><code class="docutils literal notranslate"><span class="pre">DrawnShapes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.as_json"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.background"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.background</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.copy"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.create_id"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.create_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.duplicate"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.duplicate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.id"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.k"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.k</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.mirror"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.outline"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.outline</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.outside"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.outside</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.param"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.param</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.rotate"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.shapes"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.shapes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.to_multi_lines"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.to_multi_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.to_polygon"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.to_polygon()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.to_svg"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.to_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.translate"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.DrawnShapes.z_offset"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.z_offset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.FoldLine"><code class="docutils literal notranslate"><span class="pre">FoldLine</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.FoldLine.L"><code class="docutils literal notranslate"><span class="pre">FoldLine.L</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.FoldLine.type"><code class="docutils literal notranslate"><span class="pre">FoldLine.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.Folds"><code class="docutils literal notranslate"><span class="pre">Folds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.Folds.as_json"><code class="docutils literal notranslate"><span class="pre">Folds.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.Folds.copy"><code class="docutils literal notranslate"><span class="pre">Folds.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.Folds.create_id"><code class="docutils literal notranslate"><span class="pre">Folds.create_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.Folds.fold_type"><code class="docutils literal notranslate"><span class="pre">Folds.fold_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.Folds.fold_value"><code class="docutils literal notranslate"><span class="pre">Folds.fold_value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.Folds.id"><code class="docutils literal notranslate"><span class="pre">Folds.id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.Folds.thicken_to_rect"><code class="docutils literal notranslate"><span class="pre">Folds.thicken_to_rect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.drawn_shapes.Folds.to_svg"><code class="docutils literal notranslate"><span class="pre">Folds.to_svg()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Pattern.html#module-origami_tools.Pattern.pattern">origami_tools.Pattern.pattern module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern"><code class="docutils literal notranslate"><span class="pre">Pattern</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.param_list"><code class="docutils literal notranslate"><span class="pre">Pattern.param_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.origin"><code class="docutils literal notranslate"><span class="pre">Pattern.origin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.add_drawn_shapes"><code class="docutils literal notranslate"><span class="pre">Pattern.add_drawn_shapes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.add_folds"><code class="docutils literal notranslate"><span class="pre">Pattern.add_folds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.add_shapes"><code class="docutils literal notranslate"><span class="pre">Pattern.add_shapes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.add_texts"><code class="docutils literal notranslate"><span class="pre">Pattern.add_texts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.as_json"><code class="docutils literal notranslate"><span class="pre">Pattern.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.copy"><code class="docutils literal notranslate"><span class="pre">Pattern.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.create"><code class="docutils literal notranslate"><span class="pre">Pattern.create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.create_lasercut_martyr"><code class="docutils literal notranslate"><span class="pre">Pattern.create_lasercut_martyr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.create_lasercut_patron"><code class="docutils literal notranslate"><span class="pre">Pattern.create_lasercut_patron()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.create_patron_decal"><code class="docutils literal notranslate"><span class="pre">Pattern.create_patron_decal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.create_patron_offset"><code class="docutils literal notranslate"><span class="pre">Pattern.create_patron_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.create_pattern"><code class="docutils literal notranslate"><span class="pre">Pattern.create_pattern()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.cut_half"><code class="docutils literal notranslate"><span class="pre">Pattern.cut_half()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.get_duplicate"><code class="docutils literal notranslate"><span class="pre">Pattern.get_duplicate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.mirror"><code class="docutils literal notranslate"><span class="pre">Pattern.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.reset"><code class="docutils literal notranslate"><span class="pre">Pattern.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.rotate"><code class="docutils literal notranslate"><span class="pre">Pattern.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.save_PDF"><code class="docutils literal notranslate"><span class="pre">Pattern.save_PDF()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.save_SVG"><code class="docutils literal notranslate"><span class="pre">Pattern.save_SVG()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.save_json"><code class="docutils literal notranslate"><span class="pre">Pattern.save_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.set_origin"><code class="docutils literal notranslate"><span class="pre">Pattern.set_origin()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.shape2svg"><code class="docutils literal notranslate"><span class="pre">Pattern.shape2svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.show"><code class="docutils literal notranslate"><span class="pre">Pattern.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.texts2svg"><code class="docutils literal notranslate"><span class="pre">Pattern.texts2svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.thicken_lines"><code class="docutils literal notranslate"><span class="pre">Pattern.thicken_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.translate"><code class="docutils literal notranslate"><span class="pre">Pattern.translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.pattern.Pattern.w_h"><code class="docutils literal notranslate"><span class="pre">Pattern.w_h()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Pattern.html#module-origami_tools.Pattern">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes"><code class="docutils literal notranslate"><span class="pre">DrawnShapes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.as_json"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.background"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.background</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.copy"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.create_id"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.create_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.duplicate"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.duplicate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.id"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.k"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.k</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.mirror"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.outline"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.outline</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.outside"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.outside</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.param"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.param</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.rotate"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.shapes"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.shapes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.to_multi_lines"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.to_multi_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.to_polygon"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.to_polygon()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.to_svg"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.to_svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.translate"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.DrawnShapes.z_offset"><code class="docutils literal notranslate"><span class="pre">DrawnShapes.z_offset</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds"><code class="docutils literal notranslate"><span class="pre">Folds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.as_json"><code class="docutils literal notranslate"><span class="pre">Folds.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.copy"><code class="docutils literal notranslate"><span class="pre">Folds.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.create_id"><code class="docutils literal notranslate"><span class="pre">Folds.create_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.fold_type"><code class="docutils literal notranslate"><span class="pre">Folds.fold_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.fold_value"><code class="docutils literal notranslate"><span class="pre">Folds.fold_value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.id"><code class="docutils literal notranslate"><span class="pre">Folds.id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.param"><code class="docutils literal notranslate"><span class="pre">Folds.param</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.shapes"><code class="docutils literal notranslate"><span class="pre">Folds.shapes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.thicken_to_rect"><code class="docutils literal notranslate"><span class="pre">Folds.thicken_to_rect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Folds.to_svg"><code class="docutils literal notranslate"><span class="pre">Folds.to_svg()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern"><code class="docutils literal notranslate"><span class="pre">Pattern</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.param_list"><code class="docutils literal notranslate"><span class="pre">Pattern.param_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.origin"><code class="docutils literal notranslate"><span class="pre">Pattern.origin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.add_drawn_shapes"><code class="docutils literal notranslate"><span class="pre">Pattern.add_drawn_shapes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.add_folds"><code class="docutils literal notranslate"><span class="pre">Pattern.add_folds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.add_shapes"><code class="docutils literal notranslate"><span class="pre">Pattern.add_shapes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.add_texts"><code class="docutils literal notranslate"><span class="pre">Pattern.add_texts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.as_json"><code class="docutils literal notranslate"><span class="pre">Pattern.as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.copy"><code class="docutils literal notranslate"><span class="pre">Pattern.copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.create"><code class="docutils literal notranslate"><span class="pre">Pattern.create()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.create_lasercut_martyr"><code class="docutils literal notranslate"><span class="pre">Pattern.create_lasercut_martyr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.create_lasercut_patron"><code class="docutils literal notranslate"><span class="pre">Pattern.create_lasercut_patron()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.create_patron_decal"><code class="docutils literal notranslate"><span class="pre">Pattern.create_patron_decal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.create_patron_offset"><code class="docutils literal notranslate"><span class="pre">Pattern.create_patron_offset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.create_pattern"><code class="docutils literal notranslate"><span class="pre">Pattern.create_pattern()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.cut_half"><code class="docutils literal notranslate"><span class="pre">Pattern.cut_half()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.get_duplicate"><code class="docutils literal notranslate"><span class="pre">Pattern.get_duplicate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.mirror"><code class="docutils literal notranslate"><span class="pre">Pattern.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.reset"><code class="docutils literal notranslate"><span class="pre">Pattern.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.rotate"><code class="docutils literal notranslate"><span class="pre">Pattern.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.save_PDF"><code class="docutils literal notranslate"><span class="pre">Pattern.save_PDF()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.save_SVG"><code class="docutils literal notranslate"><span class="pre">Pattern.save_SVG()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.save_json"><code class="docutils literal notranslate"><span class="pre">Pattern.save_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.set_origin"><code class="docutils literal notranslate"><span class="pre">Pattern.set_origin()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.shape2svg"><code class="docutils literal notranslate"><span class="pre">Pattern.shape2svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.show"><code class="docutils literal notranslate"><span class="pre">Pattern.show()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.texts2svg"><code class="docutils literal notranslate"><span class="pre">Pattern.texts2svg()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.thicken_lines"><code class="docutils literal notranslate"><span class="pre">Pattern.thicken_lines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.translate"><code class="docutils literal notranslate"><span class="pre">Pattern.translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html#origami_tools.Pattern.Pattern.w_h"><code class="docutils literal notranslate"><span class="pre">Pattern.w_h()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="origami_tools.Utils.html">origami_tools.Utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="origami_tools.Utils.html#module-origami_tools.Utils">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Utils.html#origami_tools.Utils.csv_to_latex"><code class="docutils literal notranslate"><span class="pre">csv_to_latex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Utils.html#origami_tools.Utils.deg2rad"><code class="docutils literal notranslate"><span class="pre">deg2rad()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Utils.html#origami_tools.Utils.hex_to_rgb"><code class="docutils literal notranslate"><span class="pre">hex_to_rgb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Utils.html#origami_tools.Utils.hsv_to_hex"><code class="docutils literal notranslate"><span class="pre">hsv_to_hex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Utils.html#origami_tools.Utils.mm_str"><code class="docutils literal notranslate"><span class="pre">mm_str()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Utils.html#origami_tools.Utils.rad2deg"><code class="docutils literal notranslate"><span class="pre">rad2deg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Utils.html#origami_tools.Utils.rgb_to_hex"><code class="docutils literal notranslate"><span class="pre">rgb_to_hex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Utils.html#origami_tools.Utils.save_svg"><code class="docutils literal notranslate"><span class="pre">save_svg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.Utils.html#origami_tools.Utils.simplifed_hex"><code class="docutils literal notranslate"><span class="pre">simplifed_hex()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-origami_tools">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-origami_tools" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="origami_tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="origami_tools.Geometry.html" class="btn btn-neutral float-right" title="origami_tools.Geometry package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Druart Mateo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

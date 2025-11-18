@@ -344,6 +344,29 @@ class Arc(Circle):
         self.sweep = not self.sweep  # Reverse the sweep direction on mirroring
     
 
+    def show(self, ax = None, show = False):
+        """Show the arc."""
+        start_angle, end_angle = self.get_angles()
+        if not self.sweep and end_angle > start_angle:
+            end_angle -= 2 * np.pi
+        elif self.sweep and end_angle < start_angle:
+            end_angle += 2 * np.pi
+
+        theta = np.linspace(start_angle, end_angle, 100)
+        x = self[0][0] + self.radius * np.cos(theta)
+        y = self[0][1] + self.radius * np.sin(theta)
+
+        if ax is None:
+            plt.plot(x, y)
+        else:
+            ax.plot(x, y)
+        
+        if show:
+            plt.show()
+        else :
+            return ax
+
+
 
 @dataclass
 class Rectangle(Surface):

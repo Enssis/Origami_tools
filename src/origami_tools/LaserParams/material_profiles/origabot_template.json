@@ -1,0 +1,11 @@
+{
+    "adhesive": "f1p50p14.0v_#000",
+    "fold_cut": "d4.0l0.5r4p80p4.0v_#f00",
+    "cut": "f4p80p4.0v_#f00",
+    "text": "f1p40p10.0v_#00f",
+    "fold_dup": "d4.0l0.5r4p80p4.0v_#369",
+    "dup": "f4p80p4.0v_#369",
+    "hole": "f4p100p4.0v_#0ff",
+    "horizontal": "f4p95p4.0v_#0f0",
+    "fold_horizontal": "d4.0l0.5r4p95p4.0v_#0f0"
+}

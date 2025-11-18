@@ -1,0 +1,655 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>origami_tools.LaserParams package &mdash; origami_tools Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=01f34227"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="origami_tools.Origamis package" href="origami_tools.Origamis.html" />
+    <link rel="prev" title="origami_tools.Geometry package" href="origami_tools.Geometry.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            origami_tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">origami_tools</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="origami_tools.html">origami_tools package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="origami_tools.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Geometry.html">origami_tools.Geometry package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">origami_tools.LaserParams package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Origamis.html">origami_tools.Origamis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Pattern.html">origami_tools.Pattern package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="origami_tools.Utils.html">origami_tools.Utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="origami_tools.html#module-origami_tools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">Quick Start</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">origami_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">origami_tools</a></li>
+          <li class="breadcrumb-item"><a href="origami_tools.html">origami_tools package</a></li>
+      <li class="breadcrumb-item active">origami_tools.LaserParams package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/origami_tools.LaserParams.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="origami-tools-laserparams-package">
+<h1>origami_tools.LaserParams package<a class="headerlink" href="#origami-tools-laserparams-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-origami_tools.LaserParams.laser_cut">
+<span id="origami-tools-laserparams-laser-cut-module"></span><h2>origami_tools.LaserParams.laser_cut module<a class="headerlink" href="#module-origami_tools.LaserParams.laser_cut" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.LaserParams.laser_cut.</span></span><span class="sig-name descname"><span class="pre">LaserParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dash_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dash_full_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">80</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.as_csv">
+<span class="sig-name descname"><span class="pre">as_csv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.as_csv" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le paramètre sous forme de json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.copy" title="Link to this definition"></a></dt>
+<dd><p>copie le paramètre</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.default_cut">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_cut</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.default_cut" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.default_dash">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_dash</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.default_dash" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.default_text">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_text</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.default_text" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.from_id">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.from_id" title="Link to this definition"></a></dt>
+<dd><p>renvoie un paramètre à partir de son id
+id : id du paramètre</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.load">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.load" title="Link to this definition"></a></dt>
+<dd><p>charge le paramètre depuis un fichier de sauvegarde</p>
+<p>name : nom du paramètre à charger</p>
+<p>profile : nom du profil dans lequel on veut charger le paramètre</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.load_from_csv">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.load_from_csv" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.load_from_str">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.load_from_str" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.LaserParam.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.LaserParam.save" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ListTemplate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.LaserParams.laser_cut.</span></span><span class="sig-name descname"><span class="pre">ListTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ListTemplate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+<p>Class to manage a template for laser parameters.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ListTemplate.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ListTemplate.as_json" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ListTemplate.contain_list">
+<span class="sig-name descname"><span class="pre">contain_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ListTemplate.contain_list" title="Link to this definition"></a></dt>
+<dd><p>renvoie True si le template contient la liste de clés
+key : liste de clés à tester</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ListTemplate.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ListTemplate.copy" title="Link to this definition"></a></dt>
+<dd><p>Return a shallow copy of the dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#origami_tools.LaserParams.laser_cut.ListTemplate" title="origami_tools.LaserParams.laser_cut.ListTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListTemplate</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ListTemplate.default_template">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_template</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ListTemplate.default_template" title="Link to this definition"></a></dt>
+<dd><p>renvoie un template par défaut</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ListTemplate.load">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ListTemplate.load" title="Link to this definition"></a></dt>
+<dd><p>charge le template depuis un fichier
+name : nom du template à charger
+dir_path : chemin du dossier dans lequel on veut charger le template</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ListTemplate.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ListTemplate.save" title="Link to this definition"></a></dt>
+<dd><p>sauvegarde le template dans un fichier
+name : nom du template
+dir_path : chemin du dossier dans lequel on veut sauvegarder le template</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.LaserParams.laser_cut.</span></span><span class="sig-name descname"><span class="pre">ParamList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to manage a list of laser parameters.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.add_param">
+<span class="sig-name descname"><span class="pre">add_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.add_param" title="Link to this definition"></a></dt>
+<dd><p>ajoute un paramètre au laser cut
+param : LaserParam</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le laser cut sous forme de json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.copy" title="Link to this definition"></a></dt>
+<dd><p>copie le laser cut</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.fab_shapes">
+<span class="sig-name descname"><span class="pre">fab_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.fab_shapes" title="Link to this definition"></a></dt>
+<dd><p>return a list of shapes for the laser cut</p>
+<p>shapes : list of shapes to cut</p>
+<blockquote>
+<div><p>shape : Line(), Circle(), Rectangle(), Polygon(), Shape()</p>
+</div></blockquote>
+<p>param : name of the parameter to use</p>
+<p>background : if True, the shape is filled</p>
+<p>outline : if True, the shape is outlined</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.fab_text">
+<span class="sig-name descname"><span class="pre">fab_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_anchor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'start'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.fab_text" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.from_list">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.from_list" title="Link to this definition"></a></dt>
+<dd><p>Initializes a ParamList from a list of LaserParam objects.
+params : list of LaserParam objects
+template : optional, a dictionary or ListTemplate for additional parameters
+profile : name of the profile for this ParamList</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.get_param">
+<span class="sig-name descname"><span class="pre">get_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.get_param" title="Link to this definition"></a></dt>
+<dd><p>renvoie le paramètre avec le nom name
+name : nom du paramètre</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#origami_tools.LaserParams.laser_cut.LaserParam" title="origami_tools.LaserParams.laser_cut.LaserParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">LaserParam</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.get_param_num">
+<span class="sig-name descname"><span class="pre">get_param_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.get_param_num" title="Link to this definition"></a></dt>
+<dd><p>renvoie le paramètre numero n</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#origami_tools.LaserParams.laser_cut.LaserParam" title="origami_tools.LaserParams.laser_cut.LaserParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">LaserParam</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.load_from_profile">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.load_from_profile" title="Link to this definition"></a></dt>
+<dd><p>Load a ParamList from a saved profile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – name of the profile to load.</p></li>
+<li><p><strong>dir_path</strong> – directory path where the profile is stored. If None, use LASER_SAVE_PATH.</p></li>
+<li><p><strong>template_name</strong> – name of the template to use. If None, use profile + “_template”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#origami_tools.LaserParams.laser_cut.ParamList" title="origami_tools.LaserParams.laser_cut.ParamList"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParamList</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the loaded ParamList object, or None if the profile does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.save_profile">
+<span class="sig-name descname"><span class="pre">save_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">overwrite_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.save_profile" title="Link to this definition"></a></dt>
+<dd><p>sauvegarde le profil dans un fichier
+overwrite_file : si True, écrase le fichier existant
+overwrite_param : si True, écrase le paramètre existant dans le fichier</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.show_cut_param">
+<span class="sig-name descname"><span class="pre">show_cut_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.show_cut_param" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.show_param">
+<span class="sig-name descname"><span class="pre">show_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markdown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.show_param" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.table_from_profile">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">table_from_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.table_from_profile" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut.ParamList.update_names">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut.ParamList.update_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-origami_tools.LaserParams">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-origami_tools.LaserParams" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.LaserParams.</span></span><span class="sig-name descname"><span class="pre">LaserParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dash_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dash_full_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">80</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.as_csv">
+<span class="sig-name descname"><span class="pre">as_csv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.as_csv" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le paramètre sous forme de json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.copy" title="Link to this definition"></a></dt>
+<dd><p>copie le paramètre</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.default_cut">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_cut</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.default_cut" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.default_dash">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_dash</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.default_dash" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.default_text">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_text</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.default_text" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.from_id">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.from_id" title="Link to this definition"></a></dt>
+<dd><p>renvoie un paramètre à partir de son id
+id : id du paramètre</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.id">
+<span class="sig-name descname"><span class="pre">id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.load">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.load" title="Link to this definition"></a></dt>
+<dd><p>charge le paramètre depuis un fichier de sauvegarde</p>
+<p>name : nom du paramètre à charger</p>
+<p>profile : nom du profil dans lequel on veut charger le paramètre</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.load_from_csv">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.load_from_csv" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.load_from_str">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.load_from_str" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.LaserParam.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.LaserParam.save" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ListTemplate">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.LaserParams.</span></span><span class="sig-name descname"><span class="pre">ListTemplate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ListTemplate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</p>
+<p>Class to manage a template for laser parameters.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ListTemplate.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ListTemplate.as_json" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ListTemplate.contain_list">
+<span class="sig-name descname"><span class="pre">contain_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ListTemplate.contain_list" title="Link to this definition"></a></dt>
+<dd><p>renvoie True si le template contient la liste de clés
+key : liste de clés à tester</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ListTemplate.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ListTemplate.copy" title="Link to this definition"></a></dt>
+<dd><p>Return a shallow copy of the dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#origami_tools.LaserParams.laser_cut.ListTemplate" title="origami_tools.LaserParams.laser_cut.ListTemplate"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListTemplate</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ListTemplate.default_template">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_template</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ListTemplate.default_template" title="Link to this definition"></a></dt>
+<dd><p>renvoie un template par défaut</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ListTemplate.load">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ListTemplate.load" title="Link to this definition"></a></dt>
+<dd><p>charge le template depuis un fichier
+name : nom du template à charger
+dir_path : chemin du dossier dans lequel on veut charger le template</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ListTemplate.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ListTemplate.save" title="Link to this definition"></a></dt>
+<dd><p>sauvegarde le template dans un fichier
+name : nom du template
+dir_path : chemin du dossier dans lequel on veut sauvegarder le template</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">origami_tools.LaserParams.</span></span><span class="sig-name descname"><span class="pre">ParamList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class to manage a list of laser parameters.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.add_param">
+<span class="sig-name descname"><span class="pre">add_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.add_param" title="Link to this definition"></a></dt>
+<dd><p>ajoute un paramètre au laser cut
+param : LaserParam</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.as_json">
+<span class="sig-name descname"><span class="pre">as_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.as_json" title="Link to this definition"></a></dt>
+<dd><p>renvoie le laser cut sous forme de json</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.copy" title="Link to this definition"></a></dt>
+<dd><p>copie le laser cut</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.fab_shapes">
+<span class="sig-name descname"><span class="pre">fab_shapes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shapes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.fab_shapes" title="Link to this definition"></a></dt>
+<dd><p>return a list of shapes for the laser cut</p>
+<p>shapes : list of shapes to cut</p>
+<blockquote>
+<div><p>shape : Line(), Circle(), Rectangle(), Polygon(), Shape()</p>
+</div></blockquote>
+<p>param : name of the parameter to use</p>
+<p>background : if True, the shape is filled</p>
+<p>outline : if True, the shape is outlined</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.fab_text">
+<span class="sig-name descname"><span class="pre">fab_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_anchor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'start'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.fab_text" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.from_list">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.from_list" title="Link to this definition"></a></dt>
+<dd><p>Initializes a ParamList from a list of LaserParam objects.
+params : list of LaserParam objects
+template : optional, a dictionary or ListTemplate for additional parameters
+profile : name of the profile for this ParamList</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.get_param">
+<span class="sig-name descname"><span class="pre">get_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.get_param" title="Link to this definition"></a></dt>
+<dd><p>renvoie le paramètre avec le nom name
+name : nom du paramètre</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#origami_tools.LaserParams.laser_cut.LaserParam" title="origami_tools.LaserParams.laser_cut.LaserParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">LaserParam</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.get_param_num">
+<span class="sig-name descname"><span class="pre">get_param_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.get_param_num" title="Link to this definition"></a></dt>
+<dd><p>renvoie le paramètre numero n</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#origami_tools.LaserParams.laser_cut.LaserParam" title="origami_tools.LaserParams.laser_cut.LaserParam"><code class="xref py py-class docutils literal notranslate"><span class="pre">LaserParam</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.load_from_profile">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_from_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.load_from_profile" title="Link to this definition"></a></dt>
+<dd><p>Load a ParamList from a saved profile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – name of the profile to load.</p></li>
+<li><p><strong>dir_path</strong> – directory path where the profile is stored. If None, use LASER_SAVE_PATH.</p></li>
+<li><p><strong>template_name</strong> – name of the template to use. If None, use profile + “_template”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#origami_tools.LaserParams.laser_cut.ParamList" title="origami_tools.LaserParams.laser_cut.ParamList"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParamList</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the loaded ParamList object, or None if the profile does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.save_profile">
+<span class="sig-name descname"><span class="pre">save_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">overwrite_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.save_profile" title="Link to this definition"></a></dt>
+<dd><p>sauvegarde le profil dans un fichier
+overwrite_file : si True, écrase le fichier existant
+overwrite_param : si True, écrase le paramètre existant dans le fichier</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.show_cut_param">
+<span class="sig-name descname"><span class="pre">show_cut_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.show_cut_param" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.show_param">
+<span class="sig-name descname"><span class="pre">show_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">markdown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.show_param" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.table_from_profile">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">table_from_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.table_from_profile" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.ParamList.update_names">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.ParamList.update_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.get_lasercut_color_num">
+<span class="sig-prename descclassname"><span class="pre">origami_tools.LaserParams.</span></span><span class="sig-name descname"><span class="pre">get_lasercut_color_num</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.get_lasercut_color_num" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="origami_tools.LaserParams.laser_cut_colors">
+<span class="sig-prename descclassname"><span class="pre">origami_tools.LaserParams.</span></span><span class="sig-name descname"><span class="pre">laser_cut_colors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#origami_tools.LaserParams.laser_cut_colors" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="origami_tools.Geometry.html" class="btn btn-neutral float-left" title="origami_tools.Geometry package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="origami_tools.Origamis.html" class="btn btn-neutral float-right" title="origami_tools.Origamis package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Druart Mateo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

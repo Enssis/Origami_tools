@@ -2,6 +2,8 @@
 from dataclasses import dataclass
 from typing import Sequence
 
+from matplotlib import pyplot as plt
+
 
 from ..Utils._types import Number
 from ..Geometry import Point, Line, Plane, Shape, Polygon, Circle, RegularPolygon, Rectangle
@@ -200,6 +202,28 @@ class DrawnShapes():
 		print("Lines connection:", lines_connection)
 
 		return multilines
+
+	def show(self):
+		
+		for shape in self.shapes:
+			shape.show(show=False)
+		plt.gca().invert_yaxis()
+		plt.show()
+
+	def __add__(self, other):
+		"""Add another DrawnShapes to this DrawnShapes."""
+		if isinstance(other, DrawnShapes):
+			
+			new_shapes = self.shapes + other.shapes #type: ignore
+			return DrawnShapes(new_shapes, param=self.param, background=self.background, outline=self.outline, outside=self.outside, duplicate=self.duplicate, z_offset=self.z_offset, k=self.k)
+		else:
+			raise TypeError("Expected a DrawnShapes object")
+
+	def add_shape(self, shape: Shape):
+		"""
+			Add a shape to the drawn shapes
+		"""
+		self.shapes.append(shape) # type: ignore
 
 
 @dataclass			

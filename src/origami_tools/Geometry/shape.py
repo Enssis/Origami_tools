@@ -121,8 +121,10 @@ class Shape():
         nb_pts = len(self)
         if self.dimension == 2:
             if ax is None:
+                plt.plot([self[i % nb_pts][0] for i in range(nb_pts + 1)], [self[i % nb_pts][1] for i in range(nb_pts + 1)])
+            else :
                 fig, ax = plt.subplots()
-            plt.plot([self[i % nb_pts][0] for i in range(nb_pts + 1)], [self[i % nb_pts][1] for i in range(nb_pts + 1)])
+                ax.plot([self[i % nb_pts][0] for i in range(nb_pts + 1)], [self[i % nb_pts][1] for i in range(nb_pts + 1)])
         else:
             if ax is None:
                 fig = plt.figure()
