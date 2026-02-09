@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to origami_tools's Documentation!  
-=====================================  
+=========================================  
 
 .. toctree::  
    :maxdepth: 2  
