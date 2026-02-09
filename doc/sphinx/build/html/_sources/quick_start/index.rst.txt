@@ -136,6 +136,7 @@ You can see and change this directory with the functions `get_material_path()` a
 Once you have the parameters set, you can use them in your origami pattern:
 
 .. code-block:: python
+    
     my_origami = Pattern(name="Miura_ori", param_list=params)
     my_origami.w_h(d + 2 * a, 2 * h)
     my_origami.add_shapes(exterior_lines, param="cut")

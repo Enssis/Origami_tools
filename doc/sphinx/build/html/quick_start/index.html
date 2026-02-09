@@ -176,6 +176,15 @@ You can see and change this directory with the functions <cite>get_material_path
 </pre></div>
 </div>
 <p>Once you have the parameters set, you can use them in your origami pattern:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_origami</span> <span class="o">=</span> <span class="n">Pattern</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Miura_ori&quot;</span><span class="p">,</span> <span class="n">param_list</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+<span class="n">my_origami</span><span class="o">.</span><span class="n">w_h</span><span class="p">(</span><span class="n">d</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
+<span class="n">my_origami</span><span class="o">.</span><span class="n">add_shapes</span><span class="p">(</span><span class="n">exterior_lines</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="s2">&quot;cut&quot;</span><span class="p">)</span>
+<span class="n">my_origami</span><span class="o">.</span><span class="n">add_folds</span><span class="p">(</span><span class="n">mountain_folds</span><span class="p">,</span> <span class="n">fold_type</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="s2">&quot;fold_cut&quot;</span><span class="p">)</span>
+<span class="n">my_origami</span><span class="o">.</span><span class="n">add_folds</span><span class="p">(</span><span class="n">valley_folds</span><span class="p">,</span> <span class="n">fold_type</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="s2">&quot;fold_cut&quot;</span><span class="p">)</span>
+<span class="n">my_origami</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s2">&quot;cut&quot;</span><span class="p">)</span>
+<span class="n">my_origami</span><span class="o">.</span><span class="n">save_SVG</span><span class="p">(</span><span class="s2">&quot;path</span><span class="se">\\</span><span class="s2">to</span><span class="se">\\</span><span class="s2">your</span><span class="se">\\</span><span class="s2">directory&quot;</span><span class="p">,</span> <span class="s2">&quot;Miura_ori_cut&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>which gives you this pattern :</p>
 <img alt="SVG Output with Laser Parameters" class="align-center" src="../_images/Miura_ori_cut.svg" />
 </section>

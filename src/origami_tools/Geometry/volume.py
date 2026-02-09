@@ -130,6 +130,11 @@ class Volume():
         volume_mesh.save(filename) # type: ignore
         print(f"Volume saved to {filename}")
 
+    @staticmethod
+    def place_holder():
+        """Create a placeholder volume."""
+        return Volume([Surface([Point(0, 0, 0), Point(1, 0, 0), Point(0, 1, 0)])])
+
 @dataclass
 class Parallelepiped(Volume):
     pass

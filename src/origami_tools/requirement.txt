@@ -1,0 +1,8 @@
+numpy == 1.26
+svg.py == 1.6
+Ipython == 8.0
+matplotlib == 3.7
+numpy-stl == 3.0
+prettytable == 0.7
+svglib == 0.9.3
+reportlab == 3.6.12
