@@ -5,8 +5,8 @@ import json
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from scipy.optimize import minimize
-
+from matplotlib.patches import Patch
+from scipy.optimize import minimize, minimize_scalar 
 
 from ..Geometry import *
 from ..Utils._types import Number
@@ -15,7 +15,7 @@ from ..Utils import rad2deg, deg2rad, min_search_grad, add_arrow_to_line2D
 from .. import get_origami_dir
 from ..Pattern import Pattern
 from ..LaserParams import ParamList
-from .__init__ import general_U_rot, general_U_trac
+from .__init__ import general_U_rot, general_U_trac, general_dU_trac, general_dU_rot
 
 
 def rotation_vect_and_point(vec, pt, angle):
@@ -64,7 +64,7 @@ class TDK:
     name : str = ""
     color : str = "cyan"
     U_raid = [general_U_rot(), general_U_trac()]
-
+    dU_raid = [general_dU_rot(), general_dU_trac()]
 
     def __post_init__(self):
         if self.name == "":
@@ -86,7 +86,7 @@ class TDK:
         self.phi_1 = np.pi/2 + temp_acos
         self.phi_2 = np.pi/2 - temp_acos
 
-
+        self.verbose = False
         self.patron = None
         self.attache = None
         self.volume = None
@@ -213,13 +213,14 @@ class TDK:
             return self.john_phi_b(h)
     
     # calcul de phi_l et phi_b (equations perso)
-    def phi_l(self,h):
+    def phi_l(self, h):
         return np.arccos((h**2 - self.l**2 + self.r**2 *(self.m**2 + 1))/(2*self.m*self.r**2)) - np.pi/self.n
 
-    def phi_b(self,h):
+    def phi_b(self, h):
         a = (h**2 - self.b**2 + self.r**2 *(self.m**2 + 1))/(2*self.m*self.r**2)
         if a < -1 or a > 1:
-            print("No solution for phi_b, returning 0 or pi for h =", h, self.name, "h1 =", self.h1, "h2 =", self.h2)
+            if self.verbose :
+                print("No solution for phi_b, returning 0 or pi for h =", h, self.name, "h1 =", self.h1, "h2 =", self.h2)
             if a < -1:
                 return 0
             else:
@@ -232,6 +233,9 @@ class TDK:
             return self.phi_l(h)
         else:
             return self.phi_b(h)
+
+    def phi_num(self, h):
+        return minimize_scalar(lambda phi : self.U(phi, h), self.phi(h), bounds=(0, 2 * np.pi)).x # type: ignore
 
 
     def h(self, phi):
@@ -247,6 +251,10 @@ class TDK:
             else:
                 return self.b
         return np.sqrt(A)
+
+    def h_num(self, phi):
+        return minimize_scalar(lambda h : self.U(phi, h), self.h(phi), bounds=(0, self.b)).x #type: ignore
+
 
 
     # def l_compressed(self, h):
@@ -398,7 +406,14 @@ class TDK:
         rmgamma = self.r * (self.m * np.cos(gamma)-np.cos(phi))
         rmphi = self.r * (self.m * np.cos(phi)-np.cos(gamma))
         h2 = h**2
-        return np.arccos(-(h2*np.cos(phi + gamma) + rmgamma * rmphi)/(np.sqrt((h2 + rmgamma**2)*(h2 + rmphi**2))))
+        A = -(h2*np.cos(phi + gamma) + rmgamma * rmphi)/(np.sqrt((h2 + rmgamma**2)*(h2 + rmphi**2)))
+        # if A < -1 or A > 1:
+        #     print("No solution for theta_b, returning 0 or pi for phi =", rad2deg(phi), "and h =", h, self.name, "h1 =", self.h1, "h2 =", self.h2)
+        #     if A < -1:
+        #         return 0
+        #     else:
+        #         return np.pi
+        return np.arccos(A)
 
     def deriv_theta_b_h(self, phi, h):
         gamma = np.pi/self.n
@@ -457,15 +472,43 @@ class TDK:
 
         return n * (U_t(dl) / self.l + U_t(db) / self.b + U_r(dtheta_a) * self.a + U_r(dtheta_ah) * self.a * self.m + U_r(dtheta_b) * self.b + U_r(dtheta_l) * self.l)
 
+    def deriv_U_h(self, phi, h):
+
+        dl = self.l_dep(phi, h) - self.l
+        dl_dh = self.deriv_l_h(phi, h)
+        db = self.b_dep(phi, h) - self.b
+        db_dh = self.deriv_b_h(phi, h)
+
+        n = self.n
+        dU_t = self.dU_raid[1]
+
+        return n * (dU_t(dl, dl_dh) / self.l + dU_t(db, db_dh) / self.b)
+
+
     def set_U_raid(self, U_rot, U_trac):
         self.U_raid = [U_rot, U_trac]
 
 
+    def find_curve(self, x_values, rotation = False, graph = False):
+        curve = []
+        for x in x_values:
+            if rotation :
+                h = minimize_scalar(lambda h : self.U(x, h), self.h(x), bounds=(0, self.b)).x # type: ignore
+                curve.append([x, h])
+            else:
+                phi = minimize_scalar(lambda phi : self.U(phi, x), self.phi(x), bounds=(0, 2 * np.pi)).x # type: ignore
+                curve.append([phi, x])
 
+        curve = np.array(curve)
+        if graph:
+            plt.plot(curve[:, 0], curve[:, 1])
+            plt.xlabel("phi (rad)" if not rotation else "h (mm)")
+            plt.ylabel("h (mm)" if not rotation else "phi (rad)")
+            plt.title(f"Deplacement curve for {self.name}")
+            plt.grid()
+            plt.show()
 
-
-
-
+        return curve
 
 
 
@@ -767,31 +810,42 @@ class TDK:
             C = Point(x0 - self.r_p * np.cos(rho), self.a / 2 + np.sqrt(self.b ** 2 - self.r_p **2), self.r_p * np.sin(rho))
         else :
             C = Point(self.r * np.cos(phi) * self.m, self.r * np.sin(phi) * self.m, h_rep) 
-        D = C.rotate(2 * gamma, Point(0, 0, 0), Vec(0, 0, 1))
+        if type == 2:
+            D = C.copy()
+            D.translate(self.m * Vec.from_2points(A, B))
+            angle_m_pc = (np.pi - self.angle_pli_montagne(h_rep)) * fold_pc / 100
+            D.rotate(angle_m_pc, C, Vec.from_2points(B, C))
+        else :
+            D = C.rotate(2 * gamma, Point(0, 0, 0), Vec(0, 0, 1))
 
         # rotation matrix for starting position
 
-        verts = [Polygon([A,B,C]), Polygon([B,C,D])]
 
         # Calculation with angles between panels
         if type == 2:
+            verts = [Polygon([A,B,C]), Polygon([B,C,D])]
             angle_m_pc = (np.pi - self.angle_pli_montagne(h_rep)) * fold_pc / 100
             angle_v_pc = (np.pi - self.angle_pli_vallee(h_rep)) * fold_pc / 100
 
-            for i in range(2 * self.n - 1):
-                n_poly = verts[-1].copy()
-                v_norm = n_poly.normal_vect()
+            # TODO !!
+            for i in range(self.n - 1):
+                # get panels and their norms
+                n_poly_P = verts[-2].copy()
+                n_poly_Q = verts[-1].copy()
+                v_norm_P = n_poly_P.normal_vect()
+                v_norm_Q = n_poly_Q.normal_vect()
+
                 # get the middle point of the edge
-                middle = Point.from_list(n_poly[1] + n_poly[0]) / 2 if i % 2 == 1 else Point.from_list(n_poly[1] + n_poly[2]) / 2
+                middle = Point.from_list(n_poly_P[1] + n_poly_P[0]) / 2 if i % 2 == 1 else Point.from_list(n_poly_P[1] + n_poly_P[2]) / 2
 
-                n_poly.rotate(np.pi, middle, v_norm)
-                direc = v_norm * (ep_tot - e_pp) / 2 if ep_tot != 0 else Vec(0, 0, 0) 
+                n_poly_P.rotate(np.pi, middle, v_norm_P)
+                direc = v_norm_P * (ep_tot - e_pp) / 2 if ep_tot != 0 else Vec(0, 0, 0) 
                 if i % 2 == 0:
-                    n_poly.rotate(-angle_m_pc, n_poly[2] - direc, n_poly[1] - n_poly[2])
+                    n_poly_P.rotate(-angle_m_pc, n_poly_P[2] - direc, n_poly_P[1] - n_poly_P[2])
                 else:
-                    n_poly.rotate(-angle_v_pc, n_poly[1] + direc, n_poly[1] - n_poly[0])
+                    n_poly_P.rotate(-angle_v_pc, n_poly_P[1] + direc, n_poly_P[1] - n_poly_P[0])
 
-                verts.append(n_poly)
+                verts.append(n_poly_P)
             if side != 0 and ep_tot != 0:
                 angle_m = self.angle_pli_montagne(h_constr)
                 angle_v = self.angle_pli_vallee(h_constr)
@@ -803,40 +857,48 @@ class TDK:
 
         else :
             verts = []
-            # asymetrie
+
+            # if asymetrie, offset the panel to reduce it's size
+            # TODO for m
             if side != 0 and ep_tot != 0:
                 angle_m = self.angle_pli_montagne(h_constr)
                 angle_v = self.angle_pli_vallee(h_constr)
-                # angle_rho = self.angle_pli_rho(h)
+
                 d_mont = ep_tot / np.tan(angle_m/2) if side == 1 else 0
                 d_val = ep_tot / np.tan(angle_v/2) if side == 2 else 0
                 pol = Polygon([A, B, C, A]).offset([-d_val, -d_mont, 0])
-                U = pol[0]
-                V = pol[1]
-                W = pol[2]
+                A = pol[0]
+                B = pol[1]
+                C = pol[2]
 
 
             # transformation matrix
             mat_rot = np.array([[np.cos(2 * gamma), -np.sin(2 * gamma), 0, 0],
                                 [np.sin(2 * gamma), np.cos(2 * gamma), 0, 0],
                                 [0, 0, 1, 0], [0, 0, 0, 1]])
-            mat_up_rot = np.array([[np.cos(phi + gamma), np.sin(phi + gamma), 0, 0],
-                                [np.sin(phi + gamma), -np.cos(phi + gamma), 0, 0],
-                                [0, 0, -1, h_rep], [0, 0, 0, 1]])
+            # mat_up_rot = np.array([[np.cos(phi + gamma), np.sin(phi + gamma), 0, 0],
+            #                     [np.sin(phi + gamma), -np.cos(phi + gamma), 0, 0],
+            #                     [0, 0, -1, h_rep], [0, 0, 0, 1]])
 
-            U2 = A.copy().transform(mat_up_rot)
-            V2 = B.copy().transform(mat_up_rot)
-            W2 = C.copy().transform(mat_up_rot)
+            # U2 = A.copy().transform(mat_up_rot)
+            # V2 = B.copy().transform(mat_up_rot)
+            # W2 = C.copy().transform(mat_up_rot)
 
-            for _ in range(self.n):
+            B2 = B.copy()
+            C2 = C.copy()
+
+            verts.append(Polygon([A, B, C]))
+            verts.append(Polygon([B2, C2, D]))
+
+            for _ in range(self.n - 1):
                 A = A.transform(mat_rot)
                 B = B.transform(mat_rot)
                 C = C.transform(mat_rot)
                 verts.append(Polygon([A, B, C]))
-                U2 = U2.transform(mat_rot)
-                V2 = V2.transform(mat_rot)
-                W2 = W2.transform(mat_rot)
-                verts.append(Polygon([U2, V2, W2]))
+                B2 = B2.transform(mat_rot)
+                C2 = C2.transform(mat_rot)
+                D = D.transform(mat_rot)
+                verts.append(Polygon([B2, C2, D]))
             
         if chiral:
             for pol in verts:
@@ -847,7 +909,7 @@ class TDK:
 
         return verts  
 
-    ## TODO : add m
+
     def create_volume(self, h_rep : Number | None = None, phi_rep : Number | None = None, constr_type : int =0, fold_pc : Number =100, ep : Number =0, decal : Number=0, ep_tot : Number =0, side : int =0, h_constr : Number | None = None, rotation : Number = 0, chiral : bool = False):
         
         if h_rep is None:
@@ -964,7 +1026,7 @@ class TDK:
 
 
 
-## TODO : add m and inversion haut/bas        
+## TODO : add inversion haut/bas        
 class MultiStoriesKresling:
 
     def __init__(self, towers : list[TDK], chiralities : list[bool] = [False], name : str =""):
@@ -992,6 +1054,10 @@ class MultiStoriesKresling:
             "towers": [tower.as_dict() for tower in self.towers],
             "chiralities": self.chiralities
         }
+
+
+    def __getitem__(self, key) -> TDK:
+        return self.towers[key]
 
     @staticmethod
     def from_dict(d):
@@ -1090,7 +1156,7 @@ class MultiStoriesKresling:
         else :
             if h is None:
                 h = [tower.h2 for tower in self.towers]
-            ax.set_zlim(0, sum(h) + 5)
+            ax.set_zlim(0, sum(h))
 
         # if fold_pc == 100 and show_type == 0:
         #     height = 0
@@ -1175,28 +1241,43 @@ class MultiStoriesKresling:
             U_tot += tower.U(phi[i], h[i])
         return U_tot
 
+    def dU_dh(self, phi : list[Number], h : list[Number]):
+        if len(phi) != len(self.towers) or len(h) != len(self.towers):
+            raise ValueError("The number of towers must be equal to the number of phi, h")
+        dU_dh_tot = 0
+        for i in range(len(self.towers)):
+            tower = self.towers[i]
+            dU_dh_tot += tower.deriv_U_h(phi[i], h[i])
+        return dU_dh_tot
+
+
+
     def U_simp_phi(self, phi_tot, x):
         # print(phi_tot, x)
         phi0 = abs(phi_tot - np.sum(x)) % (2*np.pi)
         # print("phi0 :", [phi0], "x :", x)
         phis = [phi0] 
         phis.extend(np.array(x))
-        phis = [abs(phi) % (2 * np.pi) for phi in phis]
+        phis = [phi % (2 * np.pi) for phi in phis]
         # print("phis :", phis)
-        hs = [tower.h(abs(phi)) for tower, phi in zip(self.towers, phis)]
+        hs = [tower.h(phi) for tower, phi in zip(self.towers, phis)]
 
         # print("phis :", phis, "hs :", hs)
         return self.U(phis, hs)
     
     def U_simp_h(self, h_tot, x):
         # print(phi_tot, x)
-        h0 = abs(h_tot - np.sum(x))
+        h0 = h_tot - np.sum(x)
         # print("phi0 :", [phi0], "x :", x)
         hs = [h0] 
         hs.extend(np.array(x))
         # print("phis :", phis)
-        phis = [tower.phi(h) for tower, h in zip(self.towers, hs)]
+        phis = [tower.phi_num(h) for tower, h in zip(self.towers, hs)]
 
+        if h0 < 0.0:
+            # print("h0 is negative, returning U with h0 = 0", "h0 :", h0, "hs :", hs)
+            # return (2-h0) * self.U([self.towers[0].phi(0)] + phis[1:], [0.0] + hs[1:])
+            return 1
         # print("phis :", phis, "hs :", hs)
         return self.U(phis, hs)
 
@@ -1213,7 +1294,7 @@ class MultiStoriesKresling:
         return [volume_mesh.vectors for volume_mesh in volumes_mesh]
 
 
-    def show_tower_movement(self, x_ax, curve, segments : list[list[Number]] | None = None, start_ind=0, save=False, path="", name="", graph_intermediates=False, graph_3D=True, animated=True, rotation = True):
+    def show_tower_movement(self, x_ax, curve, segments : list[list[Number]] | None = None, start_ind=0, save=False, path="", name="", graph_intermediates=False, graph_3D=True, animated=True, rotation = True, camera_pos_3D = [45, 0, 5], force_show = False):
         """curve : list of (phis, hs) for each point of the curve"""
 
         if len(curve) != len(x_ax):
@@ -1223,16 +1304,16 @@ class MultiStoriesKresling:
         sens = np.array([-1.0 if chiral else 1.0 for chiral in self.chiralities])
 
         # initiate the number of graphs to displays
-        ncol = 1 + int(graph_intermediates) + int(graph_3D)
+        ncol = 1 + int(graph_intermediates) + int(graph_3D or force_show)
 
         fig = plt.figure(figsize=(16, 10), dpi=100)
 
         # -------------------- Graph with the 3D representation of the tower -------------------------
         if graph_3D:
-            ax_3D = fig.add_subplot(1, ncol, 1, projection="3d")
+            ax_3D = fig.add_subplot(1 + int(force_show), ncol, 1, projection="3d")
 
             # set the camera pos
-            camera_pos = [45, 0, 25]
+            camera_pos = camera_pos_3D
             ax_3D.azim = camera_pos[0]
             ax_3D.dist = camera_pos[1] # type: ignore
             ax_3D.elev = camera_pos[2]
@@ -1249,6 +1330,9 @@ class MultiStoriesKresling:
             ax_3D.set_yticks(np.linspace(-self.towers[0].r, self.towers[0].r, 5))
             ax_3D.set_aspect('equal')
 
+            legend_elements = [Patch(facecolor=self.towers[i].color, edgecolor=None, label=f'Tower {i+1}') for i in range(len(self.towers))]
+            ax_3D.legend(handles=legend_elements, loc="upper left")
+
         # Store polygon collection references
         poly_collections = []
 
@@ -1257,53 +1341,75 @@ class MultiStoriesKresling:
 
         energy_ax = fig.add_subplot(2, ncol, int(graph_3D) + 1)
 
-        kinematic_ax = fig.add_subplot(2, ncol, int(graph_3D) + 1 + ncol)
+        kinematic_ax = fig.add_subplot(2, ncol, int(graph_3D) + 1 + ncol - int(force_show))
 
         if rotation:
-            energy_ax.set_xlabel("phi (degrees)")
-            energy_ax.set_ylabel("U(phi, h(phi))")
+            energy_ax.set_xlabel(r"$\varphi_{total}$ (deg)")
+            energy_ax.set_ylabel(r"$U(\varphi, h_{num}(\varphi))$")
             
-            kinematic_ax.set_xlabel("phi (degrees)")
-            kinematic_ax.set_ylabel("h total(mm)")
+            kinematic_ax.set_xlabel(r"$\varphi_{total}$ (deg)")
+            kinematic_ax.set_ylabel(r"h_{total} (mm)")
         else:
-            energy_ax.set_xlabel("h total (mm)")
-            energy_ax.set_ylabel("U(phi(h), h)")
+            energy_ax.set_xlabel(r"$h_{total}$ (mm)")
+            energy_ax.set_ylabel(r"$U(\varphi_{num}(h), h)$")
             
-            kinematic_ax.set_xlabel("h (mm)")
-            kinematic_ax.set_ylabel("phi total (deg)")
+            kinematic_ax.set_xlabel(r"$h_{total}$ (mm)")
+            kinematic_ax.set_ylabel(r"$\varphi_{total}$ (deg)")
 
+        
         x_ax = rad2deg(np.array(x_ax)) if rotation else np.array(x_ax)
         
         ordened_curve = np.concatenate((curve[-start_ind:], curve[:-start_ind])) if start_ind != 0 else np.array(curve)
         # change colors for segments
+        energy_top = -100
+        energy_bottom = 100
         if segments is not None:
             ind_s = 0
             colors = [hsv_to_hex(i / len(segments), 1, 1) for i in range(len(segments))]
 
             for i in range(len(segments)):
                 x = rad2deg(np.array(segments[i])) if rotation else np.array(segments[i])
-                label = "energy segment [" + str(int(rad2deg(segments[i][0]))) + "° ; " + str(int(rad2deg(segments[i][-1]))) + "°]" if rotation else "energy segment [" + str(int(segments[i][0])) + " ; " + str(int(segments[i][-1])) + "]"
+                label = f"energy segment for $\\varphi$ from {str(int(rad2deg(segments[i][0])))}° to {str(int(rad2deg(segments[i][-1])))}°" if rotation else f"energy segment for $h$ from {str(int(segments[i][0]*100)/100)} to {str(int(segments[i][-1]*100)/100)}"
+                y_energy = [self.U(curve[(ind_s + j - start_ind) % len(curve)][0] * sens, curve[(ind_s + j - start_ind) % len(curve)][1]) for j in range(len(segments[i]))]
+                energy_line = energy_ax.plot(x, y_energy, color=colors[i],label=label)
                 
-                energy_line = energy_ax.plot(x, [self.U(curve[(ind_s + j - start_ind) % len(curve)][0] * sens, curve[(ind_s + j - start_ind) % len(curve)][1]) for j in range(len(segments[i]))], color=colors[i],label=label)
-                
+                energy_bottom = min(energy_bottom, min(y_energy))
+                energy_top = max(energy_top, max(y_energy))
+
+
                 y = [sum(np.array(curve[(ind_s + j - start_ind) % len(curve)][1])) for j in range(len(segments[i]))] if rotation else [rad2deg(sum(np.array(curve[(ind_s + j - start_ind) % len(curve)][0]))) for j in range(len(segments[i]))]
-                kinematic_ax.plot(x, y, color=colors[i],label="height segment [" + str(int(rad2deg(segments[i][0]))) + "° ; " + str(int(rad2deg(segments[i][-1]))) + "°]")
+
+                label_kinematic = f"{"height" if rotation else "angle"} for {"$\\varphi$" if rotation else "$h$"} from {str(int(rad2deg(segments[i][0])) if rotation else int(segments[i][0]*100)/100)}{"°" if rotation else ""} to {str(int(rad2deg(segments[i][-1]))if rotation else int(segments[i][-1]*100)/100)}{"°" if rotation else ""}"
+                kinematic_line = kinematic_ax.plot(x, y, color=colors[i],label=label_kinematic)
 
                 add_arrow_to_line2D(energy_ax, energy_line, arrow_locs=np.linspace(0, 1, int(10 * len(segments[0]) / len(x_ax))), arrowsize=1.5)
+                add_arrow_to_line2D(kinematic_ax, kinematic_line, arrow_locs=np.linspace(0, 1, int(10 * len(segments[0]) / len(x_ax))), arrowsize=1.5)
                 ind_s += len(segments[i])
-                # print(ind_s)
+                
 
         else:
-            line = energy_ax.plot(x_ax, [self.U(ordened_curve[i][0] * sens, ordened_curve[i][1]) for i in range(len(x_ax))], "b", label="energy")
+            y_energy = [self.U(ordened_curve[i][0] * sens, ordened_curve[i][1]) for i in range(len(x_ax))]
+            line = energy_ax.plot(x_ax, y_energy, "b", label="energy")
             add_arrow_to_line2D(energy_ax, line, arrow_locs=[0.11, 0.21, 0.31, 0.41, 0.61, 0.71, 0.81, 0.91],arrowsize=1.5)
             y = [sum(c[1]) for c in ordened_curve] if rotation else [rad2deg(sum(c[0])) for c in ordened_curve]
-            kinematic_ax.plot(x_ax, [sum(c[1]) for c in ordened_curve], "b",label="height")
+            kinematic_ax.plot(x_ax, y, "b",label="height" if rotation else "angle")
+            energy_bottom = min(y_energy)
+            energy_top = max(y_energy)
 
 
         point_energy = energy_ax.plot([], [], "ro", label="current position")[0]
         point_kinematic = kinematic_ax.plot([], [], "ro", label="current position")[0]
 
-        energy_ax.legend()
+        
+        diff = energy_top - energy_bottom
+        energy_ax.set_ylim(energy_bottom - 0.1 * diff, energy_top + 0.1 * diff)
+        energy_ax.grid()
+        energy_ax.ticklabel_format(axis='y', style='sci', scilimits=(-1,1))
+        energy_ax.legend(loc="upper right")
+        energy_ax.set_title("Energy of the system")
+
+        kinematic_ax.legend()
+        kinematic_ax.set_title(f"Relation {"$h(\\varphi)$" if rotation else "$\\varphi(h)$"} of the system")
 
 
 
@@ -1312,28 +1418,52 @@ class MultiStoriesKresling:
 
         if graph_intermediates:
             kinematic_phi_ax = fig.add_subplot(2, 3, 3)
-            kinematic_phi_ax.set_ylabel("phi (degrees)")
+            kinematic_phi_ax.set_ylabel("$\\varphi$ (degrees)")
 
             kinematic_h_ax = fig.add_subplot(2, 3, 6)
-            kinematic_h_ax.set_ylabel("h (mm)")
+            kinematic_h_ax.set_ylabel("$h$ (mm)")
 
             if rotation:
-                kinematic_phi_ax.set_xlabel("phi total (degrees)")
-                kinematic_h_ax.set_xlabel("phi total (degrees)")
+                kinematic_phi_ax.set_xlabel(r"\varphi_{total} (degrees)")
+                kinematic_h_ax.set_xlabel(r"\varphi_{total} (degrees)")
             else:
-                kinematic_phi_ax.set_xlabel("h total (mm)")
-                kinematic_h_ax.set_xlabel("h total (mm)")
+                kinematic_phi_ax.set_xlabel(r"$h_{total}$ (mm)")
+                kinematic_h_ax.set_xlabel(r"$h_{total}$ (mm)")
 
             for i in range(len(curve[0][0])):
-                kinematic_phi_ax.plot(x_ax, [rad2deg(c[0][i]) for c in ordened_curve], label="phi " + str(i+1))
-                kinematic_h_ax.plot(x_ax, [c[1][i] for c in ordened_curve], label="h " + str(i+1))
+                kinematic_phi_ax.plot(x_ax, [rad2deg(c[0][i]) for c in ordened_curve], label="$\\varphi$ tower " + str(i+1), color=self.towers[i].color)
+                kinematic_h_ax.plot(x_ax, [c[1][i] for c in ordened_curve], label="$h$ tower " + str(i+1), color = self.towers[i].color)
             
             points_phi = kinematic_phi_ax.plot([], [], "ro", label="current position")[0]
             points_h = kinematic_h_ax.plot([], [], "ro", label="current position")[0]
 
+            kinematic_phi_ax.set_title("$\\varphi$ of each tower")
             kinematic_phi_ax.legend()
+            kinematic_h_ax.set_title("$h$ of each tower")
             kinematic_h_ax.legend()
                 
+
+        # -------------------- Force graphs -------------------------
+
+        if force_show:
+            force_ax = fig.add_subplot(2, ncol, ncol + 2)
+            force_ax.set_xlabel(r"$\varphi_{total}$ (deg)" if rotation else r"$h_{total}$ (mm)")
+            force_ax.set_ylabel("Force")
+
+            
+
+            force_ax.plot(x_ax, [self.dU_dh(c[0] * sens, c[1]) for c in ordened_curve], "b", label="force")
+
+
+
+
+            point_force = force_ax.plot([], [], "ro", label="current position")[0]
+
+            force_ax.ticklabel_format(axis='y', style='sci', scilimits=(-1,1))
+            force_ax.grid()
+            force_ax.set_title("Force applied depending on the position")
+            force_ax.legend()
+
 
         # -------------------- Animation function -------------------------
         def animate(frame):
@@ -1372,6 +1502,11 @@ class MultiStoriesKresling:
                 points_h.set_data([x_ax[frame]] * len(self.towers), [ordened_curve[frame][1]]) # type: ignore
                 points += [points_phi, points_h] # type: ignore
 
+            # ======== 2D animation of the force graph ========
+            if force_show:
+                point_force.set_data([x_ax[frame]], [self.dU_dh(np.array(ordened_curve[frame][0] * sens), ordened_curve[frame][1])])  # type: ignore
+                points += [point_force] # type: ignore
+
             return poly_collections + points
 
         
@@ -1379,16 +1514,22 @@ class MultiStoriesKresling:
         # if abs(x_ax[0] - x_ax[-1]) > deg2rad(0.1) and rotation or abs(x_ax[0] - x_ax[-1]) > 0.5 and not rotation:
         #     frames = [ i if i < len(curve) else len(curve) - (i % len(curve) + 1) for i in range(len(curve) * 2)]
         # else:
-        frames = range(len(curve))
+        step = max(1, len(curve) // 200)  # Adjust the step to have at most 200 frames
+        frames = range(0, len(curve), step)
         # Create animation
         if animated :
             anim = FuncAnimation(fig, animate, frames=frames, interval=50, blit=False, repeat=True)
         
+        plt.subplots_adjust(hspace=0.3, wspace=0.3)
+
         if save:
             if name == "":
                 name = self.name
             if path == "":
                 path = ORIGAMI_DIR_PATH + "/animations/"
+            elif path[-1] != "\\" and path[-1] != "/":
+                path += "/"
+
             if animated:
                 anim.save(path + f"animation_{name}.gif", writer='pillow', fps=20) # type: ignore
                 print(f"Saved animation to {path + f'animation_{name}.gif'}")
@@ -1469,13 +1610,17 @@ class MultiStoriesKresling:
         for h_i in h:
             # print("phi =", rad2deg(phi_i))
             # phi_t = minimize(lambda x : self.U_simp_phi(phi_i, x), start, bounds=[(0, 2*np.pi)] * (len(self.towers) - 1)).x # graph_x_deriv=False, anim_graph=False, graph_limits=[0, np.pi]) 
-            # start = min_search_grad(start, lambda x : self.U_simp_h(h_i, x)) # graph_x_deriv=False, anim_graph=False, graph_limits=[0, np.pi]) 
-            start = minimize(lambda x : self.U_simp_h(h_i, x), start, bounds=[(0, tower.b) for tower in self.towers[1:]]).x 
-            h0 = abs(h_i - np.sum(start))
+            # start = min_search_grad(start, lambda x : self.U_simp_h(h_i, x), graph=False) # graph_x_deriv=False, anim_graph=False, graph_limits=[0, np.pi]) 
+            if len(self.towers) == 0:
+                start = [minimize_scalar(lambda x : self.U_simp_h(h_i, [x]), start, bounds=(0, self.towers[1].b)).x] # type: ignore
+            else:
+                cons = ({'type': 'ineq', 'fun': lambda x:  h_i - sum(x)})
+                start = minimize(lambda x : self.U_simp_h(h_i, x), start, bounds=[(0, tower.b) for tower in self.towers[1:]], constraints=cons, method="SLSQP", jac="2-point").x
+            h0 = h_i - np.sum(start)
             hs =  np.concatenate(([h0], start))
             # print("hs :", hs, 'h_i :', h_i, 'start :', start, h0)
             # print("phis :", [rad2deg(phi) for phi in phis], 'phi_i :', rad2deg(phi_i), 'start :', [rad2deg(s) for s in start])
-            phis = [tower.phi(h) for tower, h in zip(self.towers, hs)] * sens
+            phis = [tower.phi_num(h) for tower, h in zip(self.towers, hs)] * sens
             curve.append([phis, hs])
 
         

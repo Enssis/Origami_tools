@@ -1,4 +1,4 @@
-from ._svg_utils import hsv_to_hex, rgb_to_hex, hex_to_rgb, simplifed_hex, mm_str, save_svg
+from ._svg_utils import hsv_to_hex, rgb_to_hex, hex_to_rgb, simplifed_hex, mm_str, save_svg, rgb_vals_to_hex
 from ._types import Number, Group
 
 
@@ -275,11 +275,11 @@ def multi_point_linspace(points : list[Number], num_points : int, segmented = Fa
     total_length = sum(segment_lengths)
     segment_ratios = segment_lengths / total_length
 
-    points_per_segment = [int(num_points * ratio) for ratio in segment_ratios]
+    points_per_segment = [int((num_points-1) * ratio) for ratio in segment_ratios]
     # Adjust the number of points to ensure we have exactly num_points
-    while sum(points_per_segment) < num_points:
+    while sum(points_per_segment) < num_points-1:
         for i in range(len(points_per_segment)):
-            if sum(points_per_segment) < num_points:
+            if sum(points_per_segment) < num_points-1:
                 points_per_segment[i] += 1
 
     result = []
@@ -289,8 +289,9 @@ def multi_point_linspace(points : list[Number], num_points : int, segmented = Fa
         for j in range(points_per_segment[i]):
             t = j / points_per_segment[i]
             if segmented:
-                segments[i].append(start + t * (end - start))
+                segments[i].append(start + t * (end - start)) # type: ignore
             result.append(start + t * (end - start))
+    result.append(points[-1])
     if segmented:
         return result, segments
     return result

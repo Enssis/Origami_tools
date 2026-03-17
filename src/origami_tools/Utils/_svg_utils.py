@@ -40,6 +40,15 @@ def save_svg(svg, path):
 		f.write(svg.as_str())
 	print(f"Fichier SVG sauvegardé dans {path}")
 
+def rgb_vals_to_hex(rgb : tuple[int, int, int] | int):
+	"""
+	Convert a tuple of RGB values to a hex color string.
+	"""
+	if isinstance(rgb, int):
+		rgb = (rgb, rgb, rgb)
+	r, g, b = rgb
+	return "#{:02x}{:02x}{:02x}".format(r, g, b)
+
 def rgb_to_hex(rgb):
 	# Convertit une couleur
 	r, g, b = rgb[:-1].split('(')[1].split(",")
