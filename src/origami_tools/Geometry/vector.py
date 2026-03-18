@@ -8,13 +8,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .line import Line
     from .plane import Plane
-
 @dataclass
 class Vec(list):
     """ A class representing a vector in 2D or 3D space. """
-    x : Number
-    y : Number
-    z : Number | None = None
+    x : float | int
+    y : float | int
+    z : float | int | None = None
     dimension : int = 2
 
     @classmethod
@@ -38,6 +37,11 @@ class Vec(list):
         else:
             raise ValueError("Vector must have length 2 or 3")
     
+    @classmethod
+    def from_angle(cls, angle : float | int, length : float | int = 1):
+        """Create a 2D vector from an angle and a length."""
+        return cls(length * np.cos(angle), length * np.sin(angle))
+
     def __post_init__(self):
         if self.z is not None:
             self.dimension = 3

@@ -13,7 +13,7 @@ from ..Utils._types import Number
 from ..Utils._svg_utils import hsv_to_hex
 from ..Utils import rad2deg, deg2rad, min_search_grad, add_arrow_to_line2D
 from .. import get_origami_dir
-from ..Pattern import Pattern
+from ..Pattern import Pattern, base_flap_pattern
 from ..LaserParams import ParamList
 from .__init__ import general_U_rot, general_U_trac, general_dU_trac, general_dU_rot
 
@@ -512,6 +512,22 @@ class TDK:
 
 
 
+    def show_graph(self, type : str, abscisse = "h"):
+        if type == "energy":
+            if abscisse == "h":
+                x_values = np.linspace(0, self.b, 100)
+            else:
+                x_values = np.linspace(0, 2 * np.pi, 100)
+
+            curve = self.find_curve(x_values, rotation=abscisse != "h")
+            
+            plt.plot(x_values, self.U(curve[:, 0], curve[:, 1]))
+            plt.xlabel("phi (rad)" if abscisse != "h" else "h (mm)")
+            plt.ylabel("h (mm)" if abscisse != "h" else "phi (rad)")
+            plt.title(f"Energy curve for {self.name}")
+            plt.grid()
+            plt.show()
+
 
 
 
@@ -606,7 +622,140 @@ class TDK:
             self.create_patron(h)
         self.patron.create_pattern() # type: ignore
 
-    ## TODO : add m   
+
+    def create_patron_simplified(self, param_list : ParamList | None = None, flap : str | Pattern = "none", base_flaps : str | list[Pattern] = "none"):
+        """
+            flap : "none" => no flap, "default" => default flap, Pattern => pattern of the flap to add on each extreme of the pattern
+        """
+
+
+        #----------------- Initialisations of the parameters ---------------- 
+        
+        if param_list is None:
+            param_list = ParamList()
+
+        #verify the presence of the parameters in the template list
+        if not param_list.template.contain_list(["fold_cut"]): # type: ignore
+            raise ValueError(f"Not all parameters of {["fold_cut"]} is in the template list {param_list.template.__str__()}")
+
+        # initial margin for the pattern
+        w_margin = 5
+        h_margin = 5
+
+        # -------------- Initialisation of the values for the creation of the folds --------------
+        alpha = alkashi_angle(self.l, self.a, self.b) # angle betweenm valley fold and base a 
+        beta = alkashi_angle(self.l, self.b, self.m * self.a) # angle between mountain fold and valley fold 
+        rho = alkashi_angle(self.b, self.a, self.l) # angle between mountain fold and base a
+        dec_ang = 0 # angle between base a and horizontal
+
+        # Lists of the folds to create
+        down_line = []
+        up_line = []
+        mountain_line = []
+        valley_line = []
+
+        # starting point
+        A0 = Point(0, 0)
+        D0 = A0 + Vec.from_angle(beta + alpha + dec_ang, self.b)
+        B = A0
+        C = Point(0, 0)
+
+        # width anf height of the pattern
+        width = 0
+        height = 0
+
+        # -------------- Creation of the folds --------------
+        for i in range(self.n):
+
+            # compute the points of the folds
+            A = B
+            B = A + Vec.from_angle(dec_ang, self.a)
+            C = A + Vec.from_angle(alpha + dec_ang, self.l)
+            D = A + Vec.from_angle(beta + alpha + dec_ang, self.b)
+
+            # add the folds to the lists
+            down_line.append(Line(A, B))
+            up_line.append(Line(D, C))
+            mountain_line.append(Line(A, D))
+            valley_line.append(Line(A, C))
+
+            #compute width and height
+            width = max(width, B[0], C[0], D[0])
+            height = max(height, B[1], C[1], D[1])
+
+            # update the angle for the next iteration
+            dec_ang = (np.pi - (alpha + beta + rho))*(i+1)
+        
+        mountain_line.append(Line(B, C))
+
+        # ------------- Creation of the pattern --------------     
+
+
+        # Create the patron with the given parameters
+        self.patron = Pattern(self.name, param_list=param_list, origin=Point(0, 0))
+
+        # add the folds to the patron
+        self.patron.add_folds(down_line + up_line, "n", 0)
+        self.patron.add_folds(mountain_line, "m", 0)
+        self.patron.add_folds(valley_line, "v", 0)
+
+        
+
+
+        # ------------- Creation of the flaps --------------
+
+        # ------------- Closing flaps --------------
+
+        # if flap is "default", create a default flap with the same height as the fold where it's attached and a width of a/3, with a cut fold on the outside of the pattern
+        if isinstance(flap, str) and flap == "default":
+            flap = Pattern(param_list=param_list)
+            w = self.a/3
+            angle = deg2rad(20)
+            flap.w_h(w, self.b)
+            A_flap = Point(w, 0)
+            B_flap = A_flap - Vec.from_angle(-angle, w)
+            D_flap = A_flap + Vec(0, self.b/2)
+            C_flap = D_flap - Vec.from_angle(angle, w)
+            flap.add_shapes([Line(A_flap, B_flap), Line(B_flap, C_flap), Line(C_flap, D_flap)], outside=True, param="cut")
+
+        if isinstance(flap, Pattern):
+            w_margin += flap.width
+            # add the flap on the left side
+            flap_left = flap.copy()
+            flap_left.translate(Vec(-flap_left.width, 0))
+            flap_left.rotate(Vec(0, 1).angle(Vec.from_2points(A0, D0)), Point(0, 0))
+            flap_left.translate(A0)
+            self.patron += flap_left
+
+            # add the flap on the right side
+            flap_right = flap.copy()
+            flap_right.translate(Vec(-flap_right.width, 0))
+            flap_right.rotate(np.pi + Vec(0, 1).angle(Vec.from_2points(B, C)), Point(0, 0))
+            flap_right.translate(C)
+            self.patron += flap_right
+
+        # ------------- Base flaps --------------
+        
+        angle = (1 - 3 / (2 * self.n)) * np.pi
+
+        b_flap = base_flap_pattern(param_list, angle=angle, w=self.a * self.m)
+        t_flap = base_flap_pattern(param_list, angle=angle, w=self.a, inv=True)
+
+
+        # ------------- Finish creation of the pattern --------------
+
+        # update the size of the pattern
+        self.patron.w_h(width + 10, height + 10)
+        self.patron.origin = Point(w_margin, h_margin)
+
+        return self.patron
+
+
+    
+
+
+    ## TODO : add m
+    ## TODO : replace closing and closing_type by string to understand what they do   
     def create_patron(self, h : Number =0, attache : Pattern | None = None, param_list : ParamList | None = None, closing : int = 2, side : int = 0, closing_type : int = 1, outside_param="fold_cut") -> Pattern:
         """
         Create the patron of the Kresling tower
@@ -619,20 +768,30 @@ class TDK:
         :return: Patron object
         """
 
+        # ---------------- Initialisations of the parameters ----------------
 
-        if h == 0: #default height
+        # Set h for asymetric patrons (h is the height where there should be touching between adjacent panels)
+        if h == 0: 
             h = self.h1
 
-        w = 5 + self.a/2 if (closing == 2 and side == 1) else 5 + self.a if (closing == 2 and side == 2) else 5 # margin for attache depending on closing type
+        # margin for attache depending on closing type
+        w = 5 + self.a/2 if (closing == 2 and side == 1) else 5 + self.a if (closing == 2 and side == 2) else 5 
 
+        # Create the patron with the given parameters
         self.patron = Pattern(self.name, param_list=param_list, origin=Point(w, 5))
         
+        #verify the presence of the parameters in the template list
         if not self.patron.param_list.template.contain_list([outside_param, "fold_cut"]): # type: ignore
             raise ValueError(f"Not all parameters of {[outside_param, "fold_cut"]} is in the template list {self.patron.param_list.template.__str__()}")
         
-        if isinstance(attache, Pattern): # if attache is given, prepare it's place on the patron
+        # if attache is given, prepare it's place on the patron
+        if isinstance(attache, Pattern): 
             attache.origin = self.patron.origin.copy() 
             self.patron.origin[1] += attache.height
+
+
+        # ---------------------- Calculate the placement of the folds ----------------------
+
 
         dec = np.sqrt(self.b ** 2 - self.r_p ** 2)
 
@@ -773,7 +932,7 @@ class TDK:
             self.create_patron()
         self.patron.show() # type: ignore
 
-    ## TODO : add m
+    ## TODO : add m for certains 
     def create_3D(self, h_rep : Number | None = None, phi_rep : Number | None = None, type : int = 0, fold_pc : Number = 100, ep_tot : Number = 0, side : int=0, h_constr : Number | None = None, e_pp = 0.5, rotation : Number = 0, chiral : bool = False):
         """
         type :
@@ -1157,21 +1316,6 @@ class MultiStoriesKresling:
             if h is None:
                 h = [tower.h2 for tower in self.towers]
             ax.set_zlim(0, sum(h))
-
-        # if fold_pc == 100 and show_type == 0:
-        #     height = 0
-        #     for i, tower in enumerate(self.towers):
-        #         if h is None:
-        #             height += tower.h2
-        #         else:
-        #             height += h[i]
-        #     theta = np.linspace(0, 2 * np.pi, 50)
-        #     x = np.cos(theta) * self.towers[0].r
-        #     y = np.sin(theta) * self.towers[-1].r 
-        #     z = np.zeros_like(theta)
-        #     ax.plot(x, y, z, label='parametric curve')
-        #     z2 = z + height
-        #     ax.plot(x, y, z2, label='parametric curve')
 
         for i, poly in enumerate(polys):
             poly.set_edgecolor('0')
@@ -1625,152 +1769,3 @@ class MultiStoriesKresling:
 
         
         return curve, ind
-
-
-
-    def movement3D_rot_full(self, phi, start_pos : list[Number] = [], segments : list[list[Number]] | None = None,save=False, path="", name=""):
-        """start_pos : list of phi followed by list of h, for the starting position of the animation, if None, it will be the full extended position."""
-        # phi = np.linspace(self.min_phi_stable() - deg2rad(10), self.max_phi_stable() + deg2rad(10), 100)
-        sens = np.array([-1.0 if chiral else 1.0 for chiral in self.chiralities])
-        # chiral_plus = sum(sens)
-        # start = [tower.phi_1 if chiral else tower.phi_2 for tower, chiral in zip(self.towers, self.chiralities)]
-        
-        if start_pos == []:
-            start_pos = [tower.phi_2 for tower in self.towers] * sens 
-            start_pos = np.concatenate((start_pos, [tower.h2 for tower in self.towers])) #type: ignore
-        start = start_pos[1:]
-        phi_0 = sum(start_pos[:len(self.towers)])
-
-        diff = abs(phi[0] - phi[1])
-        ind = 0
-        for i, p in enumerate(phi):
-            if abs(p - phi_0) < diff:
-                ind = i
-                break 
-        else :
-            raise ValueError("phi_0 must be in the range of phi")
-        phi = np.concatenate((phi[ind:], phi[:ind]))
-
-
-        # print(start)
-
-        curve = []
-
-        bounds = [(0, np.pi)] * (len(self.towers) - 1) + [(0, tower.h2) for tower in self.towers]
-
-        for phi_i in phi:
-            # find phi and h values that minimize U for a given total rotation phi_i 
-            minimized_values = minimize(self.U_phi_tot, start, bounds=bounds, args=(phi_i,)).x # graph_x_deriv=False, anim_graph=False, graph_limits=[0, np.pi]) 
-            
-            #get the finded h and phi values
-            hs = minimized_values[len(self.towers)-1:]
-            phis = minimized_values[:len(self.towers)-1]
-
-            # Add the first value of phi to have the full list of phi values, deduced from phi_i and the other phis
-            phis = np.concatenate(([abs(phi_i - np.sum(phis)) % (2*np.pi)], phis)) * sens
-
-            curve.append([phis, hs])
-
-        
-        print(curve)
-
-        plt.plot(phi, [sum(c[1]) for c in curve], label="height")
-
-        fig = plt.figure(figsize=(10, 6), dpi=100)
-        ax = fig.add_subplot(1, 2, 1, projection="3d")
-
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-
-        camera_pos = [45, 0, 25]
-        ax.azim = camera_pos[0]
-        ax.dist = camera_pos[1] # type: ignore
-        ax.elev = camera_pos[2]
-
-        # Setting the Axes properties
-        ax.set(xlim3d=(-self.towers[0].r, self.towers[0].r), xlabel='X')
-        ax.set(ylim3d=(-self.towers[0].r, self.towers[0].r), ylabel='Y')
-        ax.set(zlim3d=(0, self.max_height_stable() + 5), zlabel='Z')
-        ax.set_xticks(np.linspace(-self.towers[0].r, self.towers[0].r, 5))
-        ax.set_yticks(np.linspace(-self.towers[0].r, self.towers[0].r, 5))
-
-        def polygons_from_pos(pos):
-            volumes = self.create_volumes(pos[1], pos[0])
-            volumes_mesh = [volume.mesh_3D() for volume in volumes]
-            return [volume_mesh.vectors for volume_mesh in volumes_mesh]
-
-        # Store polygon collection references
-        poly_collections = []
-
-        ax2 = fig.add_subplot(1, 2, 2)
-
-        
-        if segments is not None:
-            ind_s = 0
-            colors = [hsv_to_hex(i / len(segments), 1, 1) for i in range(len(segments))]
-            # print(colors)
-            for i in range(len(segments)):
-                # print(f"Segment {i + 1} : phi in [{rad2deg(segments[i][0])}, {rad2deg(segments[i][-1])}]")
-                line = ax2.plot(rad2deg(np.array(segments[i])), [self.U_phi_tot(phi_i, np.array(curve[(ind_s + j - ind) % len(curve)][0][1:]) * sens[1:]) for j, phi_i in enumerate(segments[i])], color=colors[i],label="energy segment " + str(i + 1))
-                add_arrow_to_line2D(ax2, line, arrow_locs=np.linspace(0, 1, int(10 * len(segments[0]) / len(phi))), arrowsize=1.5)
-                ind_s += len(segments[i])
-                # print(ind_s)
-
-        else:
-            line = ax2.plot(rad2deg(phi), [self.U(curve[i][0] * sens, curve[i][1]) for i in range(len(phi))], "b", label="energy")
-            add_arrow_to_line2D(ax2, line, arrow_locs=[0.11, 0.21, 0.31, 0.41, 0.61, 0.71, 0.81, 0.91],arrowsize=1.5)
-
-
-
-        # point = ax2.plot([rad2deg(phi[0])], [self.U_simp_phi(phi[0], np.array(curve[0][0][1:])) * sens[1:]], "ro", label="current position")[0]
-        point = ax2.plot([], [], "ro", label="current position")[0]
-
-
-        def animate(frame):
-            # Clear previous collections
-            for poly in poly_collections:
-                poly.remove()
-            poly_collections.clear()
-            
-            # Get new polygon data for current frame
-            current_pos = curve[frame]  # Assuming 0 for second parameter
-            polygon_data = polygons_from_pos(current_pos)
-            
-            # Create and add new polygons
-            for i, polygon in enumerate(polygon_data):
-                poly = Poly3DCollection(polygon, alpha=0.5, linewidths=1, edgecolors='k')
-                poly.set_edgecolor('0')
-                poly.set_facecolor(self.towers[i].color)
-                ax.add_collection3d(poly)
-                poly_collections.append(poly)
-            
-
-            # Update the point position in the energy graph
-            point.set_data([rad2deg(phi[frame])], [self.U_simp_phi(phi[frame], np.array(curve[frame][0][1:]) * sens[1:]) ])
-
-            return poly_collections + [point]
-
-        ax.set_aspect('equal')
-        if abs(phi[0] - phi[-1]) > deg2rad(10):
-            frames = [ i if i < len(curve) else len(curve) - (i % len(curve) + 1) for i in range(len(curve) * 2)]
-        else:
-            frames = range(len(curve))
-        # Create animation
-        anim = FuncAnimation(fig, animate, frames=frames, interval=50, blit=False, repeat=True)
-
-
-        ax2.legend()
-        ax2.set_xlabel("phi (degrees)")
-        ax2.set_ylabel("U(phi, h(phi))")
-
-
-        if save:
-            if name == "":
-                name = self.name
-            if path == "":
-                path = ORIGAMI_DIR_PATH + "/animations/"
-            anim.save(path + f"{name}_rot_animation.gif", writer='pillow', fps=20)
-            print(f"Saved animation to {path + f'{name}_rot_animation.gif'}")
-        else:
-            plt.show()
