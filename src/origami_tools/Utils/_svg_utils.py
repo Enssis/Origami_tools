@@ -110,3 +110,31 @@ def hsv_to_hex(h, s, v):
         r, g, b = v, p, q
 
     return "#{:02x}{:02x}{:02x}".format(r, g, b)
+
+
+def hex_to_hsv(hex):
+	"""
+	Convert HEX to HSV color format.
+	"""
+	r = int(hex[1:3], 16) / 255.0
+	g = int(hex[3:5], 16) / 255.0
+	b = int(hex[5:7], 16) / 255.0
+
+	mx = max(r, g, b)
+	mn = min(r, g, b)
+	h = s = v = mx
+
+	d = mx - mn
+	s = 0 if mx == 0 else d / mx
+
+	if mx == mn:
+		h = 0
+	elif mx == r:
+		h = (g - b) / d + (6 if g < b else 0)
+	elif mx == g:
+		h = (b - r) / d + 2
+	elif mx == b:
+		h = (r - g) / d + 4
+
+	h /= 6
+	return (h, s, v)

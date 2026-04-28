@@ -1,6 +1,6 @@
 __name__ = "origami_tools.test.test1"
-from ..geometry import *
-from ..decoupe_laser import *
+from ..Geometry import *
+from ..Origamis import *
 
 
 p1 = Point(1, 2)

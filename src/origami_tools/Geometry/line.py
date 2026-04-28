@@ -415,6 +415,14 @@ class Line(Shape):
 @dataclass
 class MultiLine(Line):
     break_points : list[Point] = field(default_factory=list)
+    
+    @classmethod
+    def from_points(cls, points: list[Point], dashed : bool = False, dash_length : float = 6, dash_ratio : float = 0.5):
+        """Create a MultiLine from a list of points."""
+        if len(points) < 2:
+            raise ValueError("At least two points are required to create a MultiLine")
+        return cls([points[0], points[-1]], dashed=dashed, dash_length=dash_length, dash_ratio=dash_ratio, break_points=points[1:-1])
+
 
     @classmethod
     def from_lines(cls, lines: list["Line"]):

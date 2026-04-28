@@ -1,4 +1,4 @@
-from ._svg_utils import hsv_to_hex, rgb_to_hex, hex_to_rgb, simplifed_hex, mm_str, save_svg, rgb_vals_to_hex
+from ._svg_utils import hsv_to_hex, rgb_to_hex, hex_to_rgb, simplifed_hex, mm_str, save_svg, rgb_vals_to_hex, hex_to_hsv
 from ._types import Number, Group
 
 
@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 import matplotlib.patches as mpatches
+from scipy.optimize import line_search
 
 def csv_to_latex(csv_file : str, latex_file : str):
     """
@@ -59,12 +60,85 @@ def rad2deg(rad):
     return rad * 180 / np.pi
 
 def deriv_fun(fun, deps=0.01):
-    return lambda x : (fun(x + deps) - fun(x - deps)) / (2 * deps)
+    return lambda x : (fun(x + deps) - fun(x)) / (deps)
 
-def min_search(start : Number, fun, deps=0.001, tol=0.001, max_iter=100, graph_x_deriv=False, anim_graph=False, graph_limits = [-10, 10]):
-    x = start
-    def deriv (x):
-        return (fun(x + deps) - fun(x - deps)) / (2 * deps)
+def gradient(fun, deps=0.01):
+    def grad(x):
+        grad = np.zeros_like(x)
+        for i in range(len(x)):
+            dep = np.zeros_like(x)
+            dep[i] = deps
+            grad[i] = (fun(x + dep) - fun(x - dep)) / (2 * deps)
+        return grad
+    return grad
+
+# def adam(objective, derivative, start, bounds, n_iter, alpha, beta1, beta2, eps=1e-8):
+# 	solutions = list()
+# 	# generate an initial point
+# 	x = start
+# 	score = objective(x[0], x[1])
+# 	# initialize first and second moments
+# 	m = [0.0 for _ in range(bounds.shape[0])]
+# 	v = [0.0 for _ in range(bounds.shape[0])]
+# 	# run the gradient descent updates
+# 	for t in range(n_iter):
+# 		# calculate gradient g(t)
+# 		g = derivative(x[0], x[1])
+# 		# build a solution one variable at a time
+# 		for i in range(bounds.shape[0]):
+# 			# m(t) = beta1 * m(t-1) + (1 - beta1) * g(t)
+# 			m[i] = beta1 * m[i] + (1.0 - beta1) * g[i]
+# 			# v(t) = beta2 * v(t-1) + (1 - beta2) * g(t)^2
+# 			v[i] = beta2 * v[i] + (1.0 - beta2) * g[i]**2
+# 			# mhat(t) = m(t) / (1 - beta1(t))
+# 			mhat = m[i] / (1.0 - beta1**(t+1))
+# 			# vhat(t) = v(t) / (1 - beta2(t))
+# 			vhat = v[i] / (1.0 - beta2**(t+1))
+# 			# x(t) = x(t-1) - alpha * mhat(t) / (sqrt(vhat(t)) + ep)
+# 			x[i] = x[i] - alpha * mhat / (sqrt(vhat) + eps)
+# 		# evaluate candidate point
+# 		score = objective(x[0], x[1])
+# 		# keep track of solutions
+# 		solutions.append(x.copy())
+# 		# report progress
+# 		print('>%d f(%s) = %.5f' % (t, x, score))
+# 	return solutions
+
+
+def minimize_search(function, grad = None, start : None | list[Number] = [], bounds : list[tuple[Number, Number]] = [(-10, 10), (-10, 10)], max_iter : int = 100, alpha = 0.01, beta1 = 0.9, beta2 = 0.999, eps=1e-8, tol=1e-9):
+
+    if grad is None:
+        grad = gradient(function)
+
+    if start is None or len(start) == 0:
+        start = [np.random.uniform(bounds[i][0], bounds[i][1]) for i in range(len(bounds))]
+    
+def adam_optimize(f, grad_f, theta0, alpha=0.001, beta1=0.9, beta2=0.999, epsilon=1e-8, max_iter=1000):
+    theta = theta0
+    m = np.zeros_like(theta)
+    v = np.zeros_like(theta)
+    for t in range(1, max_iter+1):
+        g = grad_f(theta)
+        m = beta1 * m + (1 - beta1) * g
+        v = beta2 * v + (1 - beta2) * (g**2)
+        m_hat = m / (1 - beta1**t)
+        v_hat = v / (1 - beta2**t)
+        theta = theta - alpha * m_hat / (np.sqrt(v_hat) + epsilon)
+    return theta
+
+
+def min_search(x0 : Number, f, g = None,  eps=0.001, tol=0.001, max_iter=100, eta=0.001, graph_x_deriv=False, anim_graph=False, graph_limits = [-10, 10], verbose=False):
+    x = x0
+    
+    if g is not None:
+        def deriv(x):
+            return g(x)
+    else:
+        def deriv (x):
+            der = (f(x + eps) - f(x - eps)) / (2 * eps)
+            if np.isnan(der):
+                print("NaN detected in derivative, stopping optimization. current point:", x, "fun(x + deps):", f(x + eps), "fun(x - deps):", f(x - eps))
+            return der
     
     def dual_graph(xs, ders):
         # On récupère le système d'axes (ax) et on l'utilise pour tracer la fonction carré.
@@ -86,66 +160,97 @@ def min_search(start : Number, fun, deps=0.001, tol=0.001, max_iter=100, graph_x
         plt.show()
 
 
-    def animated_graph(xs):
-        plt.ion()
-        fig, ax = plt.subplots()
+    def tests_graph(xs):
+        # plt.ion()
+        # fig, ax = plt.subplots()
+        # x = np.linspace(graph_limits[0], graph_limits[1], 100)
+        # y = [fun(x_i) for x_i in x]
+        # ax.plot(x, y, "b")
+        # point, = ax.plot([], [], "ro")
+        # for i in range(len(xs)):
+        #     point.set_data(xs[:i], [fun(x_i) for x_i in xs[:i]])
+        #     plt.pause(0.1)
+        # plt.ioff()
+        # plt.show()
         x = np.linspace(graph_limits[0], graph_limits[1], 100)
-        y = [fun(x_i) for x_i in x]
-        ax.plot(x, y, "b")
-        point, = ax.plot([], [], "ro")
-        for i in range(len(xs)):
-            point.set_data(xs[:i], [fun(x_i) for x_i in xs[:i]])
-            plt.pause(0.1)
-        plt.ioff()
+        y = [f(x_i) for x_i in x]
+        plt.plot(x, y, "b")
+        plt.plot(xs[:-1], [f(x_i) for x_i in xs[:-1]], "ro")
+        plt.plot(xs[-1], f(xs[-1]), "bo")
         plt.show()
     
     nan_detected = False
     xs = []
     ders = []
     etas = []
-    d = deriv(x) / max(fun(x), 1)
+    d = deriv(x) #/ max(fun(x), 1)
     dn_1 = 0
     xn_1 = 0
-    eta = 0.01
+    cache = 0
+    eps = 1e-8
+    E_g_sq = 0
+    E_Dx_sq = 0
+    etai= eta
+
     for i in range(max_iter):
-        if graph_x_deriv or anim_graph:
-            xs.append(x)
-            ders.append(abs(d))
-            etas.append(eta)
+        
+        xs.append(x)
+        ders.append(abs(d))
+        etas.append(etai)
 
         # print("iteration", i, "x =", x, "deriv =", d)
         if abs(d) < tol:
             if graph_x_deriv:
                 dual_graph(xs, ders)
             if anim_graph:
-                animated_graph(xs)
+                tests_graph(xs)
             return x
         
         if i > 1:
             diff_d = d - dn_1
-            eta = abs((x - xn_1) * diff_d) / (np.linalg.norm(diff_d)**2)
-            # print("diff_g =", diff_g, "x - xn_1 =", x - xn_1, "eta =", eta)
-            # print("eta =", eta)
+            Dx = (x - xn_1)
+            if np.isnan(diff_d) or np.linalg.norm(diff_d) == 0:
+                if verbose:
+                    print("NaN or zero detected in diff_d, using default eta. current point:", x, "derivative:", d, "previous derivative:", dn_1)
+                    print("eta =", etai)
+                etai = eta
+            else:
+                etai = abs(Dx) / abs(diff_d)
+            # etai = np.linalg.norm(Dx)**2 / abs(Dx * diff_d)
+
         else :
-            eta = 0.01
+            etai = eta
         if np.isnan(x).any() or np.isnan(d).any():
-            print("NaN detected, stopping optimization. starting point:", start)
+            if verbose:
+                print("NaN detected, stopping optimization. starting point:", x0)
+                print("last point before NaN:", xn_1, "derivative at last point:", dn_1, "current point:", x, "current derivative:", d, "diff_d =", d - dn_1)
             x = xn_1
             d = dn_1
-            nan_detected = True
+            # nan_detected = True
             break
         # eta = 0.001
         xn_1 = x
         dn_1 = d
-        x -= eta * d
+        x -= etai * d
         d = deriv(x)
-    print("Max iterations reached without convergence, derivative:", d)
+        # E_g_sq = beta * E_g_sq + (1-beta) * d**2
+
+        # RMS_g = np.sqrt(E_g_sq + eps)
+        # RMS_Dx = np.sqrt(E_Dx_sq + eps)
+        # Dx = - (RMS_Dx / RMS_g) * d
+
+        # E_Dx_sq = beta * E_Dx_sq + (1-beta) * Dx**2
+
+        # # cache += beta * cache + (1-beta) * d**2
+        # x += eta * d #Dx #eta * d / np.sqrt(cache + eps)
+    if verbose:
+        print("Max iterations reached without convergence, derivative:", d)
     if graph_x_deriv:
         dual_graph(xs, ders)
     if anim_graph:
-        animated_graph(xs)
-    if nan_detected:
-        return np.nan
+        tests_graph(xs)
+    # if nan_detected:
+    #     return np.nan
     return x
 
 def min_search_grad(start, fun, deps=0.01, tol=0.001, max_iter=100, graph=False):
@@ -297,6 +402,26 @@ def multi_point_linspace(points : list[Number], num_points : int, segmented = Fa
     return result
 
 
+def gravity_spaced(p_start : Number, p_end : Number, p_grav : list[Number], num_points : int, g=10.0):
+    """
+        Generate a list of points that are spaced between the given points, with a higher density around the gravity point.
+    """
+    
+    start_spaced = np.linspace(p_start, p_end, num_points)
+    scale = abs(p_start - p_end)
+
+    def gravity_func(p):
+        return sum([(p_g - p) * (1-2 /np.pi * np.atan(g / scale * abs(p_g - p)))**2 for p_g in p_grav])
+    
+    for i in range(1, len(start_spaced)-1):
+        # print("p:", start_spaced[i], "gravity:", gravity_func(start_spaced[i]), "dist :",  [abs(p_g - start_spaced[i]) for p_g in p_grav], "after gravity:", start_spaced[i] + gravity_func(start_spaced[i]))
+        start_spaced[i] += gravity_func(start_spaced[i])
+
+    return start_spaced.tolist()
+
+
+
+
 __all__ = [
     "csv_to_latex",
     "deg2rad",
@@ -312,5 +437,7 @@ __all__ = [
     "min_search",
     "min_search_grad", 
     "multi_point_linspace",
-    "deriv_fun"
+    "deriv_fun",
+    "hex_to_hsv",
+    "gravity_spaced"
 ]

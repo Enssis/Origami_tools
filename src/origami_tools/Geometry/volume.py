@@ -119,6 +119,16 @@ class Volume():
         for i in range(len(self)):
             self[i].translate(v) 
     
+    def rotate(self, angle : float = 0, point : Point = Point(0, 0, 0), axis : Vec = Vec(0, 0, 1)):
+        """Rotate the volume around a given axis by a given angle."""
+        if not isinstance(axis, Vec):
+            raise ValueError("Rotation axis must be a Vec object")
+        if not isinstance(angle, (int, float)):
+            raise ValueError("Rotation angle must be a number")
+        
+        for i in range(len(self)):
+            self[i].rotate(angle, point, axis)
+    
     def save(self, filename : str):
         """Save the volume to a file."""
         if not isinstance(filename, str):

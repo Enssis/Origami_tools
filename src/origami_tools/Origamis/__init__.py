@@ -25,8 +25,8 @@ def general_dU_trac(k=k):
 
 
 def general_dU_rot(k=k*5*10**-5):
-    def U_trac(dtheta, dervi_theta):
-        return k * dtheta * dervi_theta
+    def U_trac(dtheta, deriv_theta):
+        return k * dtheta * deriv_theta
     return U_trac
 
 
